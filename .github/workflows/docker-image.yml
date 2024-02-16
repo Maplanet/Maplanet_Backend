@@ -1,9 +1,9 @@
 name: CI/CD Pipeline
 
 on:
-  push:
+  pull_request:
     branches:
-      - develop # Update this with your main branch name
+      - develop
 
 jobs:
   build:
