@@ -23,8 +23,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t your-image-name .
-          docker tag parkbranjunsoo/maplanet_repository:v1 parkbrianjunsoo/maplanet_repository:v1
+          docker build -t parkbrianjunsoo/maplanet_repository .
+          docker tag parkbrianjunsoo/maplanet_repository:v1 parkbrianjunsoo/maplanet_repository:v1
 
       - name: Push Docker image to Docker Hub
         uses: docker/login-action@v1
@@ -33,4 +33,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push Docker image
         run: |
-          docker push parkbranjunsoo/maplanet_repository:v1
+          docker push parkbrianjunsoo/maplanet_repository:v1
