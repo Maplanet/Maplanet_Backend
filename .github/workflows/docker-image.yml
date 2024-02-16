@@ -20,7 +20,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t parkbrianjunsoo/maplanet_repository:v1 .
+          docker build -t maplanet_repository:v1 .
           docker tag v1
 
       - name: Push Docker image to Docker Hub
