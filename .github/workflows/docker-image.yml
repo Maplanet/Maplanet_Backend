@@ -18,12 +18,9 @@ jobs:
         with:
           node-version: '18' # Update this with your desired Node.js version
 
-      - name: Install dependencies
-        run: yarn install
-
       - name: Build Docker image
         run: |
-          docker build -t parkbrianjunsoo/maplanet_repository .
+          docker build . -t parkbrianjunsoo/maplanet_repository
           docker tag parkbrianjunsoo/maplanet_repository:v1 parkbrianjunsoo/maplanet_repository:v1
 
       - name: Push Docker image to Docker Hub
