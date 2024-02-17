@@ -43,13 +43,13 @@ jobs:
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@master
         with:
-            host: ${{ env.AWS_EC2_HOST }}
-            username: ${{ env.AWS_EC2_HOST }}
-            key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-            script_stop: true
-            script: |
-              docker pull ${{ secrets.DOCKER_USERNAME }}/maplanet_repository:v1
-              docker stop mapalnet-nest-app || true
-              docker rm mapalnet-nest-app || true
-              docker run -d --name my-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/maplanet_repository:v1
-              EOF
+          host: ${{ secrets.AWS_EC2_HOST }}
+          username: ${{ secrets.AWS_EC2_HOST }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/maplanet_repository:v1
+            docker stop mapalnet-nest-app || true
+            docker rm mapalnet-nest-app || true
+            docker run -d --name my-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/maplanet_repository:v1
+            EOF
