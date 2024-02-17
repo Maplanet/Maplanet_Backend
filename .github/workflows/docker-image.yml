@@ -34,8 +34,8 @@ jobs:
 
       - name: Print Secrets
         run: |
-          echo "AWS_EC2_HOST: $AWS_EC2_HOST"
-          echo "AWS_EC2_USERNAME: $AWS_EC2_USERNAME"
+          echo "AWS_EC2_HOST: ${{ env.AWS_EC2_HOST }}"
+          echo "AWS_EC2_USERNAME: ${{ env.AWS_EC2_USERNAME }}"
         env:
           AWS_EC2_HOST: ${{ env.AWS_EC2_HOST }}
           AWS_EC2_USERNAME: ${{ env.AWS_EC2_USERNAME }}
