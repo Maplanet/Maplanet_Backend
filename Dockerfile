@@ -9,5 +9,5 @@ RUN yarn install --frozen-lockfile
 RUN yarn build
 #EXPOSE 3000
 # pm2를 사용하여 애플리케이션 실행
-COPY . .
+#COPY . .
 CMD ["pm2-runtime", "start", "ecosystem.config.js"]
