@@ -34,9 +34,8 @@ jobs:
 
       - name: Print Secrets
         run: |
-          echo ${{ secrets.AWS_EC2_HOST }}
-          echo ${{ secrets.AWS_EC2_USERNAME }}
-          echo ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          echo $AWS_EC2_HOST
+          echo $AWS_EC2_USERNAME
 
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@master
