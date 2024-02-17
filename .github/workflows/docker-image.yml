@@ -38,7 +38,7 @@ jobs:
           echo "AWS_EC2_USERNAME: ${{ secrets.AWS_EC2_USERNAME }}"
 
       - name: SSH into EC2 instance and deploy
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.AWS_EC2_HOST }}
           username: ${{ secrets.AWS_EC2_USERNAME }}
