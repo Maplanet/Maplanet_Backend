@@ -32,6 +32,10 @@ jobs:
         run: |
           docker push parkbrianjunsoo/maplanet_repository:v1
 
+      - name: Delete last Docker image
+        run: |
+          sudo docker rmi -f $(sudo docker images -q parkbrianjunsoo/maplanet_repository:v1)
+
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
