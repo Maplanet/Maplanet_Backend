@@ -4,9 +4,10 @@ RUN yarn global add pm2
 
 RUN mkdir -p /var/app
 WORKDIR /var/app
-COPY . .
+COPY package*.json ./
 RUN yarn install
 RUN yarn build
 #EXPOSE 3000
 # pm2를 사용하여 애플리케이션 실행
+COPY . .
 CMD ["pm2-runtime", "start", "ecosystem.config.js"]
