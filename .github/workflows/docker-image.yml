@@ -42,5 +42,5 @@ jobs:
             sudo docker pull parkbrianjunsoo/maplanet_repository:v1
             sudo docker stop maplanet-nest-app || true
             sudo docker rm maplanet-nest-app || true
-            sudo docker rmi -f $(sudo docker images -q parkbrianjunsoo/maplanet_repository:v1)
+            sudo docker rmi -f $(sudo docker images -q parkbrianjunsoo/maplanet_repository:v1) 
             sudo docker run -d --name maplanet-nest-app -p 3000:3000 parkbrianjunsoo/maplanet_repository:v1
