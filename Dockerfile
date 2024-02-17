@@ -11,4 +11,4 @@ RUN yarn build
 # pm2를 사용하여 애플리케이션 실행
 #COPY . .
 #CMD ["pm2-runtime", "start", "ecosystem.config.js"]
-CMD ["pm2-runtime", "start", "ecosystem.config.js", "--name", "maplanet-nest-app", "--log", "/var/app/logs/pm2.log"]
+CMD ["pm2-runtime", "start", "ecosystem.config.js", "--log", "/var/app/logs/pm2.log"]
