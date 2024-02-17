@@ -1,6 +1,6 @@
 FROM node:18-alpine As development
 # pm2 설치
-RUN npm install pm2 -g
+RUN yarn global add pm2
 
 RUN mkdir -p /var/app
 WORKDIR /var/app
@@ -9,4 +9,4 @@ RUN yarn install
 RUN yarn build
 #EXPOSE 3000
 # pm2를 사용하여 애플리케이션 실행
-CMD ["pm2-runtime", "dist/main.js"]
+CMD ["pm2-runtime", "start", "ecosystem.config.js"]
