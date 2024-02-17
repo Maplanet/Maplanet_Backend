@@ -4,9 +4,10 @@ RUN yarn global add pm2
 
 RUN mkdir -p /var/app
 WORKDIR /var/app
-COPY . .
-RUN yarn install
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 RUN yarn build
 #EXPOSE 3000
 # pm2를 사용하여 애플리케이션 실행
+COPY . .
 CMD ["pm2-runtime", "start", "ecosystem.config.js"]
