@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            docker pull parkbrianjunsoo/maplanet_repository:v1
-            docker stop maplanet-nest-app || true
-            docker rm maplanet-nest-app || true
-            docker run -d --name maplanet-nest-app -p 3000:3000 parkbrianjunsoo/maplanet_repository:v1
+            sudo docker pull parkbrianjunsoo/maplanet_repository:v1
+            sudo docker stop maplanet-nest-app || true
+            sudo docker rm maplanet-nest-app || true
+            sudo docker run -d --name maplanet-nest-app -p 3000:3000 parkbrianjunsoo/maplanet_repository:v1
