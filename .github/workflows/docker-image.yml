@@ -32,11 +32,6 @@ jobs:
         run: |
           docker push parkbrianjunsoo/maplanet_repository:v1
 
-      - name: Print Secrets
-        run: |
-          echo "AWS_EC2_HOST: ${{ secrets.AWS_EC2_HOST }}"
-          echo "AWS_EC2_USERNAME: ${{ secrets.AWS_EC2_USERNAME }}"
-
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -45,6 +40,6 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             docker pull parkbrianjunsoo/maplanet_repository:v1
-            docker stop my-app || true
-            docker rm my-app || true
-            docker run -d --name my-app -p 3000:3000 parkbrianjunsoo/maplanet_repository:v1
+            docker stop maplanet-nest-app || true
+            docker rm maplanet-nest-app || true
+            docker run -d --name maplanet-nest-app -p 3000:3000 parkbrianjunsoo/maplanet_repository:v1
