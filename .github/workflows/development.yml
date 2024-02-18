@@ -1,12 +1,9 @@
 name: production CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
   build:
@@ -23,7 +20,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t parkbrianjunsoo/maplanet_repository:v1 .
+          docker build -t -f Dockerfile.dev parkbrianjunsoo/maplanet_repository:v1 .
 
       - name: Push Docker image to Docker Hub
         uses: docker/login-action@v1
