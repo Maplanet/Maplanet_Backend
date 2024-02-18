@@ -1,4 +1,4 @@
-FROM node:18-alpine As Production
+FROM node:18-alpine As Development
 # pm2 설치
 RUN yarn global add pm2
 
