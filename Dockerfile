@@ -1,13 +1,14 @@
-FROM node:18-alpine As Development
-# pm2 설치
-#RUN yarn global add pm2
+FROM node:20.9.0-alpine As Development
 
-RUN mkdir -p /var/app
-WORKDIR /var/app
+# Create app directory
+WORKDIR /usr/src/app
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
+RUN yarn install
 COPY . .
-RUN yarn install --frozen-lockfile
+
 RUN yarn build
+
 EXPOSE 3000
-# pm2를 사용하여 애플리케이션 실행
-#COPY . .
-CMD ["yarn", "start:dev"]
+
+CMD [ "node", "dist/main.js" ]
