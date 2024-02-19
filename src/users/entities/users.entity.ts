@@ -25,10 +25,10 @@ export class Users {
     progress_count: number;
 
     @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
+    created_at: Date;
   
     @UpdateDateColumn({ type: 'timestamp' })
-    updatedAt: Date;
+    updated_at: Date;
 
     @OneToMany(() => Board, (board) => board.Users, {  cascade: true })
     boards: Board[];

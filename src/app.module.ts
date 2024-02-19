@@ -9,10 +9,21 @@ import { ReportModule } from './report/report.module';
 import { AdministratorModule } from './administrator/administrator.module';
 import { NoticeModule } from './notice/notice.module';
 import { dataSourceOptions } from './config/data-source';
-
+import { ConfigModule as NestConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [BoardModule, Board2Module, UsersModule, ReportModule, AdministratorModule, NoticeModule, TypeOrmModule.forRoot(dataSourceOptions) ],
+  imports: [
+    BoardModule, 
+    Board2Module, 
+    UsersModule, 
+    ReportModule, 
+    AdministratorModule, 
+    NoticeModule, 
+    TypeOrmModule.forRoot(dataSourceOptions),
+    NestConfigModule.forRoot({
+      envFilePath: ['.env'],
+    }), 
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
