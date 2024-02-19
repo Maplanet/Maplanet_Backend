@@ -1,26 +1,22 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 import { UsersService } from './users.service';
 // import { DiscordAuthGuard } from '../auth/discord-auth.guard'
 
 @ApiTags('USERS')
-@Controller('/users')
+@Controller('/discord')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {
+  }
 
-  // @Get('/discord/login')
-  // @UseGuards(DiscordAuthGuard)
-  // @ApiOperation({
-  //   summary: '디스코드 로그인',
-  //   description: '디스코드 로그인'
-  // })
-  // async discordLogin(@Req() req: Request) {
-    
-  // }
-
-  // @Get('discord/callback')
-  // @UseGuards(DiscordAuthGuard)
-  // async discordLoginCallback(@Req() req: Request, @Res() res: Response) {
-  //   res.redirect('/')
-  // }
+  @Get('/login')
+  @ApiOperation({
+    summary: '디스코드 로그인',
+    description: '디스코드 로그인',
+  })
+  async discordLogin(@Query('code') code: any):Promise<void> {
+    const tokenResponse = await this.usersService.discordLogin(code);
+    return tokenResponse;
+  }
 }
