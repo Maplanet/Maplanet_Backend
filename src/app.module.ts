@@ -10,6 +10,7 @@ import { AdministratorModule } from './administrator/administrator.module';
 import { NoticeModule } from './notice/notice.module';
 import { dataSourceOptions } from './config/data-source';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
+import { MainpageModule } from './mainpage/mainpage.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { ConfigModule as NestConfigModule } from '@nestjs/config';
     TypeOrmModule.forRoot(dataSourceOptions),
     NestConfigModule.forRoot({
       envFilePath: ['.env'],
-    }), 
+    }),
+    MainpageModule, 
   ],
   controllers: [AppController],
   providers: [AppService],
