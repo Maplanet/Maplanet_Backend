@@ -7,12 +7,12 @@ export class Board2 {
     board2_id: number;
 
     @Column()
-    user_id: number;
+    discord_id: string;
 
-    @ManyToOne(() => Users, (Users) => Users.user_id ,{
+    @ManyToOne(() => Users, (Users) => Users.discord_id ,{
         onDelete: 'CASCADE'
     })
-    @JoinColumn({ name: 'user_id' })
+    @JoinColumn({ name: 'discord_id' })
     Users: Users;
 
     @Column()
@@ -31,7 +31,10 @@ export class Board2 {
     place_theif_nickname: string;
 
     @Column()
-    discord_nickname: string;
+    discord_username: string;
+
+    @Column()
+    discord_global_name: string;
 
     @Column()
     discord_image: string;

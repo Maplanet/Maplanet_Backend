@@ -20,7 +20,7 @@ export class BoardService {
             const board1 = await this.boardRepository.find({
                 select: [
                     'board1_id',
-                    'user_id',
+                    'discord_id',
                     'meso',
                     'title',
                     'maple_nickname',
@@ -28,8 +28,7 @@ export class BoardService {
                     'level',
                     'job',
                     'progress_time',
-                    //'discord_id'
-                    'discord_nickname',
+                    'discord_global_name',
                     'discord_image',
                     'view_count',
                     'complete',
@@ -37,7 +36,10 @@ export class BoardService {
                     'updated_at'
                 ],
                 skip,
-                take
+                take,
+                order: {
+                    created_at: 'DESC' // Order by created_at timestamp in descending order
+                }
             })
             return {board1Data: board1}
         } catch (error) {
@@ -60,11 +62,11 @@ export class BoardService {
                     { level: search },
                     { job: Like(`%${search}%`) },
                     { progress_time: Like(`%${search}%`) },
-                    { discord_nickname: Like(`%${search}%`) }
+                    { discord_global_name: Like(`%${search}%`) }
                 ],
                 select: [
                     'board1_id',
-                    'user_id',
+                    'discord_id',
                     'meso',
                     'title',
                     'maple_nickname',
@@ -72,8 +74,7 @@ export class BoardService {
                     'level',
                     'job',
                     'progress_time',
-                    //'discord_id'
-                    'discord_nickname',
+                    'discord_global_name',
                     'discord_image',
                     'view_count',
                     'complete',
@@ -81,7 +82,10 @@ export class BoardService {
                     'updated_at'
                 ],
                 skip,
-                take
+                take,
+                order: {
+                    created_at: 'DESC' // Order by created_at timestamp in descending order
+                }
             })
 
             return {board1Data: searchedBoard}
@@ -115,7 +119,8 @@ export class BoardService {
                 progress_time,
                 position,
                 // discord_id,
-                // discord_nickname,
+                // discord_username,
+                // discord_global_name,
                 // discord_image,
                 // view_count,
                 // complete
