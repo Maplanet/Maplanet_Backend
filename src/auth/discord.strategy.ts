@@ -37,26 +37,23 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   }
 
   async validate(accessToken: string, refreshToken: string): Promise<any> {
+    const encryptedAccessToken = encrypt(accessToken).toString();
+    const encryptedRefreshToken = encrypt(refreshToken).toString();
     const { data } = await this.http
       .get('https://discordapp.com/api/users/@me', {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .toPromise();
 
-    const encryptedAccessToken = encrypt(accessToken).toString();
-    const encryptedRefreshToken = encrypt(refreshToken).toString();
+    data.accessToken = encryptedAccessToken;
+    data.refreshToken = encryptedRefreshToken;
 
-    console.log(data);
-    const existUser = await this.authService.validateOAuth2({
-      discordId: data.id,
-      accessToken: encryptedAccessToken,
-      refreshToken: encryptedRefreshToken,
-    });
+    const existUser = await this.authService.validateOAuth2(data);
     console.log(existUser);
-    // if (!existUser) {
-    //   console.log('유저가 존재하지않음');
-    //   await this.usersServiece.saveUser(data);
-    // }
+    if (!existUser) {
+      console.log('유저가 존재하지않음');
+      await this.usersServiece.saveUser(data);
+    }
     //return this.authService.findUserFromDiscordId(data.id);
     return data;
   }

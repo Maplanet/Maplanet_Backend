@@ -10,10 +10,10 @@ import { AdministratorModule } from './administrator/administrator.module';
 import { NoticeModule } from './notice/notice.module';
 import { dataSourceOptions } from './config/data-source';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
-import { MainpageModule } from './mainpage/mainpage.module';
 import { AuthModule } from './auth/auth.module';
 import { Board } from './board/entities/board.entity';
 import { Board2 } from './board2/entities/board2.entity';
+import { LoggingModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -25,12 +25,11 @@ import { Board2 } from './board2/entities/board2.entity';
     NoticeModule,
     TypeOrmModule.forRoot(dataSourceOptions),
     NestConfigModule.forRoot({
-      envFilePath: ['.env'],
+      envFilePath: ['.env', '.env.dev', '.env.prod'],
     }),
-    MainpageModule,
     AuthModule,
-    TypeOrmModule.forFeature([Board]),
-    TypeOrmModule.forFeature([Board2])
+    TypeOrmModule.forFeature([Board, Board2]),
+    LoggingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

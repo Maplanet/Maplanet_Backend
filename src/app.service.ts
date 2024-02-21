@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from './board/entities/board.entity';
 import { Board2 } from './board2/entities/board2.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AppService {
@@ -10,10 +11,14 @@ export class AppService {
     @InjectRepository(Board)
     private boardRepository: Repository<Board>,
     @InjectRepository(Board2)
-    private board2Repository: Repository<Board2>
-) {}
+    private board2Repository: Repository<Board2>,
+    private readonly configservice: ConfigService,
+  ) {}
   getHello(): string {
-    return 'Hello 시발 World!';
+    const apiKey = this.configservice.get<string>('SECRET_PASSPHRASE');
+    const env = this.configservice.get<string>('NODE_ENV');
+    console.log(apiKey);
+    return `${env}`;
   }
 
   async getBoard1Data() {
@@ -31,15 +36,15 @@ export class AppService {
         'view_count',
         'complete',
         'created_at',
-        'updated_at'
+        'updated_at',
       ],
       // 매너카운트 추가 필요
       order: {
-        created_at: 'DESC'
+        created_at: 'DESC',
       },
-      take: 3
-    })
-    return board1Data
+      take: 3,
+    });
+    return board1Data;
   }
 
   async getBoard2Data() {
@@ -56,15 +61,15 @@ export class AppService {
         'view_count',
         'complete',
         'created_at',
-        'updated_at'
+        'updated_at',
         // 매너카운트 추가 필요
       ],
       order: {
-        created_at: 'DESC'
+        created_at: 'DESC',
       },
-      take: 3
-    })
+      take: 3,
+    });
 
-    return board2Data
+    return board2Data;
   }
 }
