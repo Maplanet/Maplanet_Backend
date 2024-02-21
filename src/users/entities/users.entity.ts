@@ -11,7 +11,7 @@ export class Users {
 
     @Column()
     discord_id: string;
-    
+
     @Column()
     discord_username: string;
     
@@ -27,6 +27,9 @@ export class Users {
     @Column()
     progress_count: number;
 
+    @Column()
+    manner_count: number;
+    
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
   
