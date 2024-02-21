@@ -14,19 +14,18 @@ export class UsersService {
   ) {}
 
   async discordLogin(code) {
-    const requestToken = code;
     const userdata:any = {}
-    console.log('code', code)
-    let tokenResponse, userResponse;
+    
     try {
-      tokenResponse = await axios({
+
+     const tokenResponse = await axios({
           method: 'post',
           url: `https://discord.com/api/oauth2/token`,
           data: {
               client_id: process.env.DISCORD_CLIENT_ID,
               client_secret: process.env.DISCORD_CLIENT_SECRET,
               grant_type: 'authorization_code',
-              code: requestToken,
+              code: code,
               redirect_uri: 'http://localhost:3000/discord/login',
               scope: 'identify, email',
           },
@@ -36,31 +35,48 @@ export class UsersService {
       });
 
       const accessToken = tokenResponse.data.access_token;
+      const refreshToken = tokenResponse.data.refresh_token
 
-      userResponse = await axios.get('https://discordapp.com/api/users/@me', {
+      const userResponse = await axios.get('https://discordapp.com/api/users/@me', {
           headers: {
               authorization: `Bearer ${accessToken}`,
           },
       });
-      console.log("accessToken",accessToken)
-      console.log("refreshToken",tokenResponse.data.refresh_token)
       console.log(userResponse.data);
 
-      const userAvatarUrl:string = `https://cdn.discordapp.com/avatars/${userResponse.data.id}/${userResponse.data.avatar}`
-      
-      userdata.access_token = accessToken
-      userdata.refreshToken = tokenResponse.data.refresh_token
-      userdata.discordImage = userAvatarUrl.slice(-4) === 'null'  ? "https://discord.com/assets/6debd47ed13483642cf09e832ed0bc1b.png" : `https://cdn.discordapp.com/avatars/${userResponse.data.id}/${userResponse.data.avatar}`
-      // console.log(userAvatarUrl.slice(-4))
+      const discord_id = userResponse.data.id; //832823498723948
+      const discord_username = userResponse.data.username; //1_brianpark
+      const discord_global_name = userResponse.data.global_name; //BrianP
+      const discord_image:string = `https://cdn.discordapp.com/avatars/${userResponse.data.id}/${userResponse.data.avatar}`;
+
+      userdata.access_token = accessToken;
+      userdata.refreshToken = refreshToken;
+      userdata.discord_id = discord_id;
+      userdata.discord_username = discord_username;
+      userdata.discord_global_name = discord_global_name;
+      userdata.discord_image = discord_image.slice(-4) === 'null'  ? "https://discord.com/assets/6debd47ed13483642cf09e832ed0bc1b.png" : `https://cdn.discordapp.com/avatars/${userResponse.data.id}/${userResponse.data.avatar}`;
       console.log('data : ', userdata)
 
-      //db에 저장할 값들 저장
+      let user = await this.usersRepository.findOne({
+        where: { discord_id }
+      });
+      if(!user) {
+        user = this.usersRepository.create({discord_id, discord_username, discord_global_name, discord_image: userdata.discord_image})
+        await this.usersRepository.save(user)
+      }
+      console.log(accessToken)
+      return {user, accessToken}
 
-      //클라이언트헤더에 토큰이랑 사용자 id반환
-      // req.headers = {
-      //   userdata
+      // const user = await this.usersRepository.findOne({
+      //   where: { discord_id }
+      // });
+      
+      // if(user) {
+      //   return userdata
+      // } else {
+      //   const discordUser = await this.usersRepository.create({ discord_id, discord_username, discord_global_name, discord_image: userdata.discord_image })
+      //   await this.usersRepository.save(discordUser)
       // }
-      return userdata
       
   } catch (error) {
       console.error(`Error in getting token or user data from Discord API: ${error.message}`);
