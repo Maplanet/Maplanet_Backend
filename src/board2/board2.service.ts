@@ -20,14 +20,14 @@ export class Board2Service {
             const board2 = await this.board2Repository.find({
                 select: [
                     'board2_id',
-                    'user_id',
+                    'discord_id',
                     'meso',
                     'report_kind',
                     'title',
                     'request_nickname',
                     'place_theif_nickname',
                     //'discord_id'
-                    'discord_nickname',
+                    'discord_global_name',
                     'discord_image',
                     'view_count',
                     'complete',
@@ -35,7 +35,10 @@ export class Board2Service {
                     'updated_at'
                 ],
                 skip,
-                take
+                take,
+                order: {
+                    created_at: 'DESC' // Order by created_at timestamp in descending order
+                }
             })
             return {board2Data: board2}
         } catch (error) {
@@ -56,18 +59,17 @@ export class Board2Service {
                     { title: Like(`%${search}%`) },
                     { request_nickname: Like(`%${search}%`) },
                     { place_theif_nickname: Like(`%${search}%`) },
-                    { discord_nickname: Like(`%${search}%`) },
+                    { discord_global_name: Like(`%${search}%`) },
                 ],
                 select: [
                     'board2_id',
-                    'user_id',
+                    'discord_id',
                     'meso',
                     'report_kind',
                     'title',
                     'request_nickname',
                     'place_theif_nickname',
-                    //'discord_id'
-                    'discord_nickname',
+                    'discord_global_name',
                     'discord_image',
                     'view_count',
                     'complete',
@@ -75,7 +77,10 @@ export class Board2Service {
                     'updated_at'
                 ],
                 skip,
-                take
+                take,
+                order: {
+                    created_at: 'DESC' // Order by created_at timestamp in descending order
+                }
             })
 
             return {board2Data: searchedBoard}
@@ -103,7 +108,8 @@ export class Board2Service {
                 request_nickname,
                 place_theif_nickname,
                 // discord_id,
-                // discord_nickname,
+                // discord_username,
+                // discord_global_name,
                 // discord_image,
                 // view_count,
                 // complete

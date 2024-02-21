@@ -10,7 +10,8 @@ import { AdministratorModule } from './administrator/administrator.module';
 import { NoticeModule } from './notice/notice.module';
 import { dataSourceOptions } from './config/data-source';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
-import { MainpageModule } from './mainpage/mainpage.module';
+import { Board } from './board/entities/board.entity';
+import { Board2 } from './board2/entities/board2.entity';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { MainpageModule } from './mainpage/mainpage.module';
     NestConfigModule.forRoot({
       envFilePath: ['.env'],
     }),
-    MainpageModule, 
+    TypeOrmModule.forFeature([Board]),
+    TypeOrmModule.forFeature([Board2])
   ],
   controllers: [AppController],
   providers: [AppService],
