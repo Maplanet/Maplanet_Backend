@@ -8,23 +8,26 @@ import { UsersModule } from './users/users.module';
 import { ReportModule } from './report/report.module';
 import { AdministratorModule } from './administrator/administrator.module';
 import { NoticeModule } from './notice/notice.module';
+
 import { dataSourceOptions } from './config/data-source';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { MainpageModule } from './mainpage/mainpage.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    BoardModule, 
-    Board2Module, 
-    UsersModule, 
-    ReportModule, 
-    AdministratorModule, 
-    NoticeModule, 
+    BoardModule,
+    Board2Module,
+    UsersModule,
+    ReportModule,
+    AdministratorModule,
+    NoticeModule,
     TypeOrmModule.forRoot(dataSourceOptions),
     NestConfigModule.forRoot({
       envFilePath: ['.env'],
     }),
-    MainpageModule, 
+    MainpageModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,5 @@
 import { Controller, Get, Header, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Request, response } from 'express';
 import { UsersService } from './users.service';
 // import { DiscordAuthGuard } from '../auth/discord-auth.guard'
 
