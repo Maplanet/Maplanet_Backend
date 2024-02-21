@@ -10,10 +10,13 @@ export class Users {
     user_id: number;
 
     @Column()
-    discord_nickname: string;
-
-    @Column()
     discord_id: string;
+    
+    @Column()
+    discord_username: string;
+    
+    @Column()
+    discord_global_name: string;
 
     @Column()
     discord_image: string;
