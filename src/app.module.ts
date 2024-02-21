@@ -8,11 +8,12 @@ import { UsersModule } from './users/users.module';
 import { ReportModule } from './report/report.module';
 import { AdministratorModule } from './administrator/administrator.module';
 import { NoticeModule } from './notice/notice.module';
-
 import { dataSourceOptions } from './config/data-source';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { MainpageModule } from './mainpage/mainpage.module';
 import { AuthModule } from './auth/auth.module';
+import { Board } from './board/entities/board.entity';
+import { Board2 } from './board2/entities/board2.entity';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     MainpageModule,
     AuthModule,
+    TypeOrmModule.forFeature([Board]),
+    TypeOrmModule.forFeature([Board2])
   ],
   controllers: [AppController],
   providers: [AppService],

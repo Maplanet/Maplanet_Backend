@@ -25,7 +25,7 @@
     <script>
       async function discordLogin() {
         const url =
-          'https://discord.com/api/oauth2/authorize?client_id=1207737873063739452&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fdiscord%2Flogin&scope=identify+email';
+          'https://discord.com/api/oauth2/authorize?client_id=1207737873063739452&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fdiscord&scope=identify+email';
 
         // Redirect the user to the Discord login page.
         window.location.href = url;
@@ -41,7 +41,7 @@
             grant_type: 'authorization_code',
             //code = NhhvTDYsFcdgNLnnLijcl7Ku7bEEeee
             code: code,
-            redirect_uri: 'http://localhost:3000/discord/login',
+            redirect_uri: 'http://localhost:3000/auth/discord',
             scope: 'identify, email',
           };
 
