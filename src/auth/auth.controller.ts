@@ -8,9 +8,12 @@ export class AuthController {
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
+  @Redirect('http://localhost:3000', 302)
   async getUserFromDiscordLogin(@Req() req, @Res() response): Promise<any> {
-    // console.log(1);
-    // console.log('유저정보?', req.user);
-    response.redirect('https://www.naver.com', 302);
+    console.log('유저정보?', req.user);
+    //토큰 클라이언트 응답바디에 전달
+    const { accessToken, refreshToken } = req.user;
+    return [accessToken, refreshToken];
+    //    response.redirect('http://localhost:3000', 302);
   }
 }

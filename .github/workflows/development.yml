@@ -1,4 +1,4 @@
-name: production CI/CD Pipeline
+name: Development CI/CD Pipeline
 
 on:
   pull_request:
@@ -20,7 +20,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t -f Dockerfile.dev parkbrianjunsoo/maplanet_repository:v1 .
+          docker build -t parkbrianjunsoo/maplanet_repository:v1 -f Dockerfile.dev .
 
       - name: Push Docker image to Docker Hub
         uses: docker/login-action@v1

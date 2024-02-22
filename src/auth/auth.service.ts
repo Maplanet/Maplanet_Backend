@@ -29,7 +29,7 @@ export class AuthService {
     const { id } = Details;
     // console.log(discordId);
     await this.usersService.saveUser(Details); // 여기까지 잘됨
-    console.log("Details: ", Details)
+    console.log('Details: ', Details);
     const oauth2 = await this.findOAuth2(id);
     return oauth2 ? this.updateOAuth2(Details) : this.createOAuth2(Details);
   }
@@ -49,17 +49,19 @@ export class AuthService {
   async updateOAuth2(Details) {
     console.log(Details);
     const { id, accessToken, refreshToken } = Details;
-    await this.DiscordRepository.update({
-      discord_id: id},
+    await this.DiscordRepository.update(
+      {
+        discord_id: id,
+      },
       {
         access_token: accessToken,
         refresh_token: refreshToken,
-    });
+      },
+    );
     return Details;
   }
 
   findOAuth2(discord_id) {
-    console.log('durl', discord_id);
     return this.DiscordRepository.findOne({
       where: { discord_id: discord_id },
     });
