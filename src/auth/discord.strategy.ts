@@ -49,7 +49,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     data.refreshToken = encryptedRefreshToken;
 
     const existUser = await this.authService.validateOAuth2(data);
-    console.log(existUser);
+    // console.log('existUser: ',existUser);
     if (!existUser) {
       console.log('유저가 존재하지않음');
       await this.usersServiece.saveUser(data);
