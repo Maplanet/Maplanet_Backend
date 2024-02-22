@@ -8,8 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   const options = new DocumentBuilder()
-    .setTitle('Your API')
-    .setDescription('API description')
+    .setTitle('Maplanet API')
+    .setDescription('메이플래닛 Swagger')
     .setVersion('1.0')
     .addTag('nestjs')
     .build();
