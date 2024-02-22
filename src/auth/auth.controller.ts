@@ -9,8 +9,8 @@ export class AuthController {
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
   async getUserFromDiscordLogin(@Req() req, @Res() response): Promise<any> {
-    console.log(1);
-    console.log('유저정보?', req.user);
+    // console.log(1);
+    // console.log('유저정보?', req.user);
     response.redirect('https://www.naver.com', 302);
   }
 }

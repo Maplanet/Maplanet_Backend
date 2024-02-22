@@ -3,11 +3,11 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 @Entity({ name: 'oauth2' })
 export class DiscordOAuth2Credentials {
   @PrimaryColumn({ name: 'discord_id' })
-  discordId: string;
+  discord_id: string;
 
   @Column({ name: 'access_token' })
-  accessToken: string;
+  access_token: string;
 
   @Column({ name: 'refresh_token' })
-  refreshToken: string;
+  refresh_token: string;
 }

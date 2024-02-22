@@ -6,10 +6,11 @@ import { DiscordStrategy } from './discord.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DiscordOAuth2Credentials } from './entity/discord.entity';
+import { Users } from 'src/users/entities/users.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([DiscordOAuth2Credentials]),
+    TypeOrmModule.forFeature([DiscordOAuth2Credentials, Users]),
     UsersModule,
     HttpModule,
   ],
