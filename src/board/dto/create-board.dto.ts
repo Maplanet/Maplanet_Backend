@@ -50,10 +50,26 @@ export class CreateBoardDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
+    example: '마법사',
+    description: '직업',
+  })
+  public main_job: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
     example: '클레릭',
     description: '직업',
   })
-  public job: string;
+  public sub_job: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    example: '심쩔',
+    description: '쩔 종류',
+  })
+  public progress_kind: string;
 
   @IsNotEmpty()
   @IsString()
@@ -61,7 +77,7 @@ export class CreateBoardDto {
     example: '5',
     description: '잠쩔 시간',
   })
-  public progress_time: string;
+  public progress_time: number;
 
   @IsNotEmpty()
   @IsBoolean()

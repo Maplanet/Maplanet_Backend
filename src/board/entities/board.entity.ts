@@ -7,13 +7,15 @@ export class Board {
     board1_id: number;
 
     @Column()
-    discord_id: string;
-
-    @ManyToOne(() => Users, (Users) => Users.discord_id ,{
+    user_id: number;
+    @ManyToOne(() => Users, (Users) => Users.user_id ,{
         onDelete: 'CASCADE'
     })
-    @JoinColumn({ name: 'discord_id' })
+    @JoinColumn({ name: 'user_id' })
     Users: Users;
+
+    @Column()
+    discord_id: string;
 
     @Column()
     meso: number;
@@ -31,10 +33,16 @@ export class Board {
     level: number;
 
     @Column()
-    job: string;
+    main_job: string;
 
     @Column()
-    progress_time: string;
+    sub_job: string;
+
+    @Column()
+    progress_kind: string;
+
+    @Column()
+    progress_time: number;
 
     @Column()
     position: boolean;
