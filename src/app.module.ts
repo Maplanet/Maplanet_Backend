@@ -8,12 +8,7 @@ import { UsersModule } from './users/users.module';
 import { ReportModule } from './report/report.module';
 import { AdministratorModule } from './administrator/administrator.module';
 import { NoticeModule } from './notice/notice.module';
-import { dataSourceOptions } from './config/data-source';
-import {
-  ConfigModule,
-  ConfigService,
-  ConfigModule as NestConfigModule,
-} from '@nestjs/config';
+import { ConfigModule, ConfigModule as NestConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { Board } from './board/entities/board.entity';
 import { Board2 } from './board2/entities/board2.entity';
