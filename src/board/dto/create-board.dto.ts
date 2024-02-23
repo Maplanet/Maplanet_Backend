@@ -77,7 +77,7 @@ export class CreateBoardDto {
     example: '5',
     description: '잠쩔 시간',
   })
-  public progress_time: string;
+  public progress_time: number;
 
   @IsNotEmpty()
   @IsBoolean()

@@ -3,6 +3,7 @@ import { Equal, Like, Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class BoardService {
@@ -19,6 +20,7 @@ export class BoardService {
 
             const board1 = await this.boardRepository.find({
                 select: [
+                    'user_id',
                     'board1_id',
                     'discord_id',
                     'meso',
@@ -46,24 +48,27 @@ export class BoardService {
         }
     }
 
-    async boardSearchInfo(page: number = 1, search: any): Promise<any> {
+    async boardSearchInfo(page: number = 1, searchMeso: number, searchTitle: string, searchNickname: string, searchHuntingGround: string, searchLevel: number, searchSubJob: string, searchProgressKind: string, searchProgressTime: number, searchDiscordName: string): Promise<any> {
         try{
             const limit = 5;
             const skip = (page - 1) * limit;
             const take = limit;
 
             const searchedBoard = await this.boardRepository.find({
-                where: [
-                    { meso: search },
-                    { title: Like(`%${search}%`) },
-                    { maple_nickname: Like(`%${search}%`) },
-                    { hunting_ground: Like(`%${search}%`) },
-                    { level: search },
-                    { sub_job: Like(`%${search}%`) },
-                    { progress_time: Like(`%${search}%`) },
-                    { discord_global_name: Like(`%${search}%`) }
+                where: 
+                [
+                    { meso: Equal(searchMeso) },
+                    { title: Like(`%${searchTitle}%`) },
+                    { maple_nickname: Like(`%${searchNickname}%`) },
+                    { hunting_ground: Like(`%${searchHuntingGround}%`) },
+                    { level: Equal(searchLevel) },
+                    { sub_job: Like(`%${searchSubJob}%`) },
+                    { progress_kind: Like(`%${searchProgressKind}%`) },
+                    { progress_time: Equal(searchProgressTime) },
+                    { discord_global_name: Like(`%${searchDiscordName}%`) }
                 ],
                 select: [
+                    'user_id',
                     'board1_id',
                     'discord_id',
                     'meso',
@@ -82,11 +87,12 @@ export class BoardService {
                 skip,
                 take,
                 order: {
-                    created_at: 'DESC' // Order by created_at timestamp in descending order
+                    created_at: 'DESC' 
                 }
             })
+            console.log("dsddddddddddddddd",searchedBoard)
 
-            return {board1Data: searchedBoard}
+            return {search1Data: searchedBoard}
         } catch (error) {
             console.error(`잠쩔 게시글 검색 조회 에러: ${error.message}`);
         }

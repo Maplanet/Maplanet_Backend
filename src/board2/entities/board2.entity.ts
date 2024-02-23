@@ -7,13 +7,15 @@ export class Board2 {
     board2_id: number;
 
     @Column()
-    discord_id: string;
-
-    @ManyToOne(() => Users, (Users) => Users.discord_id ,{
+    user_id: number;
+    @ManyToOne(() => Users, (Users) => Users.user_id ,{
         onDelete: 'CASCADE'
     })
-    @JoinColumn({ name: 'discord_id' })
+    @JoinColumn({ name: 'user_id' })
     Users: Users;
+
+    @Column()
+    discord_id: string;
 
     @Column()
     meso: number;

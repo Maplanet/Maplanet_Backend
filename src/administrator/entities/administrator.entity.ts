@@ -8,12 +8,11 @@ export class Administrator {
     administrator_id: number;
 
     @Column()
-    discord_id: string;
-
-    @OneToOne(() => Users, (Users) => Users.discord_id ,{
+    user_id: string;
+    @OneToOne(() => Users, (Users) => Users.user_id ,{
         onDelete: 'CASCADE'
     })
-    @JoinColumn({ name: 'discord_id' })
+    @JoinColumn({ name: 'user_id' })
     Users: Users;
 
     @Column()

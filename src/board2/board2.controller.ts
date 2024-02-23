@@ -18,7 +18,7 @@ export class Board2Controller {
     return getBoard2Info
   }
 
-  @Get('/')
+  @Get('/search')
   @ApiOperation({
     summary: '겹사 게시글 검색 조회',
     description: '겹사 의뢰 한 유저가 올린 게시글 검색해서 전체 조회'

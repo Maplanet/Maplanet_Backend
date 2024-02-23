@@ -19,6 +19,7 @@ export class Board2Service {
 
             const board2 = await this.board2Repository.find({
                 select: [
+                    'user_id',
                     'board2_id',
                     'discord_id',
                     'meso',
@@ -62,6 +63,7 @@ export class Board2Service {
                     { discord_global_name: Like(`%${search}%`) },
                 ],
                 select: [
+                    'user_id',
                     'board2_id',
                     'discord_id',
                     'meso',
