@@ -31,7 +31,13 @@ export class Board {
     level: number;
 
     @Column()
-    job: string;
+    main_job: string;
+
+    @Column()
+    sub_job: string;
+
+    @Column()
+    progress_kind: string;
 
     @Column()
     progress_time: string;
