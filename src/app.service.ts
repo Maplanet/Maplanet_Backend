@@ -17,7 +17,7 @@ export class AppService {
   getHello(): string {
     const apiKey = this.configservice.get<string>('SECRET_PASSPHRASE');
     const env = this.configservice.get<string>('NODE_ENV');
-    console.log(apiKey + 123);
+    console.log(apiKey + 1234);
     return `${env}`;
   }
 
