@@ -9,11 +9,16 @@ import { ReportModule } from './report/report.module';
 import { AdministratorModule } from './administrator/administrator.module';
 import { NoticeModule } from './notice/notice.module';
 import { dataSourceOptions } from './config/data-source';
-import { ConfigModule as NestConfigModule } from '@nestjs/config';
+import {
+  ConfigModule,
+  ConfigService,
+  ConfigModule as NestConfigModule,
+} from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { Board } from './board/entities/board.entity';
 import { Board2 } from './board2/entities/board2.entity';
 import { LoggingModule } from './logger/logger.module';
+import { TypeOrmConfigService } from './config/database.config';
 
 @Module({
   imports: [
@@ -23,7 +28,10 @@ import { LoggingModule } from './logger/logger.module';
     ReportModule,
     AdministratorModule,
     NoticeModule,
-    TypeOrmModule.forRoot(dataSourceOptions),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useClass: TypeOrmConfigService,
+    }),
     NestConfigModule.forRoot({
       envFilePath: ['.env', '.env.dev', '.env.prod'],
     }),
