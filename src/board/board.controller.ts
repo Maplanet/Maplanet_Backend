@@ -29,7 +29,7 @@ export class BoardController {
     return getBoardInfo;
   }
 
-  @Get('/')
+  @Get('/search')
   @ApiOperation({
     summary: '잠쩔 게시글 검색 조회',
     description: '잠수 쩔 해주는 유저가 올린 게시글을 검색해서 전체 조회',
@@ -37,17 +37,33 @@ export class BoardController {
   @ApiResponse({ status: 200, description: '잠쩔 게시글 전체 조회' })
   async boardSearchInfo(
     @Query('page') page: number,
-    @Query('search') search: any,
+    @Query('searchMeso') searchMeso: number,
+    @Query('searchTitle') searchTitle: string,
+    @Query('searchNickname') searchNickname: string,
+    @Query('searchHuntingGround') searchHuntingGround: string,
+    @Query('searchLevel') searchLevel: number,
+    @Query('searchSubJob') searchSubJob: string,
+    @Query('searchProgressKind') searchProgressKind: string,
+    @Query('searchProgressTime') searchProgressTime: number,
+    @Query('searchDiscordName') searchDiscordName: string,
   ): Promise<any> {
     const getBoardSearchInfo = await this.boardService.boardSearchInfo(
       page,
-      search,
+      searchMeso,
+      searchTitle,
+      searchNickname,
+      searchHuntingGround,
+      searchLevel,
+      searchSubJob,
+      searchProgressKind,
+      searchProgressTime,
+      searchDiscordName
     );
+    // console.log("asdfasdfasdfasdfsadfsa",getBoardSearchInfo)
     return getBoardSearchInfo;
   }
 
   @Post('/post')
-
   // @UseGuards(AuthGuard)
   async postBoard(
     @Body() createBoardDto: CreateBoardDto,
