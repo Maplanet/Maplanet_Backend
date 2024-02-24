@@ -8,11 +8,13 @@ import {
   Query,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/common/auth.guard';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
 
 @ApiTags('BOARD')
 @Controller('board1')
@@ -79,7 +81,7 @@ export class BoardController {
       searchSubJob,
       searchProgressKind,
       searchProgressTime,
-      searchDiscordName
+      searchDiscordName,
     );
     // console.log("asdfasdfasdfasdfsadfsa",getBoardSearchInfo)
     return getBoardSearchInfo;
@@ -94,7 +96,6 @@ export class BoardController {
     const discordId = request.headers['discord_id'];
     // console.log(discordId)
     // const userId = request['user'].userId;
-
     const getBoardInfo = await this.boardService.postBoard(
       createBoardDto,
       discordId

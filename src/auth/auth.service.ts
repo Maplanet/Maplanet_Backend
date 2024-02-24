@@ -17,8 +17,6 @@ export class AuthService {
 
   async findUserFromDiscordId(discord_id: string): Promise<any> {
     const user = await this.usersService.findOne(discord_id);
-
-    // console.log(user);
     if (!user) {
       throw new UnauthorizedException();
     }
@@ -27,9 +25,7 @@ export class AuthService {
   }
   async validateOAuth2(Details) {
     const { id } = Details;
-    // console.log(discordId);
     await this.usersService.saveUser(Details); // 여기까지 잘됨
-    console.log('Details: ', Details);
     const oauth2 = await this.findOAuth2(id);
     return oauth2 ? this.updateOAuth2(Details) : this.createOAuth2(Details);
   }
@@ -65,5 +61,15 @@ export class AuthService {
     return this.DiscordRepository.findOne({
       where: { discord_id: discord_id },
     });
+  }
+  googleLogin(req) {
+    if (!req.user) {
+      return 'No user from google';
+    }
+
+    return {
+      message: 'User information from google',
+      user: req.user,
+    };
   }
 }
