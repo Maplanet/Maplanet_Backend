@@ -5,7 +5,6 @@ RUN yarn global add pm2
 RUN mkdir -p /var/app
 WORKDIR /var/app
 COPY . .
-COPY .env.dev .env.dev
 RUN yarn install --frozen-lockfile
 RUN yarn build
 #EXPOSE 3000
