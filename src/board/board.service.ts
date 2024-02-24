@@ -3,6 +3,7 @@ import { Equal, Like, Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { Users } from 'src/users/entities/users.entity';
 
 @Injectable()
 export class BoardService {
@@ -38,18 +39,68 @@ export class BoardService {
         skip,
         take,
         order: {
-          created_at: 'DESC', // Order by created_at timestamp in descending order
+          created_at: 'DESC', 
         },
-      });
-      return { board1Data: board1 };
+        relations: ['Users']
+    });
+
+    const modifiedBoard1 = board1.map(({ Users: { report_count, manner_count }, ...board }) => ({
+        ...board,
+        report_count,
+        manner_count,
+      }));
+    return { board1Data: modifiedBoard1 };
     } catch (error) {
-      console.error(`잠쩔 게시글 조회 에러: ${error.message}`);
+      console.error(`쩔 게시글 조회 에러: ${error.message}`);
     }
   }
 
+  async boardDetailInfo(board1_id: number):Promise<any> {
+    try{
+    const boardDetailInfo = await this.boardRepository.findOne({
+        where: {board1_id},
+        select: [
+          'user_id',
+          'board1_id',
+          'discord_id',
+          'meso',
+          'title',
+          'maple_nickname',
+          'hunting_ground',
+          'level',
+          'sub_job',
+          'progress_kind',
+          'progress_time',
+          'position',
+          'discord_global_name',
+          'discord_image',
+          'view_count',
+          'complete',
+          'created_at',
+          'updated_at',
+        ],
+        order: {
+          created_at: 'DESC', 
+        },
+        relations: ['Users']
+    });
+    console.log(boardDetailInfo)
+
+    const { Users: { report_count, manner_count }, ...board } = boardDetailInfo;
+
+    return {
+            ...board,
+            report_count,
+            manner_count,
+        }
+    } catch (error) {
+        console.error(`쩔 게시글 상세 조회 에러: ${error.message}`);
+      }
+  }
+ 
   async boardSearchInfo(
     page: number = 1,
-    searchMeso: number,
+    searchMeso: number, 
     searchTitle: string,
     searchNickname: string,
     searchHuntingGround: string,
@@ -64,7 +115,7 @@ export class BoardService {
       const skip = (page - 1) * limit;
       const take = limit;
 
-      const searchedBoard = await this.boardRepository.find({
+      const searchedBoard1 = await this.boardRepository.find({
         where: [
           { meso: Equal(searchMeso) },
           { title: Like(`%${searchTitle}%`) },
@@ -98,16 +149,22 @@ export class BoardService {
         order: {
           created_at: 'DESC',
         },
+        relations: ['Users']
       });
-      console.log('dsddddddddddddddd', searchedBoard);
+      const modifiedSearchBoard1 = searchedBoard1.map(({ Users: { report_count, manner_count }, ...board }) => ({
+        ...board,
+        report_count,
+        manner_count,
+      }));
+      console.log('dsddddddddddddddd', searchedBoard1);
 
-      return { search1Data: searchedBoard };
+      return { search1Data: modifiedSearchBoard1 };
     } catch (error) {
-      console.error(`잠쩔 게시글 검색 조회 에러: ${error.message}`);
+      console.error(`쩔 게시글 검색 조회 에러: ${error.message}`);
     }
   }
 
-  async postBoard(createBoardDto: CreateBoardDto): Promise<any> {
+  async postBoard(createBoardDto: CreateBoardDto, discordId: string): Promise<any> {
     try {
       const {
         meso,
@@ -124,7 +181,6 @@ export class BoardService {
 
       const createBoard1 = this.boardRepository.create({
         // user_id,
-        // board1_id,
         meso,
         title,
         maple_nickname,
@@ -135,18 +191,19 @@ export class BoardService {
         progress_kind,
         progress_time,
         position,
-        // discord_id,
-        // discord_username,
+        discord_id: discordId,
+        // discord_username: discordId,
         // discord_global_name,
         // discord_image,
         // view_count,
         // complete
       });
+    //   console.log(createBoard1)
 
       await this.boardRepository.save(createBoard1);
-      return { msg: '잠쩔 게시글 등록이 완료되었습니다.' };
+      return { msg: '쩔 게시글 등록이 완료되었습니다.' };
     } catch (error) {
-      console.error(`잠쩔 게시글 등록 에러: ${error.message}`);
+      console.error(`쩔 게시글 등록 에러: ${error.message}`);
     }
   }
 }
