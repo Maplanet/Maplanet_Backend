@@ -1,10 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsString,
-  IsNotEmpty,
-  IsNumber,
-  IsBoolean,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateBoardDto {
   @IsNotEmpty()
