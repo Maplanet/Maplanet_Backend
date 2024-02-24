@@ -2,10 +2,11 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AuthService } from './auth.service';
-import { Strategy } from 'passport-oauth2';
+import { Strategy, Verifycheck } from 'passport-oauth2';
 import { stringify } from 'querystring';
 import { UsersService } from 'src/users/users.service';
 import { encrypt } from './encrypt';
+import { VerifyCallback } from 'jsonwebtoken';
 
 // change these to be your Discord client ID and secret
 const clientID = '1207737873063739452';
@@ -25,7 +26,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
           client_id: clientID,
           redirect_uri: callbackURL,
           response_type: 'code',
-          scope: 'identify, email',
+          scope: 'identify',
         },
       )}`,
       tokenURL: 'https://discordapp.com/api/oauth2/token',
@@ -45,15 +46,14 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       })
       .toPromise();
 
-    data.accessToken = encryptedAccessToken;
-    data.refreshToken = encryptedRefreshToken;
+    data.accessToken = accessToken;
+    data.refreshToken = refreshToken;
 
-    const existUser = await this.authService.validateOAuth2(data);
-    // console.log('existUser: ',existUser);
-    if (!existUser) {
-      console.log('유저가 존재하지않음');
-      await this.usersServiece.saveUser(data);
-    }
+    // const existUser = await this.authService.validateOAuth2(data);
+    // if (!existUser) {
+    //   console.log('유저가 존재하지않음');
+    //   await this.usersServiece.saveUser(data);
+    // }
     //return this.authService.findUserFromDiscordId(data.id);
     return data;
   }

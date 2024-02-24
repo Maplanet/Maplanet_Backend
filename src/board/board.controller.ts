@@ -3,15 +3,18 @@ import {
   Controller,
   Get,
   Injectable,
+  ParseIntPipe,
   Post,
   Query,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/common/auth.guard';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { LoggingInterceptor } from 'src/logger/logger.interceptor';
 
 @ApiTags('BOARD')
 @Controller('board1')
@@ -57,19 +60,20 @@ export class BoardController {
       searchSubJob,
       searchProgressKind,
       searchProgressTime,
-      searchDiscordName
+      searchDiscordName,
     );
     // console.log("asdfasdfasdfasdfsadfsa",getBoardSearchInfo)
     return getBoardSearchInfo;
   }
 
   @Post('/post')
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   async postBoard(
     @Body() createBoardDto: CreateBoardDto,
     @Req() request: Request,
   ): Promise<any> {
     // const userId = request['user'].userId;
+    console.log(createBoardDto);
     const getBoardInfo = await this.boardService.postBoard(
       createBoardDto,
       //userId

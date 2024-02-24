@@ -32,7 +32,6 @@ import { TypeOrmConfigService } from './config/database.config';
     }),
     AuthModule,
     TypeOrmModule.forFeature([Board, Board2]),
-    LoggingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
