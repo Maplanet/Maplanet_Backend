@@ -49,12 +49,14 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     data.accessToken = accessToken;
     data.refreshToken = refreshToken;
 
-    // const existUser = await this.authService.validateOAuth2(data);
-    // if (!existUser) {
-    //   console.log('유저가 존재하지않음');
-    //   await this.usersServiece.saveUser(data);
-    // }
+    const existUser = await this.authService.validateOAuth2(data);
+    if (!existUser) {
+      console.log('유저가 존재하지않음');
+      await this.usersServiece.saveUser(data);
+    }
     //return this.authService.findUserFromDiscordId(data.id);
+    //지금할거 : JWT에 accesstoken 생성, 필요한 정보 넣고 응답헤더로 반환
+    //리프레쉬 토큰은 redis db에 넣기
     return data;
   }
 }

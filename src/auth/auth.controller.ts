@@ -8,7 +8,7 @@ export class AuthController {
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
-  // @Redirect('http://localhost:3000', 302)
+  @Redirect('http://localhost:3000', 302)
   async getUserFromDiscordLogin(@Req() req): Promise<any> {
     console.log(req.user);
     return req.user;
