@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { Board2Service } from './board2.service';
 import { CreateBoard2Dto } from './dto/create-board2.dto';
 
@@ -18,14 +18,48 @@ export class Board2Controller {
     return getBoard2Info
   }
 
+  @Get('/detail/:board2_id')
+  @ApiOperation({
+    summary: '겹사 게시글 상세조회',
+    description: '겹사 해주는 유저가 올린 게시글 상세조회',
+  })
+  @ApiResponse({ status: 200, description: '겹사 게시글 전체 조회' })
+  async board2DetailInfo(@Param('board2_id') board2_id: number): Promise<any> {
+    const getBoard2Info = await this.board2Service.board2DetailInfo(board2_id);
+    return getBoard2Info;
+  }
+
   @Get('/search')
   @ApiOperation({
     summary: '겹사 게시글 검색 조회',
     description: '겹사 의뢰 한 유저가 올린 게시글 검색해서 전체 조회'
   })
   @ApiResponse({ status: 200, description: '잠쩔 게시글 전체 조회' })
-  async board2SearchInfo(@Query('page') page: number, @Query('search') search: any): Promise<any> {
-    const getBoard2SearchInfo = await this.board2Service.board2SearchInfo(page, search)
+  @ApiQuery({ name: 'searchMeso', required: false, type: Number })
+  @ApiQuery({ name: 'searchReportKind', required: false, type: String })
+  @ApiQuery({ name: 'searchTitle', required: false, type: String })
+  @ApiQuery({ name: 'searchRequestNickname', required: false, type: String })
+  @ApiQuery({ name: 'searchPlaceTheifNickname', required: false, type: String })
+  @ApiQuery({ name: 'searchDiscordName', required: false, type: String })
+  async board2SearchInfo(
+    @Query('page') page: number, 
+    @Query('searchMeso') searchMeso: number,
+    @Query('searchReportKind') searchReportKind: string,
+    @Query('searchTitle') searchTitle: string,
+    @Query('searchRequestNickname') searchRequestNickname: string,
+    @Query('searchPlaceTheifNickname') searchPlaceTheifNickname: string,
+    @Query('searchDiscordName') searchDiscordName: string,
+
+    ): Promise<any> {
+    const getBoard2SearchInfo = await this.board2Service.board2SearchInfo(
+      page, 
+      searchMeso,
+      searchReportKind,
+      searchTitle,
+      searchRequestNickname,
+      searchPlaceTheifNickname,
+      searchDiscordName
+      )
     return getBoard2SearchInfo
   }
 

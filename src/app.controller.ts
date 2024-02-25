@@ -21,13 +21,14 @@ export class AppController {
       const maindata: any = {}
       const getBoard1Data = await this.appService.getBoard1Data()
       maindata.board1Data = getBoard1Data
-      console.log(maindata)
 
       const getBoard2Data = await this.appService.getBoard2Data()
       maindata.board2Data = getBoard2Data
-      console.log(maindata)
 
-      return 
+      const highestManner3 = await this.appService.getManner3()
+      maindata.board1MannerData = highestManner3
+
+      return maindata
     }
 
 }

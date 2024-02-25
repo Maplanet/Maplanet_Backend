@@ -32,14 +32,13 @@ export class BoardController {
     return getBoardInfo;
   }
 
-  @Get('/:board1_id')
+  @Get('/detail/:board1_id')
   @ApiOperation({
     summary: '쩔 게시글 상세조회',
     description: '쩔 해주는 유저가 올린 게시글 상세조회',
   })
   @ApiResponse({ status: 200, description: '쩔 게시글 전체 조회' })
   async boardDetailInfo(@Param('board1_id') board1_id: number): Promise<any> {
-    console.log(1)
     const getBoardInfo = await this.boardService.boardDetailInfo(board1_id);
     return getBoardInfo;
   }
