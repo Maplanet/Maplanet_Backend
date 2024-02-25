@@ -10,7 +10,7 @@ import { response } from 'express';
 export class UsersService {
   constructor(
     @InjectRepository(Users)
-    private usersRepository: Repository<Users>,
+    private readonly usersRepository: Repository<Users>,
   ) {}
 
   // async discordLogin(code) {
@@ -110,37 +110,37 @@ export class UsersService {
   async saveUser(data) {
     const { id, username, avatar, global_name } = data;
     let user = await this.usersRepository.findOne({
-      where: { discord_id: id }
+      where: { discord_id: id },
     });
     let findUserInfo = await this.usersRepository.findOne({
-      where: { 
-        discord_id: id, 
-        discord_username: username, 
-        discord_image: avatar, 
-        discord_global_name:global_name 
-      }
-    })
-    const userAvatar = `https://cdn.discordapp.com/avatars/${id}/${avatar}`
-    const userAvatarNull = 'https://discord.com/assets/6debd47ed13483642cf09e832ed0bc1b.png'
-    if (!user) { // db에 유저가 없으면 유저 생성
+      where: {
+        discord_id: id,
+        discord_username: username,
+        discord_image: avatar,
+        discord_global_name: global_name,
+      },
+    });
+    const userAvatar = `https://cdn.discordapp.com/avatars/${id}/${avatar}`;
+    const userAvatarNull =
+      'https://discord.com/assets/6debd47ed13483642cf09e832ed0bc1b.png';
+    if (!user) {
+      // db에 유저가 없으면 유저 생성
       let userInfo = this.usersRepository.create({
         discord_id: id,
         discord_username: username,
         discord_global_name: global_name,
-        discord_image:
-          avatar === null
-            ? userAvatarNull
-            : userAvatar,
+        discord_image: avatar === null ? userAvatarNull : userAvatar,
       });
       await this.usersRepository.save(userInfo);
-    } else if (!findUserInfo) { //디스코드 username, global name, image 변경됐을 시 업데이트
+    } else if (!findUserInfo) {
+      //디스코드 username, global name, image 변경됐을 시 업데이트
       user.discord_id = id;
       user.discord_username = username;
-      user.discord_global_name = global_name
+      user.discord_global_name = global_name;
       user.discord_image = avatar === null ? userAvatarNull : userAvatar;
       await this.usersRepository.save(user);
     }
-    return user
+    return user;
   }
 }
 

@@ -44,13 +44,11 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       })
       .toPromise();
 
+    data.access_token = accessToken;
+    data.refresh_token = refreshToken;
+    console.log(data);
     const access_token = await this.authService.validateOAuth2(data);
-    // if (!existUser) {
-    //   await this.usersServiece.saveUser(data);
-    // }
-    //return this.authService.findUserFromDiscordId(data.id);
-    //지금할거 : JWT에 accesstoken 생성, 필요한 정보 넣고 응답헤더로 반환
-    //리프레쉬 토큰은 redis db에 넣기
+
     return access_token;
   }
 }
