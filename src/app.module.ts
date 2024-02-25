@@ -14,6 +14,7 @@ import { Board } from './board/entities/board.entity';
 import { Board2 } from './board2/entities/board2.entity';
 import { LoggingModule } from './logger/logger.module';
 import { TypeOrmConfigService } from './config/database.config';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
