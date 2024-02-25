@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Equal, Like, Repository } from 'typeorm';
+import { Equal, Like, Repository, UpdateResult } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -55,6 +55,10 @@ export class BoardService {
     }
   }
 
+  async board1ViewCount(board1_id: number): Promise<UpdateResult> {
+    return await this.boardRepository.update({ board1_id }, {view_count: () => 'view_count + 1'});
+  }
+
   async boardDetailInfo(board1_id: number):Promise<any> {
     try{
     const boardDetailInfo = await this.boardRepository.findOne({
@@ -84,7 +88,8 @@ export class BoardService {
         },
         relations: ['Users']
     });
-    console.log(boardDetailInfo)
+    // console.log(boardDetailInfo)]
+    await this.board1ViewCount(board1_id);
 
     const { Users: { report_count, manner_count }, ...board } = boardDetailInfo;
 
@@ -95,7 +100,7 @@ export class BoardService {
         }
     } catch (error) {
         console.error(`쩔 게시글 상세 조회 에러: ${error.message}`);
-      }
+    }
   }
  
   async boardSearchInfo(
@@ -114,7 +119,6 @@ export class BoardService {
       const limit = 5;
       const skip = (page - 1) * limit;
       const take = limit;
-
       const searchedBoard1 = await this.boardRepository.find({
         where: [
           { meso: Equal(searchMeso) },
@@ -151,12 +155,12 @@ export class BoardService {
         },
         relations: ['Users']
       });
+
       const modifiedSearchBoard1 = searchedBoard1.map(({ Users: { report_count, manner_count }, ...board }) => ({
         ...board,
         report_count,
         manner_count,
       }));
-      console.log('dsddddddddddddddd', searchedBoard1);
 
       return { search1Data: modifiedSearchBoard1 };
     } catch (error) {
