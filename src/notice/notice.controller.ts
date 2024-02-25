@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Post,
   SetMetadata,
   UseGuards,
@@ -11,20 +12,26 @@ import { Roles } from './role/Roles.Decorator';
 import { Role } from './role/role.enum';
 import { CreateNoticeDto } from './dto/createnotice.dto';
 import { RolesGuard } from './roles.guard';
+import { http } from 'winston';
 
 @Controller('notice')
 export class NoticeController {
   constructor(private readonly noticeService: NoticeService) {}
 
   @Get('/')
-  getNoticeAll() {}
+  @HttpCode(200)
+  async getNoticeAll(): Promise<any[]> {
+    const AllPosts = this.noticeService.getAllNoticePost();
+    return AllPosts;
+  }
 
   @Post('/')
   @UseGuards(RolesGuard)
   //@Roles(Role.Admin)
-  postNotice(@Body() createNoticeDto: CreateNoticeDto) {
-    console.log(createNoticeDto);
-    //await this.noticeService.
+  @HttpCode(201)
+  async postNotice(@Body() createNoticeDto: CreateNoticeDto) {
+    const postNotice = await this.noticeService.postNotice(createNoticeDto);
+    console.log(postNotice);
     return 1;
   }
 }
