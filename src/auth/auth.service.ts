@@ -33,32 +33,24 @@ export class AuthService {
   }
   async validateOAuth2(Details) {
     const { id } = Details;
-    // await this.usersService.saveUser(Details); // 여기까지 잘됨
-
-    //액세스 토큰과 리프레쉬 토큰 발급
+    await this.usersService.saveUser(Details); // 여기까지 잘됨
     const access_token = this.getAccessToken(Details);
     const refresh_token = this.saveRefreshToken(Details);
-    /**
-     * 1.액세스 토큰 페이로드에 Details에 들어간 값중 필요한 데이터만
-     * 2.추출해서 담고 클라이언트 응답헤더로 반환
-     * 3.리프레쉬 토큰은 캐쉬 저장소에 ttl설정해서 저장함
-     **/
 
-    const stringUserData = JSON.stringify(Details);
-    //2주
-    await this.cache.set(String(id), stringUserData, 1209600);
-    const checkcache: string = await this.cache.get(String(id));
-    console.log('여기서확인', JSON.parse(checkcache));
-    console.log(access_token);
-    return access_token;
     const oauth2 = await this.findOAuth2(id);
-    return oauth2
-      ? await this.updateOAuth2(Details)
-      : await this.createOAuth2(Details);
+    console.log(oauth2);
+
+    if (oauth2) {
+      await this.updateOAuth2(Details);
+    } else {
+      await this.createOAuth2(Details);
+    }
+
+    return { access_token };
   }
 
-  createOAuth2(Details) {
-    // console.log(Details);
+  async createOAuth2(Details) {
+    console.log(Details);
     const { id, accessToken, refreshToken } = Details;
     const oauth2User = this.DiscordRepository.create({
       discord_id: id,
@@ -66,19 +58,20 @@ export class AuthService {
       refresh_token: refreshToken,
     });
     console.log('oauth2User: ', oauth2User);
-    return this.DiscordRepository.save(oauth2User);
+    return await this.DiscordRepository.save(oauth2User);
   }
 
   async updateOAuth2(Details) {
-    console.log(Details);
-    const { id, accessToken, refreshToken } = Details;
+    console.log('여기업데이트', Details);
+    const { id, access_Token, refresh_Token } = Details;
+    console.log(id, Details.access_Token, Details.refresh_Token);
     await this.DiscordRepository.update(
       {
         discord_id: id,
       },
       {
-        access_token: accessToken,
-        refresh_token: refreshToken,
+        access_token: 'yz6wnf3sk7Q9PtwZwJiMiuXFzMPfpe',
+        refresh_token: '3felVCAKcNjvMigMJwbT8QHaEAEZrp',
       },
     );
     return Details;
@@ -89,18 +82,9 @@ export class AuthService {
       where: { discord_id: discord_id },
     });
   }
-  googleLogin(req) {
-    if (!req.user) {
-      return 'No user from google';
-    }
-
-    return {
-      message: 'User information from google',
-      user: req.user,
-    };
-  }
 
   getAccessToken(Details) {
+    Details.tokentype = 'access';
     return this.jwtService.sign(
       {
         Details,
@@ -112,9 +96,10 @@ export class AuthService {
     );
   }
 
-  saveRefreshToken(Details) {
+  async saveRefreshToken(Details) {
     const { id } = Details;
     //const userdata: string = JSON.stringify(Details);
+    Details.tokentype = 'refresh';
     const refresh_token = this.jwtService.sign(
       {
         Details,
@@ -124,11 +109,19 @@ export class AuthService {
         expiresIn: this.configService.get<number>('REFRESH_TOKEN_EXPIRESTIME'),
       },
     );
-    const check = this.cache.set(id, refresh_token, 1209600);
-    return console.log(check);
+    console.log('리프레쉬토큰', refresh_token);
+    await this.cache.set(
+      String(id),
+      refresh_token,
+      this.configService.get<number>('REFRESH_TOKEN_EXPIRESTIME'),
+    );
+    const check = await this.cache.get(String(id));
+    console.log(check);
+    return refresh_token;
   }
 
-  verifyToken(token: string) {
+  verifyToken(token) {
+    console.log('토큰', token);
     try {
       return this.jwtService.verify(token, {
         secret: this.configService.get<string>('JWT_SECRET_KEY'),
@@ -137,5 +130,16 @@ export class AuthService {
       console.error(e);
       throw new UnauthorizedException('토큰이 만료됐거나 잘못된 토큰입니다.');
     }
+  }
+
+  extractTokenFormHeader(header: string) {
+    const [bearer, token] = header.split(' ');
+
+    console.log(token);
+    if (bearer !== 'Bearer' || !token) {
+      throw new UnauthorizedException('wrong token');
+    }
+
+    return token;
   }
 }

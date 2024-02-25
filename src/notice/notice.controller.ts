@@ -13,6 +13,7 @@ import { Role } from './role/role.enum';
 import { CreateNoticeDto } from './dto/createnotice.dto';
 import { RolesGuard } from './roles.guard';
 import { http } from 'winston';
+import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
 
 @Controller('notice')
 export class NoticeController {
@@ -26,7 +27,7 @@ export class NoticeController {
   }
 
   @Post('/')
-  @UseGuards(RolesGuard)
+  // @UseGuards(RolesGuard, AccessTokenGuard)
   //@Roles(Role.Admin)
   @HttpCode(201)
   async postNotice(@Body() createNoticeDto: CreateNoticeDto) {
