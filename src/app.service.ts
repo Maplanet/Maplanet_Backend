@@ -8,6 +8,8 @@ import { Notice } from './notice/entities/notice.entity';
 
 @Injectable()
 export class AppService {
+  // private readonly cache;
+
   constructor(
     @InjectRepository(Board)
     private boardRepository: Repository<Board>,
@@ -16,7 +18,13 @@ export class AppService {
     private readonly configservice: ConfigService,    
     @InjectRepository(Notice)
     private readonly noticeReporotory: Repository<Notice>,
-  ) {}
+  ) {
+    // this.cache = cacheManager.caching({
+    //   store: redisStore,
+    //   host: 'localhost', // Redis server host
+    //   port: 6379, // Redis server port
+    // });
+  }
   getHello(): string {
     const apiKey = this.configservice.get<string>('SECRET_PASSPHRASE');
     const env = this.configservice.get<string>('NODE_ENV');
@@ -50,9 +58,10 @@ export class AppService {
         take: 3,
         relations: ['Users']
         });
-        const modifiedBoard1 = board1Data.map(({ Users: { manner_count }, ...board }) => ({
+        const modifiedBoard1 = board1Data.map(({ Users: { manner_count, report_count }, ...board }) => ({
           ...board,
           manner_count,
+          report_count
         }));
       return  modifiedBoard1;
     } catch (error) {
@@ -83,9 +92,10 @@ export class AppService {
         take: 3,
         relations: ['Users']
       });
-        const modifiedBoard2 = board2Data.map(({ Users: { manner_count }, ...board2 }) => ({
+        const modifiedBoard2 = board2Data.map(({ Users: { manner_count, report_count }, ...board2 }) => ({
           ...board2,
           manner_count,
+          report_count
         }));
       return modifiedBoard2;
     } catch (error) {
