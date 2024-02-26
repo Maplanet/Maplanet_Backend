@@ -18,8 +18,8 @@ export class AppService {
     private readonly configservice: ConfigService,    
     @InjectRepository(Notice)
     private readonly noticeReporotory: Repository<Notice>,
-    @Inject('REDIS_CLIENT')
-    private readonly redis: RedisClientType
+    // @Inject('REDIS_CLIENT')
+    // private readonly redis: RedisClientType
   ) {}
 
   getHello(): string {
@@ -177,55 +177,55 @@ export class AppService {
     }
   }
 
-  //전체 접속한 유저 수
-  async allVisitors(): Promise<number> {
-    let total_visitors_str = await this.redis.get('total_visitors');
-    let total_visitors = Number(total_visitors_str);
-    if (isNaN(total_visitors)) {
-      total_visitors = 0;
-    }
-    total_visitors++;
-    await this.redis.set('total_visitors', String(total_visitors));
-    return total_visitors;
-  } 
+  // //전체 접속한 유저 수
+  // async allVisitors(): Promise<number> {
+  //   let total_visitors_str = await this.redis.get('total_visitors');
+  //   let total_visitors = Number(total_visitors_str);
+  //   if (isNaN(total_visitors)) {
+  //     total_visitors = 0;
+  //   }
+  //   total_visitors++;
+  //   await this.redis.set('total_visitors', String(total_visitors));
+  //   return total_visitors;
+  // } 
 
-  //오늘 접속한 유저 수
-  async incrementTodayVisitors(): Promise<void> {
-    await this.redis.incr('visitors_today');
-  }
+  // //오늘 접속한 유저 수
+  // async incrementTodayVisitors(): Promise<void> {
+  //   await this.redis.incr('visitors_today');
+  // }
 
-  @Cron(CronExpression.EVERY_DAY_AT_6AM)
-  async resetDailyVisitors(): Promise<void> {
-    const visitors = await this.redis.get('visitors_today');
-    console.log(visitors)
-    if (visitors) {
-      await this.redis.set('visitors_today', '0');
-    }
-  }
+  // @Cron(CronExpression.EVERY_DAY_AT_6AM)
+  // async resetDailyVisitors(): Promise<void> {
+  //   const visitors = await this.redis.get('visitors_today');
+  //   console.log(visitors)
+  //   if (visitors) {
+  //     await this.redis.set('visitors_today', '0');
+  //   }
+  // }
 
-  async todayVisitors(): Promise<number> {
-    const visitors = await this.redis.get('visitors_today');
-    return visitors ? parseInt(visitors) : 0;
-  }
+  // async todayVisitors(): Promise<number> {
+  //   const visitors = await this.redis.get('visitors_today');
+  //   return visitors ? parseInt(visitors) : 0;
+  // }
  
-  // 현재 로그인한 유저
-  // async loginUser(userId: string): Promise<void> {
-  //   await this.redis.sAdd('logged_in_users', userId);
-  // }
+  // // 현재 로그인한 유저
+  // // async loginUser(userId: string): Promise<void> {
+  // //   await this.redis.sAdd('logged_in_users', userId);
+  // // }
 
-  // async logoutUser(userId: string): Promise<void> {
-  //   await this.redis.sRem('logged_in_users', userId);
-  // }
+  // // async logoutUser(userId: string): Promise<void> {
+  // //   await this.redis.sRem('logged_in_users', userId);
+  // // }
 
-  // async getLoggedInUserCount(): Promise<number> {
-  //   const loggedInUsersCount = await this.redis.sCard('logged_in_users');
-  //   return loggedInUsersCount;
-  // }
+  // // async getLoggedInUserCount(): Promise<number> {
+  // //   const loggedInUsersCount = await this.redis.sCard('logged_in_users');
+  // //   return loggedInUsersCount;
+  // // }
   
-  //야매 현재 로그인한 유저
-  async getLoggedInUserCount(): Promise<number> {
-    const visitorsToday = await this.todayVisitors();
-    const loggedInUsersCount = Math.ceil(visitorsToday / 3); 
-    return loggedInUsersCount
-  }
+  // //야매 현재 로그인한 유저
+  // async getLoggedInUserCount(): Promise<number> {
+  //   const visitorsToday = await this.todayVisitors();
+  //   const loggedInUsersCount = Math.ceil(visitorsToday / 3); 
+  //   return loggedInUsersCount
+  // }
 }

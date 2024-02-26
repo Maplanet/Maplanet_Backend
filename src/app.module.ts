@@ -15,7 +15,7 @@ import { Board2 } from './board2/entities/board2.entity';
 import { LoggingModule } from './logger/logger.module';
 import { TypeOrmConfigService } from './config/database.config';
 import { Notice } from './notice/entities/notice.entity';
-import { redisProvider } from 'redis.provider';
+// import { redisProvider } from 'redis.provider';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -38,7 +38,10 @@ import { ScheduleModule } from '@nestjs/schedule';
     ScheduleModule.forRoot()
   ],
   controllers: [AppController],
-  providers: [AppService, ...redisProvider],
-  exports: [...redisProvider]
+  providers: [
+    AppService, 
+    // ...redisProvider
+  ],
+  // exports: [...redisProvider]
 })
 export class AppModule {}
