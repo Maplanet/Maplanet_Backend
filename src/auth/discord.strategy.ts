@@ -1,5 +1,5 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AuthService } from './auth.service';
 import { Strategy, Verifycheck } from 'passport-oauth2';
@@ -38,6 +38,8 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   }
 
   async validate(accessToken: string, refreshToken: string): Promise<any> {
+    // const encryptedAccessToken = encrypt(accessToken);
+    // const encryptedRefreshToken = encrypt(refreshToken);
     const { data } = await this.http
       .get('https://discordapp.com/api/users/@me', {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -46,9 +48,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
 
     data.access_token = accessToken;
     data.refresh_token = refreshToken;
-    console.log(data);
-    const access_token = await this.authService.validateOAuth2(data);
 
-    return access_token;
+    return await this.authService.validateOAuth2(data);
   }
 }
