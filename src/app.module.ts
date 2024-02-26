@@ -14,8 +14,9 @@ import { Board } from './board/entities/board.entity';
 import { Board2 } from './board2/entities/board2.entity';
 import { LoggingModule } from './logger/logger.module';
 import { TypeOrmConfigService } from './config/database.config';
-import { CacheModule } from '@nestjs/cache-manager';
 import { Notice } from './notice/entities/notice.entity';
+import { redisProvider } from 'redis.provider';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -34,8 +35,10 @@ import { Notice } from './notice/entities/notice.entity';
     }),
     AuthModule,
     TypeOrmModule.forFeature([Board, Board2, Notice]),
+    ScheduleModule.forRoot()
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ...redisProvider],
+  exports: [...redisProvider]
 })
 export class AppModule {}
