@@ -4,17 +4,7 @@ import { Repository } from 'typeorm';
 import { Board } from './board/entities/board.entity';
 import { Board2 } from './board2/entities/board2.entity';
 import { ConfigService } from '@nestjs/config';
-
-interface Board1 {
-  board1_id: number;
-  user_id: number;
-  discord_id: string;
-  discord_global_name: string;
-  discord_image: string;
-  Users: {
-    manner_count: number;
-  };
-}
+import { Notice } from './notice/entities/notice.entity';
 
 @Injectable()
 export class AppService {
@@ -23,7 +13,9 @@ export class AppService {
     private boardRepository: Repository<Board>,
     @InjectRepository(Board2)
     private board2Repository: Repository<Board2>,
-    private readonly configservice: ConfigService,
+    private readonly configservice: ConfigService,    
+    @InjectRepository(Notice)
+    private readonly noticeReporotory: Repository<Notice>,
   ) {}
   getHello(): string {
     const apiKey = this.configservice.get<string>('SECRET_PASSPHRASE');
@@ -129,47 +121,53 @@ export class AppService {
     }
   }
 
-  // async getManner3():Promise<any> {
-  //   try {
-  //     const topThreeMannerPosts = await this.boardRepository
-  //     .createQueryBuilder('Board')
-  //     .select([
-  //       'Board.board1_id',
-  //       'Board.user_id',
-  //       'Board.discord_id',
-  //       'Board.discord_global_name',
-  //       'Board.discord_image',
-  //       'MAX(Users.manner_count) AS manner_count'
-  //     ])
-  //     .leftJoin('Board.Users', 'Users')
-  //     .groupBy('Board.board1_id')
-  //     .orderBy('manner_count', 'DESC')
-  //     .take(3)
-  //     .getRawMany();
+  async highestMeso3(): Promise<any> {
+    try{
+      const board2Data = await this.board2Repository.find({
+        select: [
+          'board2_id',
+          'user_id',
+          'discord_id',
+          'discord_global_name',
+          'discord_image',
+          'meso'
+        ],
+        relations: ['Users'],
+      });
 
-  //   return topThreeMannerPosts.map(post => ({
-  //     board1_id: post.Board_board1_id, 
-  //     user_id: post.Board_user_id,
-  //     discord_id: post.Board_discord_id, 
-  //     discord_global_name: post.Board_discord_global_name, 
-  //     discord_image: post.Board_discord_image, 
-  //     manner_count: post.manner_count
-  //   }));
+      const modifiedBoard2 = board2Data
+      .map(({ Users: { manner_count }, ...board2 }) => ({
+        ...board2,
+        manner_count,
+      }))
+      .sort((a, b) => b.meso - a.meso)
+      .filter(board2 => board2.meso !== null)
+      .slice(0, 3);
 
-  //   } catch (error) {
-  //     console.error(`메너 게시글 3개 조회 에러: ${error.message}`);
-  //   }
-  // }
+      return modifiedBoard2
+    } catch (error) {
+      console.error(`메인페이지 겹사 게시글 조회 에러: ${error.message}`);
+    }
+  }
 
-  // async getManner3():Promise<any> {
-  //   try {
+  async noticeData(): Promise<any> {
+    try {
+      const notice = await this.noticeReporotory.find({
+        select: [
+          'notice_id',
+          'category',
+          'title',
+        ],
+        take: 1,
+        order: {
+          created_at: 'DESC'
+        }
+      })
 
-  //   } catch (error) {
-  //     console.error(`메인페이지 겹사 게시글 조회 에러: ${error.message}`);
-  //   }
-  // }
-
-
-
+      return notice
+    } catch (error) {
+      console.error(`메인페이지 겹사 게시글 조회 에러: ${error.message}`);
+    }
+  }
 
 }
