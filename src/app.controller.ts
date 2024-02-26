@@ -34,19 +34,19 @@ export class AppController {
     const noticeData = await this.appService.noticeData();
     maindata.noticeData = noticeData;
 
-    const allVisitors = await this.appService.allVisitors();
-    await this.appService.incrementTodayVisitors();
-    const todayVisitors = await this.appService.todayVisitors();
-    // await this.appService.loginUser('1');
-    // await this.appService.loginUser('2');
-    // await this.appService.loginUser('3');
-    // await this.appService.logoutUser('user_id_1');
-    const loggedInUser = await this.appService.getLoggedInUserCount();
-    maindata.visitorsData = {
-      total_visitors: allVisitors,
-      today_visitors: todayVisitors,
-      logged_in_user: loggedInUser
-    }
+    // const allVisitors = await this.appService.allVisitors();
+    // await this.appService.incrementTodayVisitors();
+    // const todayVisitors = await this.appService.todayVisitors();
+    // // await this.appService.loginUser('1');
+    // // await this.appService.loginUser('2');
+    // // await this.appService.loginUser('3');
+    // // await this.appService.logoutUser('user_id_1');
+    // const loggedInUser = await this.appService.getLoggedInUserCount();
+    // maindata.visitorsData = {
+    //   total_visitors: allVisitors,
+    //   today_visitors: todayVisitors,
+    //   logged_in_user: loggedInUser
+    // }
 
     return maindata
   }
