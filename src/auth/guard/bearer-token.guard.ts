@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { UsersService } from 'src/users/users.service';
+import { raw } from 'mysql2';
 @Injectable()
 export class BearerTokenGuard implements CanActivate {
   constructor(
@@ -16,6 +17,7 @@ export class BearerTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
 
+    //console.log(req.headers['Authorization']);
     const rawToken = req.headers['authorization'];
 
     if (!rawToken) {
@@ -24,13 +26,15 @@ export class BearerTokenGuard implements CanActivate {
 
     const token = this.authService.extractTokenFormHeader(rawToken);
 
+    console.log(token);
     const result = await this.authService.verifyToken(token);
 
-    // const user = await this.usersServcie.getUserByEmail(result.email);
+    //const user = await this.usersServcie.getUserByEmail(result.email);
 
-    // req.user = user;
-    // req.token = token;
-    // req.tokenType = result.Type;
+    //req.user = user;
+    req.token = token;
+    req.data = result;
+    //req.tokenType = result.Type;
 
     return true;
   }
@@ -44,9 +48,9 @@ export class AccessTokenGuard extends BearerTokenGuard {
     const req = context.switchToHttp().getRequest();
     console.log(req);
 
-    if (req.tokenType !== 'access') {
-      throw new UnauthorizedException('Access Token이 아닙니다.');
-    }
+    // if (req.tokenType !== 'access') {
+    //   throw new UnauthorizedException('Access Token이 아닙니다.');
+    // }
 
     return true;
   }

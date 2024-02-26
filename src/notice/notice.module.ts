@@ -4,12 +4,10 @@ import { NoticeController } from './notice.controller';
 import { Notice } from './entities/notice.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
-import { UsersService } from 'src/users/users.service';
-import { Users } from 'src/users/entities/users.entity';
-import { AuthService } from 'src/auth/auth.service';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Notice])],
+  imports: [TypeOrmModule.forFeature([Notice]), AuthModule, UsersModule],
   controllers: [NoticeController],
   providers: [NoticeService],
   exports: [NoticeService],

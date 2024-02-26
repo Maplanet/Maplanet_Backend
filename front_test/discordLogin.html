@@ -71,18 +71,28 @@
           });
 
           const responseData = await response.json();
-        }
-        // Display username
-        const usernameElement = document.getElementById('username');
-        usernameElement.textContent = returnedData.username;
 
-        // Display avatar if available
-        const avatarElement = document.getElementById('avatar');
-        if (returnedData.avatar) {
-          avatarElement.src = returnedData.avatar;
-        } else {
-          // If no avatar is available, use a default one
-          avatarElement.src = 'https://via.placeholder.com/100'; // You can replace this with any default avatar image URL
+          // Get user information
+          const accessToken = responseData.access_token;
+          const userResponse = await fetch('https://discord.com/api/users/@me', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          const userData = await userResponse.json();
+
+          // Display username
+          const usernameElement = document.getElementById('username');
+          usernameElement.textContent = userData.username;
+
+          // Display avatar if available
+          const avatarElement = document.getElementById('avatar');
+          if (userData.avatar) {
+            avatarElement.src = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`;
+          } else {
+            // If no avatar is available, use a default one
+            avatarElement.src = 'https://via.placeholder.com/100'; // You can replace this with any default avatar image URL
+          }
         }
       }
     </script>

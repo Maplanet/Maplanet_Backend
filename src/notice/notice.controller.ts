@@ -32,12 +32,12 @@ export class NoticeController {
   @HttpCode(200)
   async getNoticeDetail(@Param('notice_id') notice_id: number): Promise<any> {
     const getOneNotice = this.noticeService.getNoticeDetail(notice_id);
-    return getOneNotice
+    return getOneNotice;
   }
 
-
   @Post('/')
-  // @UseGuards(RolesGuard, AccessTokenGuard)
+  @UseGuards(AccessTokenGuard)
+  //@UseGuards(RolesGuard, AccessTokenGuard)
   //@Roles(Role.Admin)
   @HttpCode(201)
   async postNotice(@Body() createNoticeDto: CreateNoticeDto) {

@@ -18,8 +18,9 @@ export class LoggingInterceptor implements NestInterceptor {
     const { ip, method, originalUrl } = request;
     const userAgent = request.get('user-agent') || '';
     const currnetTime = Date.now();
-    const now = new Date().toLocaleDateString('ko-KR').replaceAll('. ', '-');
-    console.log(now);
+    const now: string = new Date()
+      .toLocaleDateString('ko-KR')
+      .replaceAll('. ', '-');
 
     return next.handle().pipe(
       tap(() => {
