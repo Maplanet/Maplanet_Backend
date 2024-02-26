@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
   Post,
+  Query,
   SetMetadata,
   UseGuards,
 } from '@nestjs/common';
@@ -21,10 +23,18 @@ export class NoticeController {
 
   @Get('/')
   @HttpCode(200)
-  async getNoticeAll(): Promise<any[]> {
-    const AllPosts = this.noticeService.getAllNoticePost();
+  async getNoticeAll(@Query('page') page: number): Promise<any> {
+    const AllPosts = this.noticeService.getAllNoticePost(page);
     return AllPosts;
   }
+
+  @Get('/:notice_id')
+  @HttpCode(200)
+  async getNoticeDetail(@Param('notice_id') notice_id: number): Promise<any> {
+    const getOneNotice = this.noticeService.getNoticeDetail(notice_id);
+    return getOneNotice
+  }
+
 
   @Post('/')
   // @UseGuards(RolesGuard, AccessTokenGuard)

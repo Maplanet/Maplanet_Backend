@@ -15,6 +15,7 @@ import { Board2 } from './board2/entities/board2.entity';
 import { LoggingModule } from './logger/logger.module';
 import { TypeOrmConfigService } from './config/database.config';
 import { CacheModule } from '@nestjs/cache-manager';
+import { Notice } from './notice/entities/notice.entity';
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import { CacheModule } from '@nestjs/cache-manager';
       envFilePath: ['.env', '.env.dev', '.env.prod'],
     }),
     AuthModule,
-    TypeOrmModule.forFeature([Board, Board2]),
+    TypeOrmModule.forFeature([Board, Board2, Notice]),
   ],
   controllers: [AppController],
   providers: [AppService],
