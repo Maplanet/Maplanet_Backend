@@ -13,13 +13,25 @@ import { AuthModule } from './auth/auth.module';
 import { Board } from './board/entities/board.entity';
 import { Board2 } from './board2/entities/board2.entity';
 import { LoggingModule } from './logger/logger.module';
+import * as redisStore from 'cache-manager-ioredis';
 import { TypeOrmConfigService } from './config/database.config';
 import { Notice } from './notice/entities/notice.entity';
 // import { redisProvider } from 'redis.provider';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CacheModule } from '@nestjs/cache-manager';
+import { RedisClientOptions } from 'redis';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 @Module({
   imports: [
+    RedisModule.forRoot({
+      readyLog: true,
+      config: {
+        host: 'localhost',
+        port: 6379,
+        //password: 'bitnami'
+      },
+    }),
     BoardModule,
     Board2Module,
     UsersModule,
@@ -35,13 +47,10 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     AuthModule,
     TypeOrmModule.forFeature([Board, Board2, Notice]),
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
+    RedisModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService, 
-    // ...redisProvider
-  ],
-  // exports: [...redisProvider]
+  providers: [AppService],
 })
 export class AppModule {}

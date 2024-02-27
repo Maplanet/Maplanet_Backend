@@ -13,12 +13,17 @@ export class AppController {
 
   @Get('/main')
   @ApiOperation({
-      summary: '메인 페이지',
-      description: '잠쩔 최신 게시글 3개, 겹사 최신 게시글 3개, 상단 공지사항, 방문유저 수 조회, 매너 지수 높은 잠쩔 게시글 3개, 겹사 건당 메소 높은 게시글 3개'
-    })
-  @ApiResponse({ status: 200, description: '잠쩔 게시글 3개, 겹사 게시글 3개, 상단 공지사항, 방문유저 수 조회, 매너 지수 높은 잠쩔 게시글 3개, 겹사 건당 메소 높은 게시글 3개' })
+    summary: '메인 페이지',
+    description:
+      '잠쩔 최신 게시글 3개, 겹사 최신 게시글 3개, 상단 공지사항, 방문유저 수 조회, 매너 지수 높은 잠쩔 게시글 3개, 겹사 건당 메소 높은 게시글 3개',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      '잠쩔 게시글 3개, 겹사 게시글 3개, 상단 공지사항, 방문유저 수 조회, 매너 지수 높은 잠쩔 게시글 3개, 겹사 건당 메소 높은 게시글 3개',
+  })
   async mainpage(): Promise<any> {
-    const maindata: any = {}
+    const maindata: any = {};
     const getBoard1Data = await this.appService.getBoard1Data();
     maindata.board1Data = getBoard1Data;
 
@@ -34,21 +39,20 @@ export class AppController {
     const noticeData = await this.appService.noticeData();
     maindata.noticeData = noticeData;
 
-    // const allVisitors = await this.appService.allVisitors();
-    // await this.appService.incrementTodayVisitors();
-    // const todayVisitors = await this.appService.todayVisitors();
-    // // await this.appService.loginUser('1');
-    // // await this.appService.loginUser('2');
-    // // await this.appService.loginUser('3');
-    // // await this.appService.logoutUser('user_id_1');
-    // const loggedInUser = await this.appService.getLoggedInUserCount();
-    // maindata.visitorsData = {
-    //   total_visitors: allVisitors,
-    //   today_visitors: todayVisitors,
-    //   logged_in_user: loggedInUser
-    // }
+    const allVisitors = await this.appService.allVisitors();
+    await this.appService.incrementTodayVisitors();
+    const todayVisitors = await this.appService.todayVisitors();
+    // await this.appService.loginUser('1');
+    // await this.appService.loginUser('2');
+    // await this.appService.loginUser('3');
+    // await this.appService.logoutUser('user_id_1');
+    const loggedInUser = await this.appService.getLoggedInUserCount();
+    maindata.visitorsData = {
+      total_visitors: allVisitors,
+      today_visitors: todayVisitors,
+      logged_in_user: loggedInUser,
+    };
 
-    return maindata
+    return maindata;
   }
-
 }
