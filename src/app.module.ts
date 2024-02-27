@@ -12,14 +12,9 @@ import { ConfigModule, ConfigModule as NestConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { Board } from './board/entities/board.entity';
 import { Board2 } from './board2/entities/board2.entity';
-import { LoggingModule } from './logger/logger.module';
-import * as redisStore from 'cache-manager-ioredis';
 import { TypeOrmConfigService } from './config/database.config';
 import { Notice } from './notice/entities/notice.entity';
-// import { redisProvider } from 'redis.provider';
 import { ScheduleModule } from '@nestjs/schedule';
-import { CacheModule } from '@nestjs/cache-manager';
-import { RedisClientOptions } from 'redis';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 @Module({
@@ -27,7 +22,7 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
     RedisModule.forRoot({
       readyLog: true,
       config: {
-        host: 'localhost',
+        host: 'my-redis',
         port: 6379,
         //password: 'bitnami'
       },
