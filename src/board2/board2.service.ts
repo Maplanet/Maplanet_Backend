@@ -36,7 +36,7 @@ export class Board2Service {
                 skip,
                 take,
                 order: {
-                    created_at: 'DESC' // Order by created_at timestamp in descending order
+                    created_at: 'DESC' 
                 },
                 relations: ['Users']
             })

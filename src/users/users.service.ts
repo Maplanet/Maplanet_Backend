@@ -5,12 +5,18 @@ import { Repository } from 'typeorm';
 import { ApiExtraModels } from '@nestjs/swagger';
 import axios from 'axios';
 import { response } from 'express';
+import { Board } from 'src/board/entities/board.entity';
+import { Board2 } from 'src/board2/entities/board2.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users)
     private readonly usersRepository: Repository<Users>,
+    @InjectRepository(Board)
+    private readonly board1Repository: Repository<Board>,
+    @InjectRepository(Board2)
+    private readonly board2Repository: Repository<Board2>,
   ) {}
 
   async checkUser(discordId: string) {
@@ -61,10 +67,100 @@ export class UsersService {
     }
     return user;
   }
+
+  async userProfile (user_id: number): Promise<any> {
+    const userProfile = await this.usersRepository.findOne({
+      where: { user_id }
+    })
+    return userProfile
+  }
+
+  async board1Profile (page: number, user_id: number): Promise<any> {
+    try{
+      const limit = 8;
+      const skip = (page - 1) * limit;
+      const take = limit;
+      const board1Profile = await this.board1Repository.find({
+        where: {
+          user_id
+        },
+        select: [
+          'user_id',
+          'board1_id',
+          'discord_id',
+          'meso',
+          'title',
+          'hunting_ground',
+          'sub_job',
+          'progress_kind',
+          'progress_time',
+          'discord_global_name',
+          'discord_image',
+          'view_count',
+          'complete',
+          'created_at',
+          'updated_at',
+        ],
+        skip,
+        take,
+        order: {
+          created_at: 'DESC', 
+        },
+        relations: ['Users']
+      })
+
+      const modifiedBoard1 = board1Profile.map(({ Users: { report_count, manner_count }, ...board }) => ({
+        ...board,
+        report_count,
+        manner_count,
+      }));
+
+      return modifiedBoard1
+    } catch (error) {
+      console.error(`유저 프로필 쩔 게시글 조회 에러: ${error.message}`);
+    }
+  } 
+
+  async board2Profile (page: number, user_id: number): Promise<any> {
+    try{
+      const limit = 8;
+      const skip = (page - 1) * limit;
+      const take = limit;
+      const board2Profile = await this.board2Repository.find({
+        where: {
+          user_id
+        },
+        select: [
+          'user_id',
+          'board2_id',
+          'discord_id',
+          'meso',
+          'report_kind',
+          'title',
+          'place_theif_nickname',
+          'discord_global_name',
+          'discord_image',
+          'view_count',
+          'complete',
+          'created_at',
+          'updated_at'
+        ],
+        skip,
+        take,
+        order: {
+            created_at: 'DESC' 
+        },
+        relations: ['Users']
+      })
+    const modifiedBoard2 = board2Profile.map(({ Users: { report_count, manner_count }, ...board2 }) => ({
+      ...board2,
+      report_count,
+      manner_count,
+    }));
+      return modifiedBoard2
+    } catch (error) {
+      console.error(`유저 프로필 쩔 게시글 조회 에러: ${error.message}`);
+    }
+  } 
 }
 
-//디스코드 이미지 나오게 하는법
-//https://cdn.discordapp.com/avatars/{user_id}/{avatar_hash}
-//  id: '707954708060569670',
-//  avatar: '530e94ab89cf404c9d8ff490b2c8f54e',
-//https://cdn.discordapp.com/avatars/707954708060569670/530e94ab89cf404c9d8ff490b2c8f54e
