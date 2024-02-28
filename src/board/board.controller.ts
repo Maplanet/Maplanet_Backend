@@ -4,6 +4,7 @@ import {
   Get,
   Injectable,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -100,5 +101,18 @@ export class BoardController {
       discordId
     );
     return getBoardInfo;
+  }
+
+  // @UseGuards(AuthGuard)
+  @Patch('/complete/:board1_id')
+  async completeBoard1(
+    @Param('board1_id') board1_id: number, 
+    @Req() request: Request,
+  ): Promise<any> {
+    // const discordId = request.headers['discord_id'];
+    const discordId = '11111111'
+    // console.log(discordId)
+    // const userId = request['user'].userId;
+    return await this.boardService.completeBoard1(board1_id, discordId);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository, UpdateResult } from 'typeorm';
 import { CreateBoard2Dto } from './dto/create-board2.dto';
@@ -184,4 +184,38 @@ export class Board2Service {
             console.error(`겹사 게시글 등록 에러: ${error.message}`);
         }
     } 
+
+    async completeBoard2(board2_id: number, discordId: string): Promise<any> {
+        try{
+          const board2 = await this.board2Repository.findOne({
+            where: {
+                board2_id,
+            }
+          });
+    
+          if(!board2) {
+            throw new NotFoundException('게시글이 존재하지 않습니다.');
+          }
+    
+          if(board2.discord_id !== discordId) {
+            throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
+          }
+    
+          if (board2.complete) {
+            board2.complete = false;
+          } else {
+            board2.complete = true;
+          }
+    
+          await this.board2Repository.save(board2);
+    
+          if (board2.complete) {
+            return '게시글을 완료하였습니다.';
+          } else {
+            return '게시글의 완료를 취소하였습니다.';
+          }  
+        } catch (error) {
+          console.error(`겹사 게시글 완료 에러: ${error.message}`);
+        }
+      } 
 }

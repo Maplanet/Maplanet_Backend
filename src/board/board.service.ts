@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Equal, Like, Repository, UpdateResult } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -210,4 +210,38 @@ export class BoardService {
       console.error(`쩔 게시글 등록 에러: ${error.message}`);
     }
   }
+
+  async completeBoard1(board1_id: number, discordId: string): Promise<any> {
+    try{
+      const board = await this.boardRepository.findOne({
+        where: {
+          board1_id,
+        }
+      });
+
+      if(!board) {
+        throw new NotFoundException('게시글이 존재하지 않습니다.');
+      }
+
+      if(board.discord_id !== discordId) {
+        throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
+      }
+
+      if (board.complete) {
+        board.complete = false;
+      } else {
+        board.complete = true;
+      }
+
+      await this.boardRepository.save(board);
+
+      if (board.complete) {
+        return '게시글을 완료하였습니다.';
+      } else {
+        return '게시글의 완료를 취소하였습니다.';
+      }  
+    } catch (error) {
+      console.error(`쩔 게시글 완료 에러: ${error.message}`);
+    }
+  } 
 }
