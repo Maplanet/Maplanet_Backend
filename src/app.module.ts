@@ -28,7 +28,7 @@ import { MannerModule } from './manner/manner.module';
         port: 6379,
         //password: 'bitnami'
       },
-    }),     
+    }),
     BoardModule,
     Board2Module,
     UsersModule,
