@@ -16,6 +16,7 @@ import { TypeOrmConfigService } from './config/database.config';
 import { Notice } from './notice/entities/notice.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { MannerModule } from './manner/manner.module';
 
 @Module({
   imports: [
@@ -23,15 +24,16 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
       readyLog: true,
       config: {
         host: 'my-redis',
-        //host: '127.0.0.1',
+        // host: '127.0.0.1',
         port: 6379,
         //password: 'bitnami'
       },
-    }),
+    }),     
     BoardModule,
     Board2Module,
     UsersModule,
     ReportModule,
+    MannerModule,
     AdministratorModule,
     NoticeModule,
     TypeOrmModule.forRootAsync({
@@ -45,6 +47,7 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
     TypeOrmModule.forFeature([Board, Board2, Notice]),
     ScheduleModule.forRoot(),
     RedisModule,
+    MannerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

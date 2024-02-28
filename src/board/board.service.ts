@@ -10,6 +10,8 @@ export class BoardService {
   constructor(
     @InjectRepository(Board)
     private boardRepository: Repository<Board>,
+    @InjectRepository(Users)
+    private usersRepository: Repository<Users>,
   ) {}
 
   async boardInfo(page: number = 1): Promise<any> {
@@ -211,7 +213,7 @@ export class BoardService {
     }
   }
 
-  async completeBoard1(board1_id: number, discordId: string): Promise<any> {
+  async completeBoard1(board1_id: number, user_id: number): Promise<any> {
     try{
       const board = await this.boardRepository.findOne({
         where: {
@@ -219,27 +221,41 @@ export class BoardService {
         }
       });
 
+      const user = await this.usersRepository.findOne({
+        where: {
+          user_id: user_id
+        }
+      })
+
       if(!board) {
         throw new NotFoundException('게시글이 존재하지 않습니다.');
       }
 
-      if(board.discord_id !== discordId) {
+      if(board.user_id !== user_id) {
         throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
       }
 
-      if (board.complete) {
-        board.complete = false;
+      if (board.user_id === user.user_id){
+        if (!board.complete) {
+          board.complete = true;
+          user.progress_count += 1;
+          await this.usersRepository.save(user)
+        } else {
+          board.complete = false;
+          user.progress_count -= 1;
+          await this.usersRepository.save(user)
+        }
+
+        await this.boardRepository.save(board);
+
+        if (board.complete) {
+          return '게시글을 완료하였습니다.';
+        } else {
+          return '게시글의 완료를 취소하였습니다.';
+        }  
       } else {
-        board.complete = true;
+        '자신의 게시글만 완료처리 할 수 있습니다.'
       }
-
-      await this.boardRepository.save(board);
-
-      if (board.complete) {
-        return '게시글을 완료하였습니다.';
-      } else {
-        return '게시글의 완료를 취소하였습니다.';
-      }  
     } catch (error) {
       console.error(`쩔 게시글 완료 에러: ${error.message}`);
     }

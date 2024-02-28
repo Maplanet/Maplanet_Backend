@@ -2,19 +2,19 @@ import { Users } from 'src/users/entities/users.entity';
 import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, } from 'typeorm'
 
 @Entity()
-export class Report {
+export class Manner {
     @PrimaryGeneratedColumn()
-    report_id: number;
+    manner_id: number;
     
     @Column()
-    reporter_user_id: number;
-    @ManyToOne(() => Users, (Users) => Users.reports_reported ,{
+    manner_user_id: number;
+    @ManyToOne(() => Users, (Users) => Users.manners_mannered ,{
         onDelete: 'CASCADE'
     })
-    @JoinColumn({ name: 'reporter_user_id' })
-    reporter: Users;
+    @JoinColumn({ name: 'manner_user_id' })
+    manners: Users;
 
     @Column()
-    reported_user_id: number;
+    mannered_user_id: number;
 
 }

@@ -110,9 +110,9 @@ export class BoardController {
     @Req() request: Request,
   ): Promise<any> {
     // const discordId = request.headers['discord_id'];
-    const discordId = '11111111'
+    const user_id = 15
     // console.log(discordId)
     // const userId = request['user'].userId;
-    return await this.boardService.completeBoard1(board1_id, discordId);
+    return await this.boardService.completeBoard1(board1_id, user_id);
   }
 }
