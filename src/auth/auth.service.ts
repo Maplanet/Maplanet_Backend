@@ -132,7 +132,8 @@ export class AuthService {
       },
     );
     await this.redisClient.setex(discord_id, 1209600, refresh_token);
-    //const check = await this.redisClient.get(String(discord_id));
+    const check = await this.redisClient.get(String(discord_id));
+    console.log('리프레쉬톸ㄴ', check);
     return refresh_token;
   }
 
