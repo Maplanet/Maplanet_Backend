@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
   SetMetadata,
   UseGuards,
 } from '@nestjs/common';
@@ -40,9 +41,8 @@ export class NoticeController {
   //@UseGuards(RolesGuard, AccessTokenGuard)
   //@Roles(Role.Admin)
   @HttpCode(201)
-  async postNotice(@Body() createNoticeDto: CreateNoticeDto) {
-    const postNotice = await this.noticeService.postNotice(createNoticeDto);
-    console.log(postNotice);
-    return 1;
+  async postNotice(@Req() req, @Body() createNoticeDto: CreateNoticeDto) {
+    const { user_id } = req.user;
+    await this.noticeService.postNotice(createNoticeDto, user_id);
   }
 }

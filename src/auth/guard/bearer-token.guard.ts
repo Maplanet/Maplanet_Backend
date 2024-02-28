@@ -33,7 +33,7 @@ export class BearerTokenGuard implements CanActivate {
 
     //req.user = user;
     req.token = token;
-    req.data = result;
+    req.user = result;
     //req.tokenType = result.Type;
 
     return true;
@@ -46,7 +46,6 @@ export class AccessTokenGuard extends BearerTokenGuard {
     await super.canActivate(context);
 
     const req = context.switchToHttp().getRequest();
-    console.log(req);
 
     // if (req.tokenType !== 'access') {
     //   throw new UnauthorizedException('Access Token이 아닙니다.');

@@ -4,8 +4,9 @@ export interface DiscdordDataType {
   refresh_token: string;
 }
 
-export interface tokenpayload {
-  id: string;
+export interface ITokenpayload {
+  discord_id: string;
+  user_id: number;
   username: string;
   avatar: string | null;
   email: string;
