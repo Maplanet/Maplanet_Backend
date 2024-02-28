@@ -4,16 +4,19 @@ import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ICreatePost } from './interface/notice.interface';
 import { CreateNoticeDto } from './dto/createnotice.dto';
+import { Administrator } from 'src/administrator/entities/administrator.entity';
 
 @Injectable()
 export class NoticeService {
   constructor(
     @InjectRepository(Notice)
     private readonly noticeReporotory: Repository<Notice>,
+    @InjectRepository(Administrator)
+    private readonly AdminRepository: Repository<Administrator>,
   ) {}
 
   async getAllNoticePost(page: number): Promise<any> {
-    try{
+    try {
       const limit = 5;
       const skip = (page - 1) * limit;
       const take = limit;
@@ -27,39 +30,39 @@ export class NoticeService {
           'writer',
           'view_count',
           'created_at',
-          'updated_at'
+          'updated_at',
         ],
         skip,
         take,
         order: {
-          created_at: 'DESC', 
-        }
+          created_at: 'DESC',
+        },
       });
 
-      return getAllNotice
+      return getAllNotice;
     } catch (error) {
       console.error(`공지사항 전체 조회 에러: ${error.message}`);
     }
   }
 
   async noticeViewCount(notice_id: number): Promise<UpdateResult> {
-    return await this.noticeReporotory.update({ notice_id }, {view_count: () => 'view_count + 1'});
+    return await this.noticeReporotory.update(
+      { notice_id },
+      { view_count: () => 'view_count + 1' },
+    );
   }
-  
-  async getNoticeDetail(notice_id: number):Promise<any> {
+
+  async getNoticeDetail(notice_id: number): Promise<any> {
     const getOneNotice = await this.noticeReporotory.findOne({
-      where: {notice_id}
+      where: { notice_id },
     });
     await this.noticeViewCount(notice_id);
     return getOneNotice;
   }
 
-  async postNotice(createNoticeDto) {
-    createNoticeDto.administrator_id = 2;
-    console.log(createNoticeDto);
-
-    const IsExistAdmin = await this.findUserByUserId(2);
-    console.log(IsExistAdmin);
+  async postNotice(createNoticeDto, user_id) {
+    const Admin = await this.findUserByUserId(user_id);
+    createNoticeDto.administrator_id = Admin.administrator_id;
     const postCd = this.noticeReporotory.create(createNoticeDto);
 
     await this.noticeReporotory.save(postCd);
@@ -67,15 +70,15 @@ export class NoticeService {
     return 2;
   }
 
-  private async findUserByUserId(admin_id): Promise<Boolean> {
-    const findUserByUserId = await this.noticeReporotory.findOne({
-      where: { administrator_id: admin_id },
+  private async findUserByUserId(user_id) {
+    const findUserByUserId = await this.AdminRepository.findOne({
+      where: { user_id },
     });
 
     console.log(findUserByUserId);
     if (!findUserByUserId) {
       throw new BadRequestException('존재하지 않는 관리자계정');
     }
-    return true;
+    return findUserByUserId;
   }
 }

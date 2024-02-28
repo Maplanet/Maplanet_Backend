@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Users } from './entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -27,9 +31,9 @@ export class UsersService {
     return db에저장된디스코드아이디;
   }
 
-  async findOne(discordId: string): Promise<any> {
+  async findOne(discord_id: string): Promise<any> {
     return this.usersRepository.findOne({
-      where: { discord_id: discordId },
+      where: { discord_id },
     });
   }
   async saveUser(data) {
@@ -68,21 +72,21 @@ export class UsersService {
     return user;
   }
 
-  async userProfile (user_id: number): Promise<any> {
+  async userProfile(user_id: number): Promise<any> {
     const userProfile = await this.usersRepository.findOne({
-      where: { user_id }
-    })
-    return userProfile
+      where: { user_id },
+    });
+    return userProfile;
   }
 
-  async board1Profile (page: number, user_id: number): Promise<any> {
-    try{
+  async board1Profile(page: number, user_id: number): Promise<any> {
+    try {
       const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
       const board1Profile = await this.board1Repository.find({
         where: {
-          user_id
+          user_id,
         },
         select: [
           'user_id',
@@ -104,31 +108,33 @@ export class UsersService {
         skip,
         take,
         order: {
-          created_at: 'DESC', 
+          created_at: 'DESC',
         },
-        relations: ['Users']
-      })
+        relations: ['Users'],
+      });
 
-      const modifiedBoard1 = board1Profile.map(({ Users: { report_count, manner_count }, ...board }) => ({
-        ...board,
-        report_count,
-        manner_count,
-      }));
+      const modifiedBoard1 = board1Profile.map(
+        ({ Users: { report_count, manner_count }, ...board }) => ({
+          ...board,
+          report_count,
+          manner_count,
+        }),
+      );
 
-      return modifiedBoard1
+      return modifiedBoard1;
     } catch (error) {
       console.error(`유저 프로필 쩔 게시글 조회 에러: ${error.message}`);
     }
-  } 
+  }
 
-  async board2Profile (page: number, user_id: number): Promise<any> {
-    try{
+  async board2Profile(page: number, user_id: number): Promise<any> {
+    try {
       const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
       const board2Profile = await this.board2Repository.find({
         where: {
-          user_id
+          user_id,
         },
         select: [
           'user_id',
@@ -143,25 +149,25 @@ export class UsersService {
           'view_count',
           'complete',
           'created_at',
-          'updated_at'
+          'updated_at',
         ],
         skip,
         take,
         order: {
-            created_at: 'DESC' 
+          created_at: 'DESC',
         },
-        relations: ['Users']
-      })
-    const modifiedBoard2 = board2Profile.map(({ Users: { report_count, manner_count }, ...board2 }) => ({
-      ...board2,
-      report_count,
-      manner_count,
-    }));
-      return modifiedBoard2
+        relations: ['Users'],
+      });
+      const modifiedBoard2 = board2Profile.map(
+        ({ Users: { report_count, manner_count }, ...board2 }) => ({
+          ...board2,
+          report_count,
+          manner_count,
+        }),
+      );
+      return modifiedBoard2;
     } catch (error) {
       console.error(`유저 프로필 쩔 게시글 조회 에러: ${error.message}`);
     }
-  } 
-
+  }
 }
-

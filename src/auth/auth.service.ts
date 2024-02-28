@@ -13,7 +13,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { DiscdordDataType, tokenpayload } from './type/updateOaut2.type';
+import { DiscdordDataType, ITokenpayload } from './type/updateOaut2.type';
 import { access } from 'fs';
 
 const adminList: string[] = ['ystar5008@naver.com'];
@@ -47,18 +47,21 @@ export class AuthService {
     const userAvatar = `https://cdn.discordapp.com/avatars/${id}/${avatar}`;
     const userAvatarNull =
       'https://discord.com/assets/6debd47ed13483642cf09e832ed0bc1b.png';
-    if (!avatar) {
-      avatar = userAvatarNull;
-    } else {
-      avatar = userAvatar;
-    }
 
     if (!data) {
       throw new BadRequestException('잘못된 사용자');
     }
 
-    const payload = {
-      id,
+    avatar ? userAvatar : userAvatarNull;
+
+    const { user_id } = await this.usersService.findOne(id);
+    if (!user_id) {
+      throw new BadRequestException('존재하지 않는 유저');
+    }
+
+    const payload: ITokenpayload = {
+      discord_id: id,
+      user_id: user_id,
       username,
       avatar,
       email,
@@ -74,7 +77,7 @@ export class AuthService {
 
     oauth2 ? await this.updateOAuth2(data) : await this.createOAuth2(data);
 
-    return access_token;
+    return { access_token, payload };
   }
 
   async createOAuth2(data) {
@@ -88,8 +91,8 @@ export class AuthService {
     return await this.DiscordRepository.save(oauth2User);
   }
 
-  private getAccessToken(data: tokenpayload) {
-    const { id, username, avatar, email } = data;
+  private getAccessToken(data: ITokenpayload) {
+    const { discord_id, user_id, username, avatar, email } = data;
     const tokentype: string = 'access';
 
     // if (accessTokenType !== 'access') {
@@ -98,7 +101,8 @@ export class AuthService {
 
     return this.jwtService.sign(
       {
-        id,
+        discord_id,
+        user_id,
         username,
         avatar,
         email,
@@ -111,13 +115,13 @@ export class AuthService {
     );
   }
 
-  async getAndSaveRefreshToken(data: tokenpayload) {
-    const { id, username, avatar, email } = data;
+  async getAndSaveRefreshToken(data: ITokenpayload) {
+    const { discord_id, username, avatar, email } = data;
     const tokentype: string = 'refresh';
 
     const refresh_token = this.jwtService.sign(
       {
-        id,
+        discord_id,
         username,
         avatar,
         email,
@@ -129,11 +133,11 @@ export class AuthService {
       },
     );
     await this.cache.set(
-      id,
+      discord_id,
       refresh_token,
       this.configService.get<number>('REFRESH_TOKEN_EXPIRESTIME'),
     );
-    const check = await this.cache.get(String(id));
+    const check = await this.cache.get(String(discord_id));
     return refresh_token;
   }
 

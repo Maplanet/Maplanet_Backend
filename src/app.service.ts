@@ -195,7 +195,7 @@ export class AppService {
     await this.redisClient.incr('visitors_today');
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_6AM)
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
   async resetDailyVisitors(): Promise<void> {
     const visitors = await this.redisClient.get('visitors_today');
     console.log(visitors);
