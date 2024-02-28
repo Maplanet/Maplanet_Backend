@@ -3,6 +3,7 @@ import {
   Get,
   Header,
   Param,
+  Patch,
   Post,
   Query,
   Redirect,
@@ -77,7 +78,5 @@ export class UsersController {
   
   //   return myProfileBoard2
   // }
-  
-
 
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Users } from './entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -162,5 +162,6 @@ export class UsersService {
       console.error(`유저 프로필 쩔 게시글 조회 에러: ${error.message}`);
     }
   } 
+
 }
 

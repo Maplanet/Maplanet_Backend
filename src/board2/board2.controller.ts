@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { Board2Service } from './board2.service';
 import { CreateBoard2Dto } from './dto/create-board2.dto';
@@ -71,5 +71,18 @@ export class Board2Controller {
       //userId
       )
     return getBoard2Info
+  }
+
+  // @UseGuards(AuthGuard)
+  @Patch('/complete/:board2_id')
+  async completeBoard2(
+    @Param('board2_id') board2_id: number, 
+    @Req() request: Request,
+  ): Promise<any> {
+    // const discordId = request.headers['discord_id'];
+    const discordId = '11111111'
+    // console.log(discordId)
+    // const userId = request['user'].userId;
+    return await this.board2Service.completeBoard2(board2_id, discordId);
   }
 }
