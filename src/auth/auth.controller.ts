@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
+import { AccessTokenGuard } from './guard/bearer-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +21,8 @@ export class AuthController {
   async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {
     const access_token = req.user;
 
+    console.log(access_token);
+    console.log(access_token.access_token);
     // if (!existUser) {
     //   await this.usersServiece.saveUser(data);
     // }
@@ -29,8 +32,10 @@ export class AuthController {
 
     //const access_token_verify = this.authService.verifyToken(access_token);
     //console.log(access_token_verify);
-    res.header('Authorization', `Bearer ${access_token}`);
-    return '완료';
+    res.header('Authorization', `Bearer ${access_token?.access_token}`);
+    return access_token;
+    // accessToken: access_token?.access_token,
+    // payload: access_token?.payload,
   }
 
   @Get('redirect')
@@ -40,6 +45,9 @@ export class AuthController {
   }
 
   @Delete('logout')
-  @UseGuards()
-  DeleteToken() {}
+  @UseGuards(AccessTokenGuard)
+  DeleteToken(@Req() req) {
+    const { discord_id } = req.user;
+    this.authService.deleteRefreshToken(discord_id);
+  }
 }

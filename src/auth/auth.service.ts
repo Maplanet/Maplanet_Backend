@@ -14,9 +14,8 @@ import { Cache } from 'cache-manager';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { DiscdordDataType, ITokenpayload } from './type/updateOaut2.type';
-import { access } from 'fs';
-
-const adminList: string[] = ['ystar5008@naver.com'];
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import Redis from 'ioredis';
 @Injectable()
 export class AuthService {
   private readonly adminList: string[];
@@ -30,9 +29,8 @@ export class AuthService {
     private readonly DiscordRepository: Repository<DiscordOAuth2Credentials>,
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
-  ) {
-    this.adminList = adminList;
-  }
+    @InjectRedis() private readonly redisClient: Redis,
+  ) {}
 
   async findUserFromDiscordId(discord_id: string): Promise<any> {
     const user = await this.usersService.findOne(discord_id);
@@ -52,7 +50,8 @@ export class AuthService {
       throw new BadRequestException('잘못된 사용자');
     }
 
-    avatar ? userAvatar : userAvatarNull;
+    if (avatar) avatar = userAvatar;
+    else avatar = userAvatarNull;
 
     const { user_id } = await this.usersService.findOne(id);
     if (!user_id) {
@@ -132,12 +131,8 @@ export class AuthService {
         expiresIn: this.configService.get<number>('REFRESH_TOKEN_EXPIRESTIME'),
       },
     );
-    await this.cache.set(
-      discord_id,
-      refresh_token,
-      this.configService.get<number>('REFRESH_TOKEN_EXPIRESTIME'),
-    );
-    const check = await this.cache.get(String(discord_id));
+    await this.redisClient.setex(discord_id, 1209600, refresh_token);
+    //const check = await this.redisClient.get(String(discord_id));
     return refresh_token;
   }
 
@@ -179,5 +174,10 @@ export class AuthService {
     return this.DiscordRepository.findOne({
       where: { discord_id: discord_id },
     });
+  }
+  async deleteRefreshToken(discord_id) {
+    const a = await this.redisClient.get(discord_id);
+    console.log(a);
+    await this.redisClient.del(discord_id);
   }
 }
