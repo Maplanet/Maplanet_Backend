@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Users } from 'src/users/entities/users.entity';
 import { Like, Repository, UpdateResult } from 'typeorm';
 import { CreateBoard2Dto } from './dto/create-board2.dto';
 import { Board2 } from './entities/board2.entity';
@@ -8,7 +9,9 @@ import { Board2 } from './entities/board2.entity';
 export class Board2Service {
     constructor(
         @InjectRepository(Board2)
-        private board2Repository: Repository<Board2>
+        private board2Repository: Repository<Board2>,
+        @InjectRepository(Users)
+        private usersRepository: Repository<Users>,
     ) {}
 
     async board2Info(page: number = 1): Promise<any> {
@@ -185,35 +188,49 @@ export class Board2Service {
         }
     } 
 
-    async completeBoard2(board2_id: number, discordId: string): Promise<any> {
+    async completeBoard2(board2_id: number, user_id: number): Promise<any> {
         try{
           const board2 = await this.board2Repository.findOne({
             where: {
                 board2_id,
             }
           });
+
+          const user = await this.usersRepository.findOne({
+            where: {
+              user_id: user_id
+            }
+          })
     
           if(!board2) {
             throw new NotFoundException('게시글이 존재하지 않습니다.');
           }
     
-          if(board2.discord_id !== discordId) {
+          if(board2.user_id !== user_id) {
             throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
           }
     
-          if (board2.complete) {
-            board2.complete = false;
+          if (board2.user_id === user.user_id){
+            if (!board2.complete) {
+              board2.complete = true;
+              user.progress_count += 1;
+              await this.usersRepository.save(user)
+            } else {
+              board2.complete = false;
+              user.progress_count -= 1;
+              await this.usersRepository.save(user)
+            }
+      
+            await this.board2Repository.save(board2);
+      
+            if (board2.complete) {
+              return '게시글을 완료하였습니다.';
+            } else {
+              return '게시글의 완료를 취소하였습니다.';
+            }  
           } else {
-            board2.complete = true;
+            '자신의 게시글만 완료처리 할 수 있습니다.'
           }
-    
-          await this.board2Repository.save(board2);
-    
-          if (board2.complete) {
-            return '게시글을 완료하였습니다.';
-          } else {
-            return '게시글의 완료를 취소하였습니다.';
-          }  
         } catch (error) {
           console.error(`겹사 게시글 완료 에러: ${error.message}`);
         }

@@ -1,6 +1,7 @@
 import { Administrator } from 'src/administrator/entities/administrator.entity';
 import { Board } from 'src/board/entities/board.entity';
 import { Board2 } from 'src/board2/entities/board2.entity';
+import { Manner } from 'src/manner/entities/manner.entity';
 import { Report } from 'src/report/entities/report.entity';
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
@@ -48,7 +49,7 @@ export class Users {
     @OneToMany(() => Report, (report) => report.reporter, {  cascade: true })
     reports_reported: Report[];
 
-    @OneToMany(() => Report, (report) => report.reported, {  cascade: true })
-    reports_reporter: Report[];
+    @OneToMany(() => Manner, (manner) => manner.manners, {  cascade: true })
+    manners_mannered: Manner[];
 
 }
