@@ -199,7 +199,7 @@ export class BoardService {
         position,
         discord_id: user.discord_id,
         discord_username: user.username,
-        // discord_global_name,
+        discord_global_name: user.global_name,
         discord_image: user.avatar,
       });
 
