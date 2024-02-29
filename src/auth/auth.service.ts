@@ -41,7 +41,8 @@ export class AuthService {
     return user;
   }
   async validateOAuth2(data) {
-    let { id, username, avatar, email } = data;
+    let { id, username, global_name, avatar, email } = data;
+    console.log(data)
     const userAvatar = `https://cdn.discordapp.com/avatars/${id}/${avatar}`;
     const userAvatarNull =
       'https://discord.com/assets/6debd47ed13483642cf09e832ed0bc1b.png';
@@ -62,6 +63,7 @@ export class AuthService {
       discord_id: id,
       user_id: user_id,
       username,
+      global_name,
       avatar,
       email,
     };
@@ -91,7 +93,7 @@ export class AuthService {
   }
 
   private getAccessToken(data: ITokenpayload) {
-    const { discord_id, user_id, username, avatar, email } = data;
+    const { discord_id, user_id, username, global_name, avatar, email } = data;
     const tokentype: string = 'access';
 
     // if (accessTokenType !== 'access') {
@@ -103,6 +105,7 @@ export class AuthService {
         discord_id,
         user_id,
         username,
+        global_name,
         avatar,
         email,
         tokentype: tokentype,
@@ -115,13 +118,14 @@ export class AuthService {
   }
 
   async getAndSaveRefreshToken(data: ITokenpayload) {
-    const { discord_id, username, avatar, email } = data;
+    const { discord_id, username, global_name, avatar, email } = data;
     const tokentype: string = 'refresh';
 
     const refresh_token = this.jwtService.sign(
       {
         discord_id,
         username,
+        global_name,
         avatar,
         email,
         tokentype,
