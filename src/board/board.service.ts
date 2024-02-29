@@ -53,7 +53,7 @@ export class BoardService {
       }));
     return { board1Data: modifiedBoard1 };
     } catch (error) {
-      console.error(`쩔 게시글 조회 에러: ${error.message}`);
+      console.error(`Error 400: 쩔 게시글 조회 에러: ${error.message}`);
     }
   }
 
@@ -101,7 +101,7 @@ export class BoardService {
             manner_count,
         }
     } catch (error) {
-        console.error(`쩔 게시글 상세 조회 에러: ${error.message}`);
+        console.error(`Error 400: 쩔 게시글 상세 조회 에러: ${error.message}`);
     }
   }
  
@@ -166,7 +166,7 @@ export class BoardService {
 
       return { search1Data: modifiedSearchBoard1 };
     } catch (error) {
-      console.error(`쩔 게시글 검색 조회 에러: ${error.message}`);
+      console.error(`Error 400: 쩔 게시글 검색 조회 에러: ${error.message}`);
     }
   }
 
@@ -206,7 +206,7 @@ export class BoardService {
       await this.boardRepository.save(createBoard1);
       return { msg: '쩔 게시글 등록이 완료되었습니다.' };
     } catch (error) {
-      console.error(`쩔 게시글 등록 에러: ${error.message}`);
+      console.error(`Error 403: 쩔 게시글 등록 에러: ${error.message}`);
     }
   }
 
