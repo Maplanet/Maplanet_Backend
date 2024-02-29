@@ -64,7 +64,7 @@ export class AppService {
       );
       return modifiedBoard1;
     } catch (error) {
-      console.error(`메인페이지 쩔 게시글 조회 에러: ${error.message}`);
+      console.error(`Error 401: 메인페이지 쩔 게시글 조회 에러: ${error.message}`);
     }
   }
 
@@ -100,7 +100,7 @@ export class AppService {
       );
       return modifiedBoard2;
     } catch (error) {
-      console.error(`메인페이지 겹사 게시글 조회 에러: ${error.message}`);
+      console.error(`Error 401: 메인페이지 겹사 게시글 조회 에러: ${error.message}`);
     }
   }
 
@@ -128,7 +128,7 @@ export class AppService {
 
       return modifiedBoard;
     } catch (error) {
-      console.error(`메인페이지 겹사 게시글 조회 에러: ${error.message}`);
+      console.error(`Error 401: 메인페이지 매너 게시글 3개 조회 에러: ${error.message}`);
     }
   }
 
@@ -157,7 +157,7 @@ export class AppService {
 
       return modifiedBoard2;
     } catch (error) {
-      console.error(`메인페이지 겹사 게시글 조회 에러: ${error.message}`);
+      console.error(`Error 401: 메인페이지 메소 높은 게시글 조회 에러: ${error.message}`);
     }
   }
 
@@ -173,21 +173,25 @@ export class AppService {
 
       return notice[0];
     } catch (error) {
-      console.error(`메인페이지 공지사항 조회 에러: ${error.message}`);
+      console.error(`Error 401: 메인페이지 공지사항 조회 에러: ${error.message}`);
     }
   }
 
   //전체 접속한 유저 수
   async allVisitors(): Promise<number> {
-    let total_visitors_str = await this.redisClient.get('total_visitors');
-    console.log(total_visitors_str);
-    let total_visitors = Number(total_visitors_str);
-    if (isNaN(total_visitors)) {
-      total_visitors = 0;
+    try{
+      let total_visitors_str = await this.redisClient.get('total_visitors');
+      console.log(total_visitors_str);
+      let total_visitors = Number(total_visitors_str);
+      if (isNaN(total_visitors)) {
+        total_visitors = 0;
+      }
+      total_visitors++;
+      await this.redisClient.set('total_visitors', String(total_visitors));
+      return total_visitors;
+    } catch (error) {
+      console.error(`Error 401: 메인페이지 전체 접속한 유저 수 조회 에러: ${error.message}`);
     }
-    total_visitors++;
-    await this.redisClient.set('total_visitors', String(total_visitors));
-    return total_visitors;
   }
 
   //오늘 접속한 유저 수
@@ -205,8 +209,12 @@ export class AppService {
   }
 
   async todayVisitors(): Promise<number> {
-    const visitors = await this.redisClient.get('visitors_today');
-    return visitors ? parseInt(visitors) : 0;
+    try{
+      const visitors = await this.redisClient.get('visitors_today');
+      return visitors ? parseInt(visitors) : 0;
+    } catch (error) {
+      console.error(`Error 401: 메인페이지 오늘 접속한 유저 수 조회 에러: ${error.message}`);
+    }
   }
 
   // 현재 로그인한 유저
@@ -225,8 +233,12 @@ export class AppService {
 
   //야매 현재 로그인한 유저
   async getLoggedInUserCount(): Promise<number> {
-    const visitorsToday = await this.todayVisitors();
-    const loggedInUsersCount = Math.ceil(visitorsToday / 3);
-    return loggedInUsersCount;
+    try {
+      const visitorsToday = await this.todayVisitors();
+      const loggedInUsersCount = Math.ceil(visitorsToday / 3);
+      return loggedInUsersCount;
+    } catch (error) {
+      console.error(`Error 401: 메인페이지 현재 접속중인 유저 수 조회 에러: ${error.message}`);
+    }
   }
 }
