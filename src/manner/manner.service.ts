@@ -22,15 +22,15 @@ export class MannerService {
         
         const manner = await this.mannerRepository.findOne({
             where: {
-                manner_user_id: myUserId,
+                manner_user_id: myUserId.user_id,
                 mannered_user_id: user_id
             }
         })
 
-        if(myUserId !== user.user_id) {
+        if(myUserId.user_id !== user.user_id) {
             if (!manner) {
                 const manners = await this.mannerRepository.create({
-                    manner_user_id: myUserId,
+                    manner_user_id: myUserId.user_id,
                     mannered_user_id: user_id
                 })
                 await this.mannerRepository.save(manners);

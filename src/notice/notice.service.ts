@@ -17,7 +17,7 @@ export class NoticeService {
 
   async getAllNoticePost(page: number): Promise<any> {
     try {
-      const limit = 5;
+      const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
 
@@ -39,7 +39,7 @@ export class NoticeService {
         },
       });
 
-      return getAllNotice;
+      return { noticeData: getAllNotice };
     } catch (error) {
       console.error(`공지사항 전체 조회 에러: ${error.message}`);
     }
@@ -57,7 +57,7 @@ export class NoticeService {
       where: { notice_id },
     });
     await this.noticeViewCount(notice_id);
-    return getOneNotice;
+    return {noticeDetailData: getOneNotice};
   }
 
   async postNotice(createNoticeDto, user_id) {

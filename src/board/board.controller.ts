@@ -16,6 +16,7 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/common/auth.guard';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { LoggingInterceptor } from 'src/logger/logger.interceptor';
+import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
 
 @ApiTags('BOARD')
 @Controller('board1')
@@ -87,32 +88,29 @@ export class BoardController {
     return getBoardSearchInfo;
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AccessTokenGuard)
   @Post('/post')
   async postBoard(
     @Body() createBoardDto: CreateBoardDto,
-    @Req() request: Request,
+    @Req() req,
   ): Promise<any> {
-    const discordId = request.headers['discord_id'];
-    // console.log(discordId)
-    // const userId = request['user'].userId;
+    const user = req.user;
     const getBoardInfo = await this.boardService.postBoard(
       createBoardDto,
-      discordId
+      user
     );
     return getBoardInfo;
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AccessTokenGuard)
   @Patch('/complete/:board1_id')
   async completeBoard1(
     @Param('board1_id') board1_id: number, 
-    @Req() request: Request,
+    @Req() req,
   ): Promise<any> {
-    // const discordId = request.headers['discord_id'];
-    const user_id = 15
-    // console.log(discordId)
-    // const userId = request['user'].userId;
+    const {user_id} = req.user;
+    // const user_id = 1
     return await this.boardService.completeBoard1(board1_id, user_id);
   }
 }
+

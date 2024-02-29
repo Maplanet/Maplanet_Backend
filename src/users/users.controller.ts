@@ -11,10 +11,9 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
 import { UsersService } from './users.service';
-// import { DiscordAuthGuard } from '../auth/discord-auth.guard'
 
 interface IData {
   access_token: string;
@@ -52,31 +51,33 @@ export class UsersController {
   }
 
   // 내 쩔 프로필 조회
-  // @UseGuards(AuthGuard)
-  // @Get('/myprofile/board1')
-  // async myProfileBoard1 (@Query('page') page: number): Promise<any> {
-  //   const myProfileBoard1: any = {}
-  //   const myProfile = await this.usersService.userProfile(user_id);
-  //   myProfileBoard1.myProfile = myProfile
+  @UseGuards(AccessTokenGuard)
+  @Get('/myprofile/board1')
+  async myProfileBoard1 (@Query('page') page: number, @Req() req): Promise<any> {
+    const {user_id} = req.user
+    const myProfileBoard1: any = {}
+    const myProfile = await this.usersService.userProfile(user_id);
+    myProfileBoard1.myProfile = myProfile
     
-  //   const board1Profile = await this.usersService.board1Profile(page, user_id);
-  //   myProfileBoard1.board1Profile = board1Profile 
+    const board1Profile = await this.usersService.board1Profile(page, user_id);
+    myProfileBoard1.board1Profile = board1Profile 
   
-  //   return myProfileBoard1
-  // }
+    return myProfileBoard1
+  }
 
   //내 겹사 프로필 조회
-  // @UseGuards(AuthGuard)
-  // @Get('/myprofile/board1')
-  // async myProfileBoard1 (@Query('page') page: number): Promise<any> {
-  //   const myProfileBoard2: any = {}
-  //   const myProfile = await this.usersService.userProfile(user_id);
-  //   myProfileBoard2.myProfile = myProfile
+  @UseGuards(AccessTokenGuard)
+  @Get('/myprofile/board2')
+  async myProfileBoard2 (@Query('page') page: number, @Req() req): Promise<any> {
+    const {user_id} = req.user
+    const myProfileBoard2: any = {}
+    const myProfile = await this.usersService.userProfile(user_id);
+    myProfileBoard2.myProfile = myProfile
     
-  //   const board1Profile = await this.usersService.board2Profile(page, user_id);
-  //   myProfileBoard2.board1Profile = board1Profile 
+    const board2Profile = await this.usersService.board2Profile(page, user_id);
+    myProfileBoard2.board2Profile = board2Profile 
   
-  //   return myProfileBoard2
-  // }
+    return myProfileBoard2
+  }
 
 }

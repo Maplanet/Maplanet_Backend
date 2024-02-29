@@ -16,7 +16,7 @@ export class Board2Service {
 
     async board2Info(page: number = 1): Promise<any> {
         try {
-            const limit = 5;
+            const limit = 8;
             const skip = (page - 1) * limit;
             const take = limit;
 
@@ -107,7 +107,7 @@ export class Board2Service {
         searchDiscordName: string,
         ): Promise<any> {
         try{
-            const limit = 5;
+            const limit = 8;
             const skip = (page - 1) * limit;
             const take = limit;
 
@@ -155,7 +155,7 @@ export class Board2Service {
         }
         }
 
-    async postBoard2(createBoard2Dto: CreateBoard2Dto): Promise<any> {
+    async postBoard2(createBoard2Dto: CreateBoard2Dto, user): Promise<any> {
         try {
             const { 
                 meso,
@@ -166,19 +166,16 @@ export class Board2Service {
             } = createBoard2Dto;
 
             const createBoard2 = this.board2Repository.create({
-                // user_id,
-                // board1_id,
-                meso,
-                report_kind,
-                title,
-                request_nickname,
-                place_theif_nickname,
-                // discord_id,
-                // discord_username,
-                // discord_global_name,
-                // discord_image,
-                // view_count,
-                // complete
+              user_id: user.user_id,
+              meso,
+              report_kind,
+              title,
+              request_nickname,
+              place_theif_nickname,
+              discord_id: user.discord_id,
+              discord_username: user.username,
+              // discord_global_name,
+              discord_image: user.avatar,
             })
 
             await this.board2Repository.save(createBoard2)
@@ -206,9 +203,9 @@ export class Board2Service {
             throw new NotFoundException('게시글이 존재하지 않습니다.');
           }
     
-          if(board2.user_id !== user_id) {
-            throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
-          }
+          // if(board2.user_id !== user_id) {
+          //   throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
+          // }
     
           if (board2.user_id === user.user_id){
             if (!board2.complete) {
@@ -229,7 +226,7 @@ export class Board2Service {
               return '게시글의 완료를 취소하였습니다.';
             }  
           } else {
-            '자신의 게시글만 완료처리 할 수 있습니다.'
+            return '자신의 게시글만 완료처리 할 수 있습니다.'
           }
         } catch (error) {
           console.error(`겹사 게시글 완료 에러: ${error.message}`);

@@ -16,7 +16,7 @@ export class BoardService {
 
   async boardInfo(page: number = 1): Promise<any> {
     try {
-      const limit = 5;
+      const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
 
@@ -118,7 +118,7 @@ export class BoardService {
     searchDiscordName: string,
   ): Promise<any> {
     try {
-      const limit = 5;
+      const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
       const searchedBoard1 = await this.boardRepository.find({
@@ -170,7 +170,7 @@ export class BoardService {
     }
   }
 
-  async postBoard(createBoardDto: CreateBoardDto, discordId: string): Promise<any> {
+  async postBoard(createBoardDto: CreateBoardDto, user: any): Promise<any> {
     try {
       const {
         meso,
@@ -186,7 +186,7 @@ export class BoardService {
       } = createBoardDto;
 
       const createBoard1 = this.boardRepository.create({
-        // user_id,
+        user_id: user.user_id,
         meso,
         title,
         maple_nickname,
@@ -197,14 +197,11 @@ export class BoardService {
         progress_kind,
         progress_time,
         position,
-        discord_id: discordId,
-        // discord_username: discordId,
+        discord_id: user.discord_id,
+        discord_username: user.username,
         // discord_global_name,
-        // discord_image,
-        // view_count,
-        // complete
+        discord_image: user.avatar,
       });
-    //   console.log(createBoard1)
 
       await this.boardRepository.save(createBoard1);
       return { msg: '쩔 게시글 등록이 완료되었습니다.' };
@@ -231,9 +228,9 @@ export class BoardService {
         throw new NotFoundException('게시글이 존재하지 않습니다.');
       }
 
-      if(board.user_id !== user_id) {
-        throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
-      }
+      // if(board.user_id !== user_id) {
+      //   throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
+      // }
 
       if (board.user_id === user.user_id){
         if (!board.complete) {
@@ -254,7 +251,7 @@ export class BoardService {
           return '게시글의 완료를 취소하였습니다.';
         }  
       } else {
-        '자신의 게시글만 완료처리 할 수 있습니다.'
+        return '자신의 게시글만 완료처리 할 수 있습니다.'
       }
     } catch (error) {
       console.error(`쩔 게시글 완료 에러: ${error.message}`);
