@@ -80,55 +80,50 @@ export class UsersService {
   }
 
   async board1Profile(page: number, user_id: number): Promise<any> {
-    try {
-      const limit = 8;
-      const skip = (page - 1) * limit;
-      const take = limit;
-      const board1Profile = await this.board1Repository.find({
-        where: {
-          user_id,
-        },
-        select: [
-          'user_id',
-          'board1_id',
-          'discord_id',
-          'meso',
-          'title',
-          'hunting_ground',
-          'sub_job',
-          'progress_kind',
-          'progress_time',
-          'discord_global_name',
-          'discord_image',
-          'view_count',
-          'complete',
-          'created_at',
-          'updated_at',
-        ],
-        skip,
-        take,
-        order: {
-          created_at: 'DESC',
-        },
-        relations: ['Users'],
-      });
+    const limit = 8;
+    const skip = (page - 1) * limit;
+    const take = limit;
+    const board1Profile = await this.board1Repository.find({
+      where: {
+        user_id,
+      },
+      select: [
+        'user_id',
+        'board1_id',
+        'discord_id',
+        'meso',
+        'title',
+        'hunting_ground',
+        'sub_job',
+        'progress_kind',
+        'progress_time',
+        'discord_global_name',
+        'discord_image',
+        'view_count',
+        'complete',
+        'created_at',
+        'updated_at',
+      ],
+      skip,
+      take,
+      order: {
+        created_at: 'DESC',
+      },
+      relations: ['Users'],
+    });
 
-      const modifiedBoard1 = board1Profile.map(
-        ({ Users: { report_count, manner_count }, ...board }) => ({
-          ...board,
-          report_count,
-          manner_count,
-        }),
-      );
+    const modifiedBoard1 = board1Profile.map(
+      ({ Users: { report_count, manner_count }, ...board }) => ({
+        ...board,
+        report_count,
+        manner_count,
+      }),
+    );
 
-      return modifiedBoard1;
-    } catch (error) {
-      console.error(`유저 프로필 쩔 게시글 조회 에러: ${error.message}`);
-    }
-  }
+    return modifiedBoard1;
+  } 
 
   async board2Profile(page: number, user_id: number): Promise<any> {
-    try {
       const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
@@ -166,8 +161,5 @@ export class UsersService {
         }),
       );
       return modifiedBoard2;
-    } catch (error) {
-      console.error(`유저 프로필 쩔 게시글 조회 에러: ${error.message}`);
-    }
   }
 }
