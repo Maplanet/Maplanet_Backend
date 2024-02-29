@@ -88,6 +88,11 @@ export class BoardController {
     return getBoardSearchInfo;
   }
 
+  @ApiOperation({
+    summary: '쩔 게시글 등록',
+    description: '쩔 해주는 유저가 올리 게시글 등록하기',
+  })
+  @ApiResponse({ status: 201, description: 'meso, title, maple_nickname, hunting_ground, level, main_job, sub_job, progress_kind, progress_time, position 등록' })
   @UseGuards(AccessTokenGuard)
   @Post('/post')
   async postBoard(
@@ -102,6 +107,11 @@ export class BoardController {
     return getBoardInfo;
   }
 
+  @ApiOperation({
+    summary: '쩔 게시글 완료',
+    description: '쩔이 끝난 게시글을 올린 유저가 완료하기 누르기',
+  })
+  @ApiResponse({ status: 201, description: '쩔 완료됨' })
   @UseGuards(AccessTokenGuard)
   @Patch('/complete/:board1_id')
   async completeBoard1(

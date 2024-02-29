@@ -11,7 +11,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
 import { UsersService } from './users.service';
 
@@ -26,6 +26,11 @@ interface IData {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({
+    summary: '유저 프로필 쩔',
+    description: '유저의 프로필을 확인할 수 있음',
+  })
+  @ApiResponse({ status: 200, description: '유저 정보, 유저가 올린 쩔 게시글 정보' })
   @Get('/userprofile/board1/:user_id')
   async usersProfileBoard1 (@Query('page') page: number, @Param('user_id') user_id: number): Promise<any> {
     const userProfileBoard1: any = {}
@@ -38,6 +43,11 @@ export class UsersController {
     return userProfileBoard1
   }
 
+  @ApiOperation({
+    summary: '유저 프로필 겹사',
+    description: '유저의 프로필을 확인할 수 있음',
+  })
+  @ApiResponse({ status: 200, description: '유저 정보, 유저가 올린 겹사 게시글 정보' })
   @Get('/userprofile/board2/:user_id')
   async usersProfileBoard2 (@Query('page') page: number, @Param('user_id') user_id: number): Promise<any> {
     const userProfileBoard2: any = {}
@@ -50,7 +60,11 @@ export class UsersController {
     return userProfileBoard2
   }
 
-  // 내 쩔 프로필 조회
+  @ApiOperation({
+    summary: '내 프로필 쩔',
+    description: '내 프로필을 확인할 수 있음',
+  })
+  @ApiResponse({ status: 200, description: '내 정보, 내가 올린 쩔 게시글 정보' })
   @UseGuards(AccessTokenGuard)
   @Get('/myprofile/board1')
   async myProfileBoard1 (@Query('page') page: number, @Req() req): Promise<any> {
@@ -65,8 +79,11 @@ export class UsersController {
     return myProfileBoard1
   }
 
-  //내 겹사 프로필 조회
-  @UseGuards(AccessTokenGuard)
+  @ApiOperation({
+    summary: '내 프로필 겹사',
+    description: '내 프로필을 확인할 수 있음',
+  })
+  @ApiResponse({ status: 200, description: '내 정보, 내가 올린 겹사 게시글 정보' })  @UseGuards(AccessTokenGuard)
   @Get('/myprofile/board2')
   async myProfileBoard2 (@Query('page') page: number, @Req() req): Promise<any> {
     const {user_id} = req.user
