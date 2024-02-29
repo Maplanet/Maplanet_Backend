@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -17,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     JwtModule.register({}),
     CacheModule.register(),
     TypeOrmModule.forFeature([DiscordOAuth2Credentials, Users]),
-    UsersModule,
+    forwardRef(() => UsersModule),
     HttpModule,
   ],
   providers: [AuthService, DiscordStrategy],

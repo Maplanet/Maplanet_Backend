@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
 import { Board2Service } from './board2.service';
 import { CreateBoard2Dto } from './dto/create-board2.dto';
 
@@ -63,26 +64,21 @@ export class Board2Controller {
     return getBoard2SearchInfo
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post('/post')
-  // @UseGuards(AuthGuard)
-  async postBoard2(@Body() createBoard2Dto: CreateBoard2Dto, @Req() request: Request): Promise<any> {
-    // const userId = request['user'].userId;
-    const getBoard2Info = await this.board2Service.postBoard2(createBoard2Dto, 
-      //userId
-      )
+  async postBoard2(@Body() createBoard2Dto: CreateBoard2Dto, @Req() req): Promise<any> {
+    const user = req.user;
+    const getBoard2Info = await this.board2Service.postBoard2(createBoard2Dto, user)
     return getBoard2Info
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AccessTokenGuard)
   @Patch('/complete/:board2_id')
   async completeBoard2(
     @Param('board2_id') board2_id: number, 
-    @Req() request: Request,
+    @Req() req,
   ): Promise<any> {
-    // const discordId = request.headers['discord_id'];
-    const user_id = 16
-    // console.log(discordId)
-    // const userId = request['user'].userId;
+    const { user_id } = req.user;
     return await this.board2Service.completeBoard2(board2_id, user_id);
   }
 }

@@ -23,14 +23,14 @@ export class ReportService {
         
         const report = await this.reportRepository.findOne({
             where: {
-                reporter_user_id: myUserId,
+                reporter_user_id: myUserId.user_id,
                 reported_user_id: user_id
             }
         })
-        if (myUserId !== user.user_id) {
+        if (myUserId.user_id !== user.user_id) {
             if (!report) {
                 const reports = await this.reportRepository.create({
-                    reporter_user_id: myUserId,
+                    reporter_user_id: myUserId.user_id,
                     reported_user_id: user_id
                 })
                 await this.reportRepository.save(reports);
