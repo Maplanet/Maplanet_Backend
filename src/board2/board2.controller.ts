@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
 import { Board2Service } from './board2.service';
 import { CreateBoard2Dto } from './dto/create-board2.dto';
 
+@ApiTags('BOARD2')
 @Controller('board2')
 export class Board2Controller {
   constructor(private readonly board2Service: Board2Service) {}
@@ -24,7 +25,7 @@ export class Board2Controller {
     summary: '겹사 게시글 상세조회',
     description: '겹사 해주는 유저가 올린 게시글 상세조회',
   })
-  @ApiResponse({ status: 200, description: '겹사 게시글 전체 조회' })
+  @ApiResponse({ status: 200, description: '겹사 게시글 상세조회' })
   async board2DetailInfo(@Param('board2_id') board2_id: number): Promise<any> {
     const getBoard2Info = await this.board2Service.board2DetailInfo(board2_id);
     return getBoard2Info;
@@ -35,7 +36,7 @@ export class Board2Controller {
     summary: '겹사 게시글 검색 조회',
     description: '겹사 의뢰 한 유저가 올린 게시글 검색해서 전체 조회'
   })
-  @ApiResponse({ status: 200, description: '잠쩔 게시글 전체 조회' })
+  @ApiResponse({ status: 200, description: '겹사 게시글 검색해서 전체 조회' })
   @ApiQuery({ name: 'searchMeso', required: false, type: Number })
   @ApiQuery({ name: 'searchReportKind', required: false, type: String })
   @ApiQuery({ name: 'searchTitle', required: false, type: String })
@@ -64,6 +65,11 @@ export class Board2Controller {
     return getBoard2SearchInfo
   }
 
+  @ApiOperation({
+    summary: '겹사 게시글 등록',
+    description: '겹사 의뢰를 올릴 유저가 게시글 등록하기',
+  })
+  @ApiResponse({ status: 201, description: 'meso, report_kind, titl, request_nickname, place_theif_nickname 등록' })
   @UseGuards(AccessTokenGuard)
   @Post('/post')
   async postBoard2(@Body() createBoard2Dto: CreateBoard2Dto, @Req() req): Promise<any> {
@@ -72,6 +78,11 @@ export class Board2Controller {
     return getBoard2Info
   }
 
+  @ApiOperation({
+    summary: '겹사 게시글 완료',
+    description: '겹사 의뢰가 끝난 유저가 완료하기 누르기',
+  })
+  @ApiResponse({ status: 201, description: '겹사 완료됨' })
   @UseGuards(AccessTokenGuard)
   @Patch('/complete/:board2_id')
   async completeBoard2(
