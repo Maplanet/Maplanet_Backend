@@ -50,7 +50,7 @@ export class NoticeController {
 
   @ApiOperation({
     summary: '공지사항 등록',
-    description: '공지사항 관리자만 등록학',
+    description: '공지사항 관리자만 등록하기',
   })
   @ApiResponse({ status: 201, description: 'title, category, content' })
   @Post('/')
@@ -60,6 +60,6 @@ export class NoticeController {
   @HttpCode(201)
   async postNotice(@Req() req, @Body() createNoticeDto: CreateNoticeDto) {
     const { user_id } = req.user;
-    await this.noticeService.postNotice(createNoticeDto, user_id);
+    return await this.noticeService.postNotice(createNoticeDto, user_id);
   }
 }

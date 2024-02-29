@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { Notice } from './entities/notice.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -41,7 +41,16 @@ export class NoticeService {
 
       return { noticeData: getAllNotice };
     } catch (error) {
-      console.error(`공지사항 전체 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '공지사항 전체 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 
@@ -53,21 +62,47 @@ export class NoticeService {
   }
 
   async getNoticeDetail(notice_id: number): Promise<any> {
-    const getOneNotice = await this.noticeReporotory.findOne({
-      where: { notice_id },
-    });
-    await this.noticeViewCount(notice_id);
-    return {noticeDetailData: getOneNotice};
+    try {
+      const getOneNotice = await this.noticeReporotory.findOne({
+        where: { notice_id },
+      });
+      await this.noticeViewCount(notice_id);
+      return {noticeDetailData: getOneNotice};
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '공지사항 상세 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
+    }
   }
 
   async postNotice(createNoticeDto, user_id) {
-    const Admin = await this.findUserByUserId(user_id);
-    createNoticeDto.administrator_id = Admin.administrator_id;
-    const postCd = this.noticeReporotory.create(createNoticeDto);
+    try{
+      const Admin = await this.findUserByUserId(user_id);
+      createNoticeDto.administrator_id = Admin.administrator_id;
+      const postCd = this.noticeReporotory.create(createNoticeDto);
 
-    await this.noticeReporotory.save(postCd);
+      await this.noticeReporotory.save(postCd);
 
-    return 2;
+      return { msg: '공지사항 등록이 완료되었습니다.' };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 401,
+          error: {
+            message: '공지사항 등록 에러',
+            detail: error.message,
+          },
+        },
+        401,
+      );
+    }
   }
 
   private async findUserByUserId(user_id) {
@@ -80,5 +115,5 @@ export class NoticeService {
       throw new BadRequestException('존재하지 않는 관리자계정');
     }
     return findUserByUserId;
-  }
+  } 
 }

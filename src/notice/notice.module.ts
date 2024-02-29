@@ -6,10 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
+import { Users } from 'src/users/entities/users.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Notice, Administrator]),
+    TypeOrmModule.forFeature([Notice, Administrator, Users]),
     AuthModule,
     UsersModule,
   ],

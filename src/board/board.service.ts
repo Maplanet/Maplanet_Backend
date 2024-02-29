@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { Equal, Like, Repository, UpdateResult } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -53,7 +53,16 @@ export class BoardService {
       }));
     return { board1Data: modifiedBoard1 };
     } catch (error) {
-      console.error(`Error 400: 쩔 게시글 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '쩔 게시글 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 
@@ -101,7 +110,16 @@ export class BoardService {
             manner_count,
         }
     } catch (error) {
-        console.error(`Error 400: 쩔 게시글 상세 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '쩔 게시글 상세 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
  
@@ -166,7 +184,16 @@ export class BoardService {
 
       return { search1Data: modifiedSearchBoard1 };
     } catch (error) {
-      console.error(`Error 400: 쩔 게시글 검색 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '쩔 게시글 검색 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 
@@ -206,7 +233,16 @@ export class BoardService {
       await this.boardRepository.save(createBoard1);
       return { msg: '쩔 게시글 등록이 완료되었습니다.' };
     } catch (error) {
-      console.error(`Error 403: 쩔 게시글 등록 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 401,
+          error: {
+            message: '쩔 게시글 등록 에러',
+            detail: error.message,
+          },
+        },
+        401,
+      );
     }
   }
 
@@ -251,10 +287,19 @@ export class BoardService {
           return '게시글의 완료를 취소하였습니다.';
         }  
       } else {
-        return '자신의 게시글만 완료처리 할 수 있습니다.'
+        throw new Error ('자신의 게시글만 완료처리 할 수 있습니다.')
       }
     } catch (error) {
-      console.error(`쩔 게시글 완료 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 401,
+          error: {
+            message: '쩔 게시글 완료 에러',
+            detail: error.message,
+          },
+        },
+        401,
+      );
     }
   } 
 }

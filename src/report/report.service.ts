@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/users.entity';
 import { Repository } from 'typeorm';
@@ -15,36 +15,49 @@ export class ReportService {
       ) {}
     
     async reportUser(myUserId: any, user_id: any): Promise<any> {
-        const user = await this.usersRepository.findOne({ where: { user_id } });
-    
-        if (!user) {
-          throw new Error('유저를 찾을 수 없습니다.')
-        }
+        try {
+            const user = await this.usersRepository.findOne({ where: { user_id } });
         
-        const report = await this.reportRepository.findOne({
-            where: {
-                reporter_user_id: myUserId.user_id,
-                reported_user_id: user_id
+            if (!user) {
+            throw new Error('유저를 찾을 수 없습니다.')
             }
-        })
-        if (myUserId.user_id !== user.user_id) {
-            if (!report) {
-                const reports = await this.reportRepository.create({
+            
+            const report = await this.reportRepository.findOne({
+                where: {
                     reporter_user_id: myUserId.user_id,
                     reported_user_id: user_id
-                })
-                await this.reportRepository.save(reports);
-                user.report_count++;
-                await this.usersRepository.save(user);
-                return '유저를 신고하였습니다.';
+                }
+            })
+            if (myUserId.user_id !== user.user_id) {
+                if (!report) {
+                    const reports = await this.reportRepository.create({
+                        reporter_user_id: myUserId.user_id,
+                        reported_user_id: user_id
+                    })
+                    await this.reportRepository.save(reports);
+                    user.report_count++;
+                    await this.usersRepository.save(user);
+                    return '유저를 신고하였습니다.';
+                } else {
+                    await this.reportRepository.delete(report);
+                    user.report_count--;
+                    await this.usersRepository.save(user);
+                    return '유저를 신고하기를 취소하였습니다.';
+                }
             } else {
-                await this.reportRepository.delete(report);
-                user.report_count--;
-                await this.usersRepository.save(user);
-                return '유저를 신고하기를 취소하였습니다.';
+                throw new Error ('자기 자신을 신고할 수 없습니다.')
             }
-        } else {
-            return '자기 자신을 신고할 수 없습니다.'
+        }   catch (error) {
+            throw new HttpException(
+                {
+                    status: 401,
+                    error: {
+                    message: '유저 신고 에러',
+                    detail: error.message,
+                    },
+                },
+                401,
+            );
         }
     }
 }

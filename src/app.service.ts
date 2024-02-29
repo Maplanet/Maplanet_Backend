@@ -1,4 +1,4 @@
-import { Inject, Injectable, UseGuards } from '@nestjs/common';
+import { HttpException, Inject, Injectable, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from './board/entities/board.entity';
@@ -64,9 +64,19 @@ export class AppService {
       );
       return modifiedBoard1;
     } catch (error) {
-      console.error(`Error 401: 메인페이지 쩔 게시글 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '메인페이지 쩔 게시글 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
+  
 
   async getBoard2Data() {
     try {
@@ -100,7 +110,16 @@ export class AppService {
       );
       return modifiedBoard2;
     } catch (error) {
-      console.error(`Error 401: 메인페이지 겹사 게시글 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '메인페이지 겹사 게시글 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 
@@ -128,7 +147,16 @@ export class AppService {
 
       return modifiedBoard;
     } catch (error) {
-      console.error(`Error 401: 메인페이지 매너 게시글 3개 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '메인페이지 매너 게시글 3개 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 
@@ -157,7 +185,16 @@ export class AppService {
 
       return modifiedBoard2;
     } catch (error) {
-      console.error(`Error 401: 메인페이지 메소 높은 게시글 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '메인페이지 메소 높은 게시글 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 
@@ -173,7 +210,16 @@ export class AppService {
 
       return notice[0];
     } catch (error) {
-      console.error(`Error 401: 메인페이지 공지사항 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '메인페이지 공지사항 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 
@@ -190,7 +236,16 @@ export class AppService {
       await this.redisClient.set('total_visitors', String(total_visitors));
       return total_visitors;
     } catch (error) {
-      console.error(`Error 401: 메인페이지 전체 접속한 유저 수 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '메인페이지 전체 접속한 유저 수 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 
@@ -213,7 +268,16 @@ export class AppService {
       const visitors = await this.redisClient.get('visitors_today');
       return visitors ? parseInt(visitors) : 0;
     } catch (error) {
-      console.error(`Error 401: 메인페이지 오늘 접속한 유저 수 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '메인페이지 오늘 접속한 유저 수 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 
@@ -238,7 +302,16 @@ export class AppService {
       const loggedInUsersCount = Math.ceil(visitorsToday / 3);
       return loggedInUsersCount;
     } catch (error) {
-      console.error(`Error 401: 메인페이지 현재 접속중인 유저 수 조회 에러: ${error.message}`);
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '메인페이지 현재 접속중인 유저 수 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
   }
 }
