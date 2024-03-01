@@ -227,7 +227,6 @@ export class AppService {
   async allVisitors(): Promise<number> {
     try{
       let total_visitors_str = await this.redisClient.get('total_visitors');
-      console.log(total_visitors_str);
       let total_visitors = Number(total_visitors_str);
       if (isNaN(total_visitors)) {
         total_visitors = 0;
@@ -257,7 +256,6 @@ export class AppService {
   @Cron(CronExpression.EVERY_DAY_AT_3PM)
   async resetDailyVisitors(): Promise<void> {
     const visitors = await this.redisClient.get('visitors_today');
-    console.log(visitors);
     if (visitors) {
       await this.redisClient.set('visitors_today', '0');
     }
