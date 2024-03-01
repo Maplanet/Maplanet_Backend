@@ -28,10 +28,7 @@ export class AppController {
     
     const getBoard1Data = await this.appService.getBoard1Data();
     maindata.board1Data = getBoard1Data;
-    req.session.visits = req.session.visits ? req.session.visits + 1 : 1;
-    // let a = req.session.visits
-    // console.log(req.session)
-    // console.log(a) 
+
     const getBoard2Data = await this.appService.getBoard2Data();
     maindata.board2Data = getBoard2Data;
 
