@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 
@@ -23,11 +23,15 @@ export class AppController {
     description:
       '잠쩔 게시글 3개, 겹사 게시글 3개, 상단 공지사항, 방문유저 수 조회, 매너 지수 높은 잠쩔 게시글 3개, 겹사 건당 메소 높은 게시글 3개',
   })
-  async mainpage(): Promise<any> {
+  async mainpage(@Req() req): Promise<any> {
     const maindata: any = {};
+    
     const getBoard1Data = await this.appService.getBoard1Data();
     maindata.board1Data = getBoard1Data;
-
+    req.session.visits = req.session.visits ? req.session.visits + 1 : 1;
+    // let a = req.session.visits
+    // console.log(req.session)
+    // console.log(a) 
     const getBoard2Data = await this.appService.getBoard2Data();
     maindata.board2Data = getBoard2Data;
 

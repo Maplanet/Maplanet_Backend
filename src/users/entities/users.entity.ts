@@ -30,9 +30,6 @@ export class Users {
 
     @Column()
     manner_count: number;
-
-    @Column({ default: false })
-    admin: boolean
     
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
