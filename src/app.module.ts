@@ -17,14 +17,15 @@ import { Notice } from './notice/entities/notice.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { MannerModule } from './manner/manner.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
     RedisModule.forRoot({
       readyLog: true,
       config: {
-        // host: 'my-redis',
-        host: '127.0.0.1',
+        host: 'my-redis',
+        //host: '127.0.0.1',
         port: 6379,
         //password: 'bitnami'
       },
@@ -48,6 +49,7 @@ import { MannerModule } from './manner/manner.module';
     ScheduleModule.forRoot(),
     RedisModule,
     MannerModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
