@@ -39,7 +39,7 @@ export class Notice {
   @IsString({
     message: stringValidationMessage,
   })
-  category: number;
+  category: string;
 
   @Column()
   @IsString({
