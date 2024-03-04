@@ -43,12 +43,12 @@ export class Board2Service {
               },
               relations: ['Users']
           })
-      const modifiedBoard1 = board2.map(({ Users: { report_count, manner_count }, ...board2 }) => ({
+      const modifiedBoard2 = board2.map(({ Users: { report_count, manner_count }, ...board2 }) => ({
           ...board2,
           report_count,
           manner_count,
       }));
-      return { board1Data: modifiedBoard1 };
+      return modifiedBoard2 ;
       } catch (error) {
         throw new HttpException(
           {
@@ -61,6 +61,11 @@ export class Board2Service {
           400,
         );
       }
+  }
+
+  async board2PageCount (): Promise<any> {
+    const board2Count = await this.board2Repository.count()
+    return board2Count
   }
 
   async board2ViewCount(board2_id: number): Promise<UpdateResult> {

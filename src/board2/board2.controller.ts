@@ -16,8 +16,12 @@ export class Board2Controller {
   })
   @ApiResponse({ status: 200, description: '잠쩔 게시글 전체 조회' })
   async board2Info(@Query('page') page: number): Promise<any> {
-    const getBoard2Info = await this.board2Service.board2Info(page)
-    return getBoard2Info
+    const getBoard2Info = await this.board2Service.board2Info(page);
+    const getBoard2Count = await this.board2Service.board2PageCount();
+    return { board2Data:
+      getBoard2Info,
+      getBoard2Count
+    }
   }
 
   @Get('/detail/:board2_id')

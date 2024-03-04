@@ -38,8 +38,10 @@ export class NoticeService {
           created_at: 'DESC',
         },
       });
+      const noticeCount = await this.noticeReporotory.count()
 
-      return { noticeData: getAllNotice };
+
+      return {noticeData: getAllNotice, noticeCount};
     } catch (error) {
       throw new HttpException(
         {

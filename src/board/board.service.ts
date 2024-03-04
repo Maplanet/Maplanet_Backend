@@ -51,7 +51,7 @@ export class BoardService {
         report_count,
         manner_count,
       }));
-    return { board1Data: modifiedBoard1 };
+    return modifiedBoard1;
     } catch (error) {
       throw new HttpException(
         {
@@ -64,6 +64,11 @@ export class BoardService {
         400,
       );
     }
+  }
+
+  async board1PageCount (): Promise<any> {
+    const board1Count = await this.boardRepository.count()
+    return board1Count
   }
 
   async board1ViewCount(board1_id: number): Promise<UpdateResult> {
