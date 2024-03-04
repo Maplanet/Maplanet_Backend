@@ -162,4 +162,14 @@ export class UsersService {
       );
       return modifiedBoard2;
   }
+
+  async userPageCountBoard1(user_id: number): Promise<number> {
+    const userPageCountBoard1 = await this.board1Repository.count({ where: { user_id } });
+    return userPageCountBoard1;
+  }
+
+  async userPageCountBoard2(user_id: number): Promise<number> {
+    const userPageCountBoard2 = await this.board2Repository.count({ where: { user_id } });
+    return userPageCountBoard2;
+  }
 }

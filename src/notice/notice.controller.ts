@@ -33,7 +33,7 @@ export class NoticeController {
   @HttpCode(200)
   async getNoticeAll(@Query('page') page: number): Promise<any> {
     const AllPosts = this.noticeService.getAllNoticePost(page);
-    return AllPosts;
+    return AllPosts 
   }
 
   @ApiOperation({

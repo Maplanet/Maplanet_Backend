@@ -42,6 +42,9 @@ export class UsersController {
       const board1Profile = await this.usersService.board1Profile(page, user_id);
       userProfileBoard1.board1Profile = board1Profile
 
+      const userPageCount = await this.usersService.userPageCountBoard1(user_id);
+      userProfileBoard1.userPageCount = userPageCount
+
       return userProfileBoard1
     } catch (error) {
       throw new HttpException(
@@ -71,6 +74,9 @@ export class UsersController {
       
       const board2Profile = await this.usersService.board2Profile(page, user_id);
       userProfileBoard2.board2Profile = board2Profile
+
+      const userPageCount = await this.usersService.userPageCountBoard2(user_id);
+      userProfileBoard2.userPageCount = userPageCount
 
       return userProfileBoard2
     } catch (error) {
@@ -103,6 +109,9 @@ export class UsersController {
       
       const board1Profile = await this.usersService.board1Profile(page, user_id);
       myProfileBoard1.board1Profile = board1Profile 
+
+      const userPageCount = await this.usersService.userPageCountBoard1(user_id);
+      myProfileBoard1.userPageCount = userPageCount
     
       return myProfileBoard1
     } catch (error) {
@@ -134,6 +143,9 @@ export class UsersController {
       
       const board2Profile = await this.usersService.board2Profile(page, user_id);
       myProfileBoard2.board2Profile = board2Profile 
+
+      const userPageCount = await this.usersService.userPageCountBoard2(user_id);
+      myProfileBoard2.userPageCount = userPageCount
     
       return myProfileBoard2
     } catch (error) {
