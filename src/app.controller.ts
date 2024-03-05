@@ -1,24 +1,13 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { ChatGateway } from './chat/chat.gateway';
-import {
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  OnGatewayInit,
-  WebSocketGateway,
-  WebSocketServer,
-} from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat/chat.service';
 
 @ApiTags('MAIN')
 @Controller()
-@WebSocketGateway()
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly chatGateway: ChatGateway,
     private readonly chatService: ChatService,
   ) {}
 
