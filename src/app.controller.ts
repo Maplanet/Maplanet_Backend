@@ -1,11 +1,15 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
+import { ChatService } from './chat/chat.service';
 
 @ApiTags('MAIN')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly chatService: ChatService,
+  ) {}
 
   @Get()
   getHello(): string {
@@ -25,7 +29,7 @@ export class AppController {
   })
   async mainpage(@Req() req): Promise<any> {
     const maindata: any = {};
-    
+
     const getBoard1Data = await this.appService.getBoard1Data();
     maindata.board1Data = getBoard1Data;
 
@@ -48,7 +52,7 @@ export class AppController {
     // await this.appService.loginUser('2');
     // await this.appService.loginUser('3');
     // await this.appService.logoutUser('user_id_1');
-    const loggedInUser = await this.appService.getLoggedInUserCount();
+    const loggedInUser = await this.chatService.getUserList();
     maindata.visitorsData = {
       total_visitors: allVisitors,
       today_visitors: todayVisitors,
