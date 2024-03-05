@@ -144,7 +144,7 @@ export class BoardService {
       const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
-      const searchedBoard1 = await this.boardRepository.find({
+      const [searchedBoard1, totalCount] = await this.boardRepository.findAndCount({
         where: [
           { meso: Equal(searchMeso) },
           { title: Like(`%${searchTitle}%`) },
@@ -187,7 +187,7 @@ export class BoardService {
         manner_count,
       }));
 
-      return { search1Data: modifiedSearchBoard1 };
+      return { search1Data: modifiedSearchBoard1, totalCount };
     } catch (error) {
       throw new HttpException(
         {

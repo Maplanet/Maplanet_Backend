@@ -121,71 +121,71 @@ export class Board2Service {
     }
 
   async board2SearchInfo(
-      page: number = 1, 
-      searchMeso: number,
-      searchReportKind: string,
-      searchTitle: string,
-      searchRequestNickname: string,
-      searchPlaceTheifNickname: string,
-      searchDiscordName: string,
-      ): Promise<any> {
-      try{
-          const limit = 8;
-          const skip = (page - 1) * limit;
-          const take = limit;
+    page: number = 1, 
+    searchMeso: number,
+    searchReportKind: string,
+    searchTitle: string,
+    searchRequestNickname: string,
+    searchPlaceTheifNickname: string,
+    searchDiscordName: string,
+  ): Promise<any> {
+    try{
+        const limit = 8;
+        const skip = (page - 1) * limit;
+        const take = limit;
 
-          const searchedBoard2 = await this.board2Repository.find({
-              where: [
-                  { meso: searchMeso },
-                  { report_kind: Like(`%${searchReportKind}%`) },
-                  { title: Like(`%${searchTitle}%`) },
-                  { request_nickname: Like(`%${searchRequestNickname}%`) },
-                  { place_theif_nickname: Like(`%${searchPlaceTheifNickname}%`) },
-                  { discord_global_name: Like(`%${searchDiscordName}%`) },
-              ],
-              select: [
-                  'user_id',
-                  'board2_id',
-                  'discord_id',
-                  'meso',
-                  'report_kind',
-                  'title',
-                  'place_theif_nickname',
-                  'discord_global_name',
-                  'discord_image',
-                  'view_count',
-                  'complete',
-                  'created_at',
-                  'updated_at'
-              ],
-              skip,
-              take,
-              order: {
-                  created_at: 'DESC' // Order by created_at timestamp in descending order
-              },
-              relations: ['Users']
-          })
-
-      const modifiedSearchBoard2 = searchedBoard2.map(({ Users: { report_count, manner_count }, ...board2 }) => ({
-          ...board2,
-          report_count,
-          manner_count,
-          }));
-  
-          return { search2Data: modifiedSearchBoard2 };
-      } catch (error) {
-        throw new HttpException(
-          {
-            status: 400,
-            error: {
-              message: '겹사 게시글 검색 조회 에러',
-              detail: error.message,
-            },
+        const [searchedBoard2, totalCount] = await this.board2Repository.findAndCount({
+          where: [
+            { meso: searchMeso },
+            { report_kind: Like(`%${searchReportKind}%`) },
+            { title: Like(`%${searchTitle}%`) },
+            { request_nickname: Like(`%${searchRequestNickname}%`) },
+            { place_theif_nickname: Like(`%${searchPlaceTheifNickname}%`) },
+            { discord_global_name: Like(`%${searchDiscordName}%`) },
+          ],
+          select: [
+            'user_id',
+            'board2_id',
+            'discord_id',
+            'meso',
+            'report_kind',
+            'title',
+            'place_theif_nickname',
+            'discord_global_name',
+            'discord_image',
+            'view_count',
+            'complete',
+            'created_at',
+            'updated_at'
+          ],
+          skip,
+          take,
+          order: {
+              created_at: 'DESC' // Order by created_at timestamp in descending order
           },
-          400,
-        );
-      }
+          relations: ['Users']
+        })
+
+    const modifiedSearchBoard2 = searchedBoard2.map(({ Users: { report_count, manner_count }, ...board2 }) => ({
+      ...board2,
+      report_count,
+      manner_count,
+      }));
+
+      return { search2Data: modifiedSearchBoard2, totalCount };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '겹사 게시글 검색 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
     }
+  }
 
   async postBoard2(createBoard2Dto: CreateBoard2Dto, user): Promise<any> {
     try {

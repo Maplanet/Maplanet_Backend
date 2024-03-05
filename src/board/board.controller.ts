@@ -76,7 +76,7 @@ export class BoardController {
     @Query('searchProgressTime') searchProgressTime?: number,
     @Query('searchDiscordName') searchDiscordName?: string,
   ): Promise<any> {
-    const getBoardSearchInfo = await this.boardService.boardSearchInfo(
+    const { search1Data, totalCount } = await this.boardService.boardSearchInfo(
       page,
       searchMeso,
       searchTitle,
@@ -88,8 +88,7 @@ export class BoardController {
       searchProgressTime,
       searchDiscordName,
     );
-    // console.log("asdfasdfasdfasdfsadfsa",getBoardSearchInfo)
-    return getBoardSearchInfo;
+    return { search1Data, totalCount };
   }
 
   @ApiOperation({
