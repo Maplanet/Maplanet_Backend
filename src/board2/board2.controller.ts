@@ -57,7 +57,7 @@ export class Board2Controller {
     @Query('searchDiscordName') searchDiscordName: string,
 
     ): Promise<any> {
-    const getBoard2SearchInfo = await this.board2Service.board2SearchInfo(
+    const { search2Data, totalCount } = await this.board2Service.board2SearchInfo(
       page, 
       searchMeso,
       searchReportKind,
@@ -66,7 +66,7 @@ export class Board2Controller {
       searchPlaceTheifNickname,
       searchDiscordName
       )
-    return getBoard2SearchInfo
+    return { search2Data, totalCount }
   }
 
   @ApiOperation({
