@@ -17,7 +17,7 @@ export class AuthController {
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
-  @Redirect('https://maplanet.store/main', 302)
+  @Redirect('http://localhost:3000/main', 302)
   async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {
     const access_token = req.user;
 
