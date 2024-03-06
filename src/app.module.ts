@@ -25,7 +25,7 @@ import { ChatModule } from './chat/chat.module';
       readyLog: true,
       config: {
         host: 'my-redis',
-        //host: '127.0.0.1',
+        // host: '127.0.0.1',
         port: 6379,
         //password: 'bitnami'
       },
