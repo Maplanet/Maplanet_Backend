@@ -17,7 +17,7 @@ export class AuthController {
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
-  // @Redirect('http://13.209.210.215/main', 302)
+  // @Redirect('http://13.209.210.215:3000/main', 302)
   async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {
     const access_token = req.user;
 
