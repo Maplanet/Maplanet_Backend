@@ -11,7 +11,7 @@ import { VerifyCallback } from 'jsonwebtoken';
 // change these to be your Discord client ID and secret
 const clientID = '1207737873063739452';
 const clientSecret = 'ZaxXr7J7d3P4W3-RmuZO7HYbLgdmpMCS';
-const callbackURL = 'http://13.209.210.215/auth/discord';
+const callbackURL = 'http://13.209.210.215:3000/auth/discord';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
