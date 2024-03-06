@@ -278,38 +278,4 @@ export class AppService {
       );
     }
   }
-
-  // 현재 로그인한 유저
-  // async loginUser(userId: string): Promise<void> {
-  //   await this.redis.sAdd('logged_in_users', userId);
-  // }
-
-  // async logoutUser(userId: string): Promise<void> {
-  //   await this.redis.sRem('logged_in_users', userId);
-  // }
-
-  // async getLoggedInUserCount(): Promise<number> {
-  //   const loggedInUsersCount = await this.redis.sCard('logged_in_users');
-  //   return loggedInUsersCount;
-  // }
-
-  //야매 현재 로그인한 유저
-  async getLoggedInUserCount(): Promise<number> {
-    try {
-      const visitorsToday = await this.todayVisitors();
-      const loggedInUsersCount = Math.ceil(visitorsToday / 3);
-      return loggedInUsersCount;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: 400,
-          error: {
-            message: '메인페이지 현재 접속중인 유저 수 조회 에러',
-            detail: error.message,
-          },
-        },
-        400,
-      );
-    }
-  }
 }
