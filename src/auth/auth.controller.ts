@@ -17,12 +17,12 @@ export class AuthController {
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
-  @Redirect('http://localhost:3000', 302)
+  //@Redirect('http://localhost:3000', 302)
   async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {
     const access_token = req.user;
     res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
-    res.header('Authorization', `Bearer ${access_token?.access_token}`);
-    // res.redirect('http://localhost:3000');
+    //res.header('Authorization', `Bearer ${access_token?.access_token}`);
+    res.redirect('http://localhost:3000');
   }
 
   @Get('discord/callback')
