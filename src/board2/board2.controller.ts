@@ -14,7 +14,7 @@ export class Board2Controller {
     summary: '겹사 게시글 전체 조회',
     description: '겹사 의뢰 한 유저가 올린 게시글 전체 조회'
   })
-  @ApiResponse({ status: 200, description: '잠쩔 게시글 전체 조회' })
+  @ApiResponse({ status: 200, description: '겹사 게시글 전체 조회' })
   async board2Info(@Query('page') page: number): Promise<any> {
     const getBoard2Info = await this.board2Service.board2Info(page);
     const getBoard2Count = await this.board2Service.board2PageCount();

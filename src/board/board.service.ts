@@ -16,7 +16,7 @@ export class BoardService {
 
   async boardInfo(page: number = 1): Promise<any> {
     try {
-      const limit = 8;
+      const limit = 12;
       const skip = (page - 1) * limit;
       const take = limit;
 
@@ -141,7 +141,7 @@ export class BoardService {
     searchDiscordName: string,
   ): Promise<any> {
     try {
-      const limit = 8;
+      const limit = 12;
       const skip = (page - 1) * limit;
       const take = limit;
       const [searchedBoard1, totalCount] = await this.boardRepository.findAndCount({
