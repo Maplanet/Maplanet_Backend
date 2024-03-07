@@ -20,7 +20,7 @@ export class Board2Controller {
     const getBoard2Count = await this.board2Service.board2PageCount();
     return { board2Data:
       getBoard2Info,
-      getBoard2Count
+      totalCount: getBoard2Count
     }
   }
 

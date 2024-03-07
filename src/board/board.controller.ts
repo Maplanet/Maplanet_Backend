@@ -34,7 +34,7 @@ export class BoardController {
     const getBoardCount = await this.boardService.board1PageCount();
     return { board1Data:
       getBoardInfo,
-      getBoardCount
+      totalCount: getBoardCount
     }
   }
 
