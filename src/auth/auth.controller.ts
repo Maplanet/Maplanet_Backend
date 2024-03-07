@@ -17,7 +17,6 @@ export class AuthController {
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
-  @Redirect('http://localhost:3000', 302)
   async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {
     const access_token = req.user;
 
@@ -32,16 +31,21 @@ export class AuthController {
 
     //const access_token_verify = this.authService.verifyToken(access_token);
     //console.log(access_token_verify);
-    res.header('Authorization', `Bearer ${access_token?.access_token}`);
-    return access_token;
+    //   res.header('Authorization', `Bearer ${access_token?.access_token}`);
+    //res.cookies('Authorization', `Bearer ${access_token?.access_token}`);
+    // return access_token;
     // accessToken: access_token?.access_token,
     // payload: access_token?.payload,
   }
 
-  @Get('redirect')
+  @Get('discord/callback')
   @UseGuards(AuthGuard('discord'))
-  googleAuthRedirect(@Req() req) {
-    //   return this.authService.googleLogin(req);
+  async googleLoginCallback(@Req() req, @Res() res): Promise<void> {
+    const access_token = req.user;
+    console.log(access_token);
+    // if (access_token) res.redirect('http://localhost:3000/main' + access_token);
+    // else res.redirect('http://localhost:3000/board1');
+    return res.json(access_token);
   }
 
   @Delete('logout')
