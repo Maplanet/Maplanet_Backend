@@ -24,8 +24,8 @@ import { ChatModule } from './chat/chat.module';
     RedisModule.forRoot({
       readyLog: true,
       config: {
-        // host: 'my-redis',
-        host: '127.0.0.1',
+        host: 'my-redis',
+        //host: '127.0.0.1',
         port: 6379,
         //password: 'bitnami'
       },
