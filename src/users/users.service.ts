@@ -80,7 +80,7 @@ export class UsersService {
   }
 
   async board1Profile(page: number, user_id: number): Promise<any> {
-    const limit = 8;
+    const limit = 12;
     const skip = (page - 1) * limit;
     const take = limit;
     const board1Profile = await this.board1Repository.find({
@@ -124,7 +124,7 @@ export class UsersService {
   } 
 
   async board2Profile(page: number, user_id: number): Promise<any> {
-      const limit = 8;
+      const limit = 12;
       const skip = (page - 1) * limit;
       const take = limit;
       const board2Profile = await this.board2Repository.find({

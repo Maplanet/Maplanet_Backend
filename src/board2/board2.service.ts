@@ -16,7 +16,7 @@ export class Board2Service {
 
   async board2Info(page: number = 1): Promise<any> {
       try {
-          const limit = 8;
+          const limit = 12;
           const skip = (page - 1) * limit;
           const take = limit;
 
@@ -130,7 +130,7 @@ export class Board2Service {
     searchDiscordName: string,
   ): Promise<any> {
     try{
-        const limit = 8;
+        const limit = 12;
         const skip = (page - 1) * limit;
         const take = limit;
 
