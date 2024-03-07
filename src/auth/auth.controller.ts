@@ -17,7 +17,13 @@ export class AuthController {
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
-  async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {}
+  @Redirect('http://localhost:3000', 302)
+  async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {
+    const access_token = req.user;
+    res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
+    res.header('Authorization', `Bearer ${access_token?.access_token}`);
+    // res.redirect('http://localhost:3000');
+  }
 
   @Get('discord/callback')
   @UseGuards(AuthGuard('discord'))
@@ -29,7 +35,7 @@ export class AuthController {
     //     'http://localhost:3000/main' + `/${access_token?.access_token}`,
     //   );
     // else res.redirect('http://localhost:3000/board1');
-    res.header('Authorization', `Bearer ${access_token?.access_token}`);
+    res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
     return res.json(access_token.payload);
   }
 
