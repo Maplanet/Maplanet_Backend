@@ -36,6 +36,7 @@ export class UsersService {
       where: { discord_id },
     });
   }
+
   async saveUser(data) {
     const { id, username, avatar, global_name } = data;
     let user = await this.usersRepository.findOne({
@@ -121,55 +122,59 @@ export class UsersService {
     );
 
     return modifiedBoard1;
-  } 
+  }
 
   async board2Profile(page: number, user_id: number): Promise<any> {
-      const limit = 12;
-      const skip = (page - 1) * limit;
-      const take = limit;
-      const board2Profile = await this.board2Repository.find({
-        where: {
-          user_id,
-        },
-        select: [
-          'user_id',
-          'board2_id',
-          'discord_id',
-          'meso',
-          'report_kind',
-          'title',
-          'place_theif_nickname',
-          'discord_global_name',
-          'discord_image',
-          'view_count',
-          'complete',
-          'created_at',
-          'updated_at',
-        ],
-        skip,
-        take,
-        order: {
-          created_at: 'DESC',
-        },
-        relations: ['Users'],
-      });
-      const modifiedBoard2 = board2Profile.map(
-        ({ Users: { report_count, manner_count }, ...board2 }) => ({
-          ...board2,
-          report_count,
-          manner_count,
-        }),
-      );
-      return modifiedBoard2;
+    const limit = 8;
+    const skip = (page - 1) * limit;
+    const take = limit;
+    const board2Profile = await this.board2Repository.find({
+      where: {
+        user_id,
+      },
+      select: [
+        'user_id',
+        'board2_id',
+        'discord_id',
+        'meso',
+        'report_kind',
+        'title',
+        'place_theif_nickname',
+        'discord_global_name',
+        'discord_image',
+        'view_count',
+        'complete',
+        'created_at',
+        'updated_at',
+      ],
+      skip,
+      take,
+      order: {
+        created_at: 'DESC',
+      },
+      relations: ['Users'],
+    });
+    const modifiedBoard2 = board2Profile.map(
+      ({ Users: { report_count, manner_count }, ...board2 }) => ({
+        ...board2,
+        report_count,
+        manner_count,
+      }),
+    );
+    return modifiedBoard2;
   }
 
   async userPageCountBoard1(user_id: number): Promise<number> {
-    const userPageCountBoard1 = await this.board1Repository.count({ where: { user_id } });
+    const userPageCountBoard1 = await this.board1Repository.count({
+      where: { user_id },
+    });
     return userPageCountBoard1;
   }
 
   async userPageCountBoard2(user_id: number): Promise<number> {
-    const userPageCountBoard2 = await this.board2Repository.count({ where: { user_id } });
+    const userPageCountBoard2 = await this.board2Repository.count({
+      where: { user_id },
+    });
     return userPageCountBoard2;
   }
 }
