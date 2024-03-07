@@ -83,6 +83,7 @@ export class AppService {
       const board2Data = await this.board2Repository.find({
         select: [
           'board2_id',
+          'user_id',
           'discord_id',
           'title',
           'meso',
