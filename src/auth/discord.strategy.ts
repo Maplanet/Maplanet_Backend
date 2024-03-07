@@ -5,8 +5,6 @@ import { AuthService } from './auth.service';
 import { Strategy, Verifycheck } from 'passport-oauth2';
 import { stringify } from 'querystring';
 import { UsersService } from 'src/users/users.service';
-import { encrypt } from './encrypt';
-import { VerifyCallback } from 'jsonwebtoken';
 
 // change these to be your Discord client ID and secret
 const clientID = '1207737873063739452';

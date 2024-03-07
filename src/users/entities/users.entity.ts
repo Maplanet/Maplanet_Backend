@@ -3,53 +3,64 @@ import { Board } from 'src/board/entities/board.entity';
 import { Board2 } from 'src/board2/entities/board2.entity';
 import { Manner } from 'src/manner/entities/manner.entity';
 import { Report } from 'src/report/entities/report.entity';
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Users {
-    @PrimaryGeneratedColumn()
-    user_id: number;
+  @PrimaryGeneratedColumn()
+  user_id: number;
 
-    @Column()
-    discord_id: string;
+  @Column()
+  discord_id: string;
 
-    @Column()
-    discord_username: string;
-    
-    @Column()
-    discord_global_name: string;
+  @Column()
+  discord_username: string;
 
-    @Column()
-    discord_image: string;
+  @Column({
+    nullable: true,
+  })
+  discord_global_name: string;
 
-    @Column()
-    report_count: number;
+  @Column()
+  discord_image: string;
 
-    @Column()
-    progress_count: number;
+  @Column()
+  report_count: number;
 
-    @Column()
-    manner_count: number;
-    
-    @CreateDateColumn({ type: 'timestamp' })
-    created_at: Date;
-  
-    @UpdateDateColumn({ type: 'timestamp' })
-    updated_at: Date;
+  @Column()
+  progress_count: number;
 
-    @OneToMany(() => Board, (board) => board.Users, {  cascade: true })
-    boards: Board[];
+  @Column()
+  manner_count: number;
 
-    @OneToMany(() => Board2, (board2) => board2.Users, {  cascade: true })
-    boards2: Board2[];
+  @CreateDateColumn({ type: 'timestamp' })
+  created_at: Date;
 
-    @OneToOne(() => Administrator, (administrator) => administrator.Users, {  cascade: true })
-    administrators: Administrator[];
+  @UpdateDateColumn({ type: 'timestamp' })
+  updated_at: Date;
 
-    @OneToMany(() => Report, (report) => report.reporter, {  cascade: true })
-    reports_reported: Report[];
+  @OneToMany(() => Board, (board) => board.Users, { cascade: true })
+  boards: Board[];
 
-    @OneToMany(() => Manner, (manner) => manner.manners, {  cascade: true })
-    manners_mannered: Manner[];
+  @OneToMany(() => Board2, (board2) => board2.Users, { cascade: true })
+  boards2: Board2[];
 
+  @OneToOne(() => Administrator, (administrator) => administrator.Users, {
+    cascade: true,
+  })
+  administrators: Administrator[];
+
+  @OneToMany(() => Report, (report) => report.reporter, { cascade: true })
+  reports_reported: Report[];
+
+  @OneToMany(() => Manner, (manner) => manner.manners, { cascade: true })
+  manners_mannered: Manner[];
 }
