@@ -1,4 +1,11 @@
-import { HttpException, Inject, Injectable, UseGuards } from '@nestjs/common';
+import {
+  HttpException,
+  Inject,
+  Injectable,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from './board/entities/board.entity';
@@ -22,11 +29,14 @@ export class AppService {
     @InjectRedis() private readonly redisClient: Redis,
   ) {}
 
-  getHello(): string {
+  getHello(@Req() req, @Res() res): void {
     const apiKey = this.configservice.get<string>('SECRET_PASSPHRASE');
     const env = this.configservice.get<string>('NODE_ENV');
-    console.log(apiKey + 1234);
-    return `${env}`;
+
+    console.log(req);
+    console.log(res);
+    res.redirect('http://localhost:3000/main');
+    //return '1';
   }
 
   async getBoard1Data() {
@@ -76,7 +86,6 @@ export class AppService {
       );
     }
   }
-  
 
   async getBoard2Data() {
     try {
@@ -226,7 +235,7 @@ export class AppService {
 
   //전체 접속한 유저 수
   async allVisitors(): Promise<number> {
-    try{
+    try {
       let total_visitors_str = await this.redisClient.get('total_visitors');
       let total_visitors = Number(total_visitors_str);
       if (isNaN(total_visitors)) {
@@ -263,7 +272,7 @@ export class AppService {
   }
 
   async todayVisitors(): Promise<number> {
-    try{
+    try {
       const visitors = await this.redisClient.get('visitors_today');
       return visitors ? parseInt(visitors) : 0;
     } catch (error) {
