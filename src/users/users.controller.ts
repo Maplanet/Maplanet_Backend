@@ -43,7 +43,7 @@ export class UsersController {
       userProfileBoard1.board1Profile = board1Profile
 
       const userPageCount = await this.usersService.userPageCountBoard1(user_id);
-      userProfileBoard1.userPageCount = userPageCount
+      userProfileBoard1.totalCount = userPageCount
 
       return userProfileBoard1
     } catch (error) {
@@ -76,7 +76,7 @@ export class UsersController {
       userProfileBoard2.board2Profile = board2Profile
 
       const userPageCount = await this.usersService.userPageCountBoard2(user_id);
-      userProfileBoard2.userPageCount = userPageCount
+      userProfileBoard2.totalCount = userPageCount
 
       return userProfileBoard2
     } catch (error) {
@@ -111,7 +111,7 @@ export class UsersController {
       myProfileBoard1.board1Profile = board1Profile 
 
       const userPageCount = await this.usersService.userPageCountBoard1(user_id);
-      myProfileBoard1.userPageCount = userPageCount
+      myProfileBoard1.totalCount = userPageCount
     
       return myProfileBoard1
     } catch (error) {
@@ -145,7 +145,7 @@ export class UsersController {
       myProfileBoard2.board2Profile = board2Profile 
 
       const userPageCount = await this.usersService.userPageCountBoard2(user_id);
-      myProfileBoard2.userPageCount = userPageCount
+      myProfileBoard2.totalCount = userPageCount
     
       return myProfileBoard2
     } catch (error) {

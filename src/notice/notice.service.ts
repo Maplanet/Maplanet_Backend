@@ -27,6 +27,7 @@ export class NoticeService {
           'administrator_id',
           'title',
           'category',
+          'content',
           'writer',
           'view_count',
           'created_at',
@@ -38,10 +39,10 @@ export class NoticeService {
           created_at: 'DESC',
         },
       });
-      const noticeCount = await this.noticeReporotory.count()
+      const totalCount = await this.noticeReporotory.count()
 
 
-      return {noticeData: getAllNotice, noticeCount};
+      return {noticeData: getAllNotice, totalCount};
     } catch (error) {
       throw new HttpException(
         {
@@ -56,33 +57,33 @@ export class NoticeService {
     }
   }
 
-  async noticeViewCount(notice_id: number): Promise<UpdateResult> {
-    return await this.noticeReporotory.update(
-      { notice_id },
-      { view_count: () => 'view_count + 1' },
-    );
-  }
+  // async noticeViewCount(notice_id: number): Promise<UpdateResult> {
+  //   return await this.noticeReporotory.update(
+  //     { notice_id },
+  //     { view_count: () => 'view_count + 1' },
+  //   );
+  // }
 
-  async getNoticeDetail(notice_id: number): Promise<any> {
-    try {
-      const getOneNotice = await this.noticeReporotory.findOne({
-        where: { notice_id },
-      });
-      await this.noticeViewCount(notice_id);
-      return {noticeDetailData: getOneNotice};
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: 400,
-          error: {
-            message: '공지사항 상세 조회 에러',
-            detail: error.message,
-          },
-        },
-        400,
-      );
-    }
-  }
+  // async getNoticeDetail(notice_id: number): Promise<any> {
+  //   try {
+  //     const getOneNotice = await this.noticeReporotory.findOne({
+  //       where: { notice_id },
+  //     });
+  //     await this.noticeViewCount(notice_id);
+  //     return {noticeDetailData: getOneNotice};
+  //   } catch (error) {
+  //     throw new HttpException(
+  //       {
+  //         status: 400,
+  //         error: {
+  //           message: '공지사항 상세 조회 에러',
+  //           detail: error.message,
+  //         },
+  //       },
+  //       400,
+  //     );
+  //   }
+  // }
 
   async postNotice(createNoticeDto, user_id) {
     try{

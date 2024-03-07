@@ -36,17 +36,17 @@ export class NoticeController {
     return AllPosts 
   }
 
-  @ApiOperation({
-    summary: '공지사항 상세 조회',
-    description: '공지사항 데이터 상세 조회',
-  })
-  @ApiResponse({ status: 200, description: '관리자가 올린 공지사항 상세 조회' })
-  @Get('/:notice_id')
-  @HttpCode(200)
-  async getNoticeDetail(@Param('notice_id') notice_id: number): Promise<any> {
-    const getOneNotice = this.noticeService.getNoticeDetail(notice_id);
-    return getOneNotice;
-  }
+  // @ApiOperation({
+  //   summary: '공지사항 상세 조회',
+  //   description: '공지사항 데이터 상세 조회',
+  // })
+  // @ApiResponse({ status: 200, description: '관리자가 올린 공지사항 상세 조회' })
+  // @Get('/:notice_id')
+  // @HttpCode(200)
+  // async getNoticeDetail(@Param('notice_id') notice_id: number): Promise<any> {
+  //   const getOneNotice = this.noticeService.getNoticeDetail(notice_id);
+  //   return getOneNotice;
+  // }
 
   @ApiOperation({
     summary: '공지사항 등록',
