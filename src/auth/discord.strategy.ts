@@ -9,8 +9,8 @@ import { UsersService } from 'src/users/users.service';
 // change these to be your Discord client ID and secret
 const clientID = '1207737873063739452';
 const clientSecret = 'ZaxXr7J7d3P4W3-RmuZO7HYbLgdmpMCS';
+//const callbackURL = 'http://localhost:3000/auth/discord/callback';
 const callbackURL = 'http://13.209.210.215:3000/auth/discord/callback';
-//const callbackURL = 'http://13.209.210.215:3000/auth/discord/callback';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
@@ -25,11 +25,11 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
           client_id: clientID,
           redirect_uri: callbackURL,
           response_type: 'code',
-          scope: 'identify',
+          scope: 'identify email',
         },
       )}`,
       tokenURL: 'https://discordapp.com/api/oauth2/token',
-      scope: 'identify',
+      scope: 'identify email',
       clientID,
       clientSecret,
       callbackURL,

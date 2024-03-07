@@ -1,4 +1,4 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { ChatService } from './chat/chat.service';
@@ -12,8 +12,8 @@ export class AppController {
   ) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getHello(@Req() req, @Res() res): void {
+    this.appService.getHello(req, res);
   }
 
   @Get('/main')
