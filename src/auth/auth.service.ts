@@ -42,7 +42,7 @@ export class AuthService {
   }
   async validateOAuth2(data) {
     let { id, username, global_name, avatar, email } = data;
-    console.log(data)
+    console.log(data);
     const userAvatar = `https://cdn.discordapp.com/avatars/${id}/${avatar}`;
     const userAvatarNull =
       'https://discord.com/assets/6debd47ed13483642cf09e832ed0bc1b.png';
@@ -54,7 +54,8 @@ export class AuthService {
     if (avatar) avatar = userAvatar;
     else avatar = userAvatarNull;
 
-    const { user_id } = await this.usersService.findOne(id);
+    const user_id = await this.usersService.findOne(id);
+    console.log('여기 유저 아이디', user_id);
     if (!user_id) {
       throw new BadRequestException('존재하지 않는 유저');
     }
