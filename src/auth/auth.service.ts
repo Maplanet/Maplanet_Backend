@@ -54,11 +54,13 @@ export class AuthService {
     if (avatar) avatar = userAvatar;
     else avatar = userAvatarNull;
 
+    await this.usersService.saveUser(data);
+
     const user_id = await this.usersService.findOne(id);
     console.log('여기 유저 아이디', user_id);
-    if (!user_id) {
-      throw new BadRequestException('존재하지 않는 유저');
-    }
+    // if (!user_id) {
+    //   throw new BadRequestException('존재하지 않는 유저');
+    // }
 
     const payload: ITokenpayload = {
       discord_id: id,
@@ -68,8 +70,6 @@ export class AuthService {
       avatar,
       email,
     };
-
-    await this.usersService.saveUser(data);
 
     const access_token: string = this.getAccessToken(payload);
 
