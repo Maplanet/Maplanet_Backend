@@ -32,9 +32,6 @@ export class AppService {
   getHello(@Req() req, @Res() res): void {
     const apiKey = this.configservice.get<string>('SECRET_PASSPHRASE');
     const env = this.configservice.get<string>('NODE_ENV');
-
-    console.log(req);
-    console.log(res);
     res.redirect('http://localhost:3000/main');
     //return '1';
   }

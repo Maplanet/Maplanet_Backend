@@ -38,8 +38,9 @@ export class AuthController {
     console.log('리다이렉트시키기');
     res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
     res.header('Authorization', `Bearer ${access_token?.access_token}`);
+    res.json(access_token.payload);
     res.redirect('http://localhost:3000');
-    return res.json(access_token.payload);
+    //return ;
   }
 
   @Delete('logout')
