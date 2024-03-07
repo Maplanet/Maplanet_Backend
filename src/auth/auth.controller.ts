@@ -19,10 +19,10 @@ export class AuthController {
   @UseGuards(AuthGuard('discord'))
   //@Redirect('http://localhost:3000', 302)
   async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {
-    const access_token = req.user;
-    res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
+    //const access_token = req.user;
+    //res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
     //res.header('Authorization', `Bearer ${access_token?.access_token}`);
-    res.redirect('http://localhost:3000');
+    // res.redirect('http://localhost:3000');
   }
 
   @Get('discord/callback')
@@ -35,8 +35,10 @@ export class AuthController {
     //     'http://localhost:3000/main' + `/${access_token?.access_token}`,
     //   );
     // else res.redirect('http://localhost:3000/board1');
+    console.log('리다이렉트시키기');
     res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
-    return res.json(access_token.payload);
+    res.redirect('http://localhost:3000');
+    //return res.json(access_token.payload);
   }
 
   @Delete('logout')
