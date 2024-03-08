@@ -18,14 +18,19 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { MannerModule } from './manner/manner.module';
 import { ChatModule } from './chat/chat.module';
+import { WoodcutterModule } from './woodcutter/woodcutter.module';
+import { PartyModule } from './party/party.module';
+import { WoodCutter } from './woodcutter/entities/woodcutter.entity';
+import { Party } from './party/entities/party.entity';
+
 
 @Module({
   imports: [
     RedisModule.forRoot({
       readyLog: true,
       config: {
-        host: 'my-redis',
-        // host: '127.0.0.1',
+        // host: 'my-redis',
+        host: '127.0.0.1',
         port: 6379,
         //password: 'bitnami'
       },
@@ -45,11 +50,13 @@ import { ChatModule } from './chat/chat.module';
       envFilePath: ['.env', '.env.dev', '.env.prod'],
     }),
     AuthModule,
-    TypeOrmModule.forFeature([Board, Board2, Notice]),
+    TypeOrmModule.forFeature([Board, Board2, Notice, WoodCutter, Party]),
     ScheduleModule.forRoot(),
     RedisModule,
     MannerModule,
     ChatModule,
+    WoodcutterModule,
+    PartyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

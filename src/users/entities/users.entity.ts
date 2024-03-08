@@ -2,7 +2,9 @@ import { Administrator } from 'src/administrator/entities/administrator.entity';
 import { Board } from 'src/board/entities/board.entity';
 import { Board2 } from 'src/board2/entities/board2.entity';
 import { Manner } from 'src/manner/entities/manner.entity';
+import { Party } from 'src/party/entities/party.entity';
 import { Report } from 'src/report/entities/report.entity';
+import { WoodCutter } from 'src/woodcutter/entities/woodcutter.entity';
 import {
   Entity,
   Column,
@@ -52,6 +54,12 @@ export class Users {
 
   @OneToMany(() => Board2, (board2) => board2.Users, { cascade: true })
   boards2: Board2[];
+
+  @OneToMany(() => WoodCutter, (boards3) => boards3.Users, { cascade: true })
+  boards3: WoodCutter[];
+
+  @OneToMany(() => Party, (boards4) => boards4.Users, { cascade: true })
+  boards4: Party[];
 
   @OneToOne(() => Administrator, (administrator) => administrator.Users, {
     cascade: true,

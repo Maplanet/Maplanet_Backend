@@ -6,9 +6,11 @@ import { Users } from './entities/users.entity';
 import { Board } from 'src/board/entities/board.entity';
 import { Board2 } from 'src/board2/entities/board2.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { WoodCutter } from 'src/woodcutter/entities/woodcutter.entity';
+import { Party } from 'src/party/entities/party.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users, Board, Board2]), forwardRef(() => AuthModule)],
+  imports: [TypeOrmModule.forFeature([Users, Board, Board2, WoodCutter, Party]), forwardRef(() => AuthModule)],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],
