@@ -23,14 +23,13 @@ import { PartyModule } from './party/party.module';
 import { WoodCutter } from './woodcutter/entities/woodcutter.entity';
 import { Party } from './party/entities/party.entity';
 
-
 @Module({
   imports: [
     RedisModule.forRoot({
       readyLog: true,
       config: {
-        // host: 'my-redis',
-        host: '127.0.0.1',
+        host: 'my-redis',
+        //host: '127.0.0.1',
         port: 6379,
         //password: 'bitnami'
       },
