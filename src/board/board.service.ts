@@ -217,7 +217,7 @@ export class BoardService {
         position,
       } = createBoardDto;
 
-      const createBoard1 = this.boardRepository.create({
+      const createBoard1 = await this.boardRepository.create({
         user_id: user.user_id,
         meso,
         title,
@@ -251,19 +251,17 @@ export class BoardService {
     }
   }
 
-  async completeBoard1(board1_id: number, user_id: number): Promise<any> {
+  async completeBoard1(board1_id: number, user_id: any): Promise<any> {
     try{
       const board = await this.boardRepository.findOne({
         where: {
-          board1_id,
+          board1_id: board1_id,
         }
       });
 
       const user = await this.usersRepository.findOne({
-        where: {
-          user_id: user_id
-        }
-      })
+        where: {user_id: user_id.user_id},
+      });
 
       if(!board) {
         throw new NotFoundException('게시글이 존재하지 않습니다.');
@@ -277,14 +275,15 @@ export class BoardService {
         if (!board.complete) {
           board.complete = true;
           user.progress_count += 1;
-          await this.usersRepository.save(user)
         } else {
           board.complete = false;
           user.progress_count -= 1;
-          await this.usersRepository.save(user)
         }
-
-        await this.boardRepository.save(board);
+        
+        await Promise.all([
+          this.usersRepository.save(user),
+          this.boardRepository.save(board) 
+        ]);
 
         if (board.complete) {
           return '게시글을 완료하였습니다.';

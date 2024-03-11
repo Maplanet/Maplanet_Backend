@@ -27,9 +27,6 @@ export class Party {
     recruit_people_count: number;
 
     @Column()
-    maple_server: string;
-
-    @Column()
     maple_nickname: string;
 
     @Column()
@@ -59,7 +56,9 @@ export class Party {
     @Column()
     discord_username: string;
 
-    @Column()
+    @Column({
+        nullable: true,
+    })
     discord_global_name: string;
 
     @Column()

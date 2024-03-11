@@ -52,7 +52,7 @@ export class WoodCutter {
   @Column({ type: 'varchar', length: 10 })
   discord_username: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   discord_global_name: string;
 
   @Column({ type: 'varchar' })
