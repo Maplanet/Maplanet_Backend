@@ -37,13 +37,13 @@ export class AuthController {
     // else res.redirect('http://localhost:3000/board1');
     console.log('리다이렉트시키기');
     res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
-      //path: '/',
-      domain: '13.209.210.215',
+      domain: '*',
+      path: '/',
       sameSite: 'none', // cross-site에서도 전송
     });
     res.header('Authorization', `Bearer ${access_token?.access_token}`);
     // res.json(access_token.payload);
-    res.redirect('http://localhost:3000');
+    res.redirect('http://13.209.210.215:3000/main');
     //return ;
   }
 
