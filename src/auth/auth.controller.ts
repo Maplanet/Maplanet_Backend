@@ -44,7 +44,7 @@ export class AuthController {
     });
     res.header('Authorization', `Bearer ${access_token?.access_token}`);
     // res.json(access_token.payload);
-    res.redirect('http://localhost:3000/main');
+    res.redirect('http://13.209.210.215:3000/main');
     //return ;
   }
 
