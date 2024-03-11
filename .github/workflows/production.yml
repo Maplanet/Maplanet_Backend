@@ -1,6 +1,4 @@
-name: development CI/CD Pipeline
-
-
+name: Production CI/CD Pipeline
 
 on:
   push:
@@ -9,7 +7,6 @@ on:
   pull_request:
     branches:
       - main
-      
 
 jobs:
   build:
@@ -24,6 +21,10 @@ jobs:
         with:
           node-version: '18' # Update this with your desired Node.js version
 
+      - name: Set ENV
+        run: |
+          echo "${{ secrets.DOT_ENV_DEV }}" > .env.production
+        shell: bash
       - name: Build Docker image
         run: |
           docker build -t -f Dockerfile.prod parkbrianjunsoo/maplanet_repository:v1 .
