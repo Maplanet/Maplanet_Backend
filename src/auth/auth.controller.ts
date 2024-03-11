@@ -38,7 +38,7 @@ export class AuthController {
     res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
       maxAge: 3600000,
       //domain: 'http://localhost',
-      domain: 'http://13.209.210.215',
+      domain: '13.209.210.215',
       path: '/',
       sameSite: 'none', // cross-site에서도 전송
     });
