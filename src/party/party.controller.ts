@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { PartyService } from './party.service';
 
+@ApiTags('Party')
 @Controller('board4')
 export class PartyController {
     constructor(private readonly partyService: PartyService) {}

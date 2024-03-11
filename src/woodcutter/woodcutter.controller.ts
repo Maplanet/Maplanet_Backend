@@ -6,8 +6,9 @@ import { WoodCutterDTO } from './dto/postWoodCutter.dto';
 import { IBoard3Data, IWoodCutter } from './interface/woodcutter.interfacte';
 import { WoodCutter } from './entities/woodcutter.entity';
 import { pipe } from 'rxjs';
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('WoodCutter')
 @Controller('board3')
 export class WoodcutterController {
   constructor(private readonly woodCutterService: WoodcutterService) {}
