@@ -38,7 +38,7 @@ export class AuthController {
       domain: '13.209.210.215',
       path: '/',
       sameSite: 'none', // cross-site에서도 전송
-      secure: true, // HTTPS 환경에서만 쿠키 전송
+      // secure: true, // HTTPS 환경에서만 쿠키 전송
     });
 
     res.redirect('http://13.209.210.215:3000/main');
