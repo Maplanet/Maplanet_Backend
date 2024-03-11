@@ -17,7 +17,7 @@ export class PartyController {
     async partyInfo(@Query('page') page: number): Promise<any> {
       const getPartyInfo = await this.partyService.partyInfo(page);
       const getPartyCount = await this.partyService.partyPageCount();
-      return { board1Data:
+      return { partyData:
         getPartyInfo,
         totalCount: getPartyCount
       }
@@ -36,15 +36,15 @@ export class PartyController {
   
     @Get('/search')
     @ApiOperation({
-      summary: '쩔 게시글 검색 조회',
-      description: '쩔 해주는 유저가 올린 게시글을 검색해서 전체 조회',
+      summary: '파티모집 게시글 검색 조회',
+      description: '파티모집 해주는 유저가 올린 게시글을 검색해서 전체 조회',
     })
-    @ApiResponse({ status: 200, description: '쩔 게시글 전체 조회' })
+    @ApiResponse({ status: 200, description: '파티모집 게시글 전체 조회' })
     @ApiQuery({ name: 'searchTitle', required: false, type: String })
     @ApiQuery({ name: 'searchHuntingGround', required: false, type: String })
     @ApiQuery({ name: 'searchProgressTime', required: false, type: String })
     @ApiQuery({ name: 'searchDiscordName', required: false, type: String })
-    async boardSearchInfo(
+    async partySearchInfo(
       @Query('page') page?: number,
       @Query('searchTitle') searchTitle?: string,
       @Query('searchHuntingGround') searchHuntingGround?: string,

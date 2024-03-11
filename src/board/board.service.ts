@@ -146,16 +146,16 @@ export class BoardService {
       const take = limit;
       const [searchedBoard1, totalCount] = await this.boardRepository.findAndCount({
         where: [
-          { meso: Equal(searchMeso) },
-          { title: Like(`%${searchTitle}%`) },
-          { maple_nickname: Like(`%${searchNickname}%`) },
-          { hunting_ground: Like(`%${searchHuntingGround}%`) },
-          { level: Equal(searchLevel) },
-          { sub_job: Like(`%${searchSubJob}%`) },
-          { progress_kind: Like(`%${searchProgressKind}%`) },
-          { progress_time: Equal(searchProgressTime) },
-          { discord_global_name: Like(`%${searchDiscordName}%`) },
-        ],
+          searchMeso && { meso: Equal(searchMeso) },
+          searchTitle && { title: Like(`%${searchTitle}%`) },
+          searchNickname && { maple_nickname: Like(`%${searchNickname}%`) },
+          searchHuntingGround && { hunting_ground: Like(`%${searchHuntingGround}%`) },
+          searchLevel && { level: Equal(searchLevel) },
+          searchSubJob && { sub_job: Like(`%${searchSubJob}%`) },
+          searchProgressKind && { progress_kind: Like(`%${searchProgressKind}%`) },
+          searchProgressTime && { progress_time: Equal(searchProgressTime) },
+          searchDiscordName && { discord_global_name: Like(`%${searchDiscordName}%`) }
+        ].filter(Boolean),
         select: [
           'user_id',
           'board1_id',

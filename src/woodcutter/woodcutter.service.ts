@@ -1,28 +1,303 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { WoodCutter } from './entities/woodcutter.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Equal, Like, Repository, UpdateResult } from 'typeorm';
 import { IBoard3Data, IWoodCutter } from './interface/woodcutter.interfacte';
 import { WoodCutterDTO } from './dto/postWoodCutter.dto';
+import { Users } from 'src/users/entities/users.entity';
 
 @Injectable()
 export class WoodcutterService {
   constructor(
     @InjectRepository(WoodCutter)
     private readonly woodCutterRepository: Repository<WoodCutter>,
+    @InjectRepository(Users)
+    private usersRepository: Repository<Users>,
   ) {}
 
-  async createWoodCutter(woodCutterDTO: IWoodCutter): Promise<IWoodCutter> {
-    this.woodCutterRepository.create(woodCutterDTO);
-    return await this.woodCutterRepository.save(woodCutterDTO);
+  async woodCutterInfo(page: number = 1): Promise<any> {
+    try {
+      const limit = 12;
+      const skip = (page - 1) * limit;
+      const take = limit;
+
+      const board3 = await this.woodCutterRepository.find({
+        select: [
+          'user_id',
+          'board3_id',
+          'discord_id',
+          'title',
+          'meso',
+          'sub_job',
+          'hunting_ground',
+          'progress_time',
+          'level',
+          'discord_global_name',
+          'discord_image',
+          'view_count',
+          'complete',
+          'created_at',
+          'updated_at',
+        ],
+        skip,
+        take,
+        order: {
+          created_at: 'DESC', 
+        },
+        relations: ['Users']
+    });
+
+    const modifiedBoard3 = board3.map(({ Users: { report_count, manner_count }, ...board3 }) => ({
+        ...board3,
+        report_count,
+        manner_count,
+      }));
+    return modifiedBoard3;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '나무꾼 게시글 전체 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
+    }
   }
 
-  async getAllWoodCutter() {
-    return await this.woodCutterRepository.find();
+  async woodCutterPageCount (): Promise<any> {
+    return await this.woodCutterRepository.count()
   }
 
-  /**
-   * 특정 유저 조회
-   * @param id
-   */
+  async woodCutterViewCount(board3_id: number): Promise<UpdateResult> {
+    return await this.woodCutterRepository.update({ board3_id }, {view_count: () => 'view_count + 1'});
+  }
+
+  async woodCutterDetailInfo(board3_id: number):Promise<any> {
+    try{
+    const woodCutterDetailInfo = await this.woodCutterRepository.findOne({
+        where: {board3_id},
+        select: [
+          'user_id',
+          'board3_id',
+          'discord_id',
+          'title',
+          'meso',
+          'sub_job',
+          'level',
+          'maple_nickname',
+          'hunting_ground',
+          'progress_time',
+          'discord_global_name',
+          'discord_image',
+          'view_count',
+          'complete',
+          'created_at',
+          'updated_at',
+        ],
+        order: {
+          created_at: 'DESC', 
+        },
+        relations: ['Users']
+    });
+
+    await this.woodCutterViewCount(board3_id);
+
+    const { Users: { report_count, manner_count }, ...board3 } = woodCutterDetailInfo;
+
+    return {
+            ...board3,
+            report_count,
+            manner_count,
+        }
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '나무꾼 게시글 상세 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
+    }
+  }
+ 
+  async woodCutterSearchInfo(
+    page: number = 1,
+    searchMeso?: number,
+    searchTitle?: string,
+    searchSubJob?: string,
+    searchLevel?: number,
+    searchHuntingGround?: string,
+    searchProgressTime?: number,
+    searchDiscordName?: string,
+  ): Promise<any> {
+    try {
+      const limit = 12;
+      const skip = (page - 1) * limit;
+      const take = limit;
+      
+      const [searchedWoodCutter, totalCount] = await this.woodCutterRepository.findAndCount({
+        where: [
+          searchMeso && { meso: Equal(searchMeso) },
+          searchTitle && { title: Like(`%${searchTitle}%`) },
+          searchSubJob && { sub_job: Like(`%${searchSubJob}%`) },
+          searchLevel && { level: Equal(searchLevel) },
+          searchHuntingGround && { hunting_ground: Like(`%${searchHuntingGround}%`) },
+          searchProgressTime && { progress_time: Equal(searchProgressTime) },
+          searchDiscordName && { discord_global_name: Like(`%${searchDiscordName}%`) }
+        ].filter(Boolean),
+        select: [
+          'user_id',
+          'board3_id',
+          'discord_id',
+          'title',
+          'meso',
+          'sub_job',
+          'hunting_ground',
+          'progress_time',
+          'level',
+          'discord_global_name',
+          'discord_image',
+          'view_count',
+          'complete',
+          'created_at',
+          'updated_at',
+        ],
+        skip,
+        take,
+        order: {
+          created_at: 'DESC',
+        },
+        relations: ['Users']
+      });
+      console.log('asdfasdf',searchedWoodCutter)
+
+      const modifiedSearchWoodCutter = searchedWoodCutter.map(({ Users: { report_count, manner_count }, ...board3 }) => ({
+        ...board3,
+        report_count,
+        manner_count,
+      }));
+
+      return { search3Data: modifiedSearchWoodCutter, totalCount };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '나무꾼 게시글 검색 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
+    }
+  }
+
+  async postWoodCutter(createWoodCutterDTO: WoodCutterDTO, user: any): Promise<any> {
+    try {
+      const {
+        title,
+        meso,
+        main_job,
+        sub_job,
+        level,
+        maple_nickname,
+        hunting_ground,
+        progress_time,
+
+      } = createWoodCutterDTO;
+
+      const createWoodCutter = await this.woodCutterRepository.create({
+        user_id: user.user_id,
+        title,
+        meso,
+        main_job,
+        sub_job,
+        level,
+        maple_nickname,
+        hunting_ground,
+        progress_time,
+        discord_id: user.discord_id,
+        discord_username: user.username,
+        discord_global_name: user.global_name,
+        discord_image: user.avatar,
+      });
+
+      await this.woodCutterRepository.save(createWoodCutter);
+      return { msg: '나무꾼 게시글 등록이 완료되었습니다.' };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 401,
+          error: {
+            message: '나무꾼 게시글 등록 에러',
+            detail: error.message,
+          },
+        },
+        401,
+      );
+    }
+  }
+
+  // async completeParty(board4_id: number, user_id: any): Promise<any> {
+  //   try{
+  //     const party = await this.partyRepository.findOne({
+  //       where: {
+  //         board4_id,
+  //       }
+  //     });
+
+  //     const user = await this.usersRepository.findOne({
+  //       where: {
+  //         user_id: user_id.user_id
+  //       }
+  //     })
+
+  //     if(!party) {
+  //       throw new NotFoundException('게시글이 존재하지 않습니다.');
+  //     }
+
+  //     // if(board.user_id !== user_id) {
+  //     //   throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
+  //     // }
+
+  //     if (party.user_id === user.user_id){
+  //       if (!party.complete) {
+  //         party.complete = true;
+  //         user.progress_count += 1;
+  //         await this.usersRepository.save(user)
+  //       } else {
+  //         party.complete = false;
+  //         user.progress_count -= 1;
+  //         await this.usersRepository.save(user)
+  //       }
+
+  //       await this.partyRepository.save(party);
+
+  //       if (party.complete) {
+  //         return '게시글을 완료하였습니다.';
+  //       } else {
+  //         return '게시글의 완료를 취소하였습니다.';
+  //       }  
+  //     } else {
+  //       throw new Error ('자신의 게시글만 완료처리 할 수 있습니다.')
+  //     }
+  //   } catch (error) {
+  //     throw new HttpException(
+  //       {
+  //         status: 401,
+  //         error: {
+  //           message: '파티모집 게시글 완료 에러',
+  //           detail: error.message,
+  //         },
+  //       },
+  //       401,
+  //     );
+  //   }
+  // } 
 }
