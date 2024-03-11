@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { Strategy, Verifycheck } from 'passport-oauth2';
 import { stringify } from 'querystring';
 import { UsersService } from 'src/users/users.service';
+import { VerifyCallback } from 'jsonwebtoken';
 
 // change these to be your Discord client ID and secret
 const clientID = '1207737873063739452';
@@ -36,7 +37,12 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     });
   }
 
-  async validate(accessToken: string, refreshToken: string): Promise<any> {
+  async validate(
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+    done: VerifyCallback,
+  ): Promise<any> {
     // const encryptedAccessToken = encrypt(accessToken);
     // const encryptedRefreshToken = encrypt(refreshToken);
     const { data } = await this.http
@@ -48,6 +54,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     data.access_token = accessToken;
     data.refresh_token = refreshToken;
 
-    return await this.authService.validateOAuth2(data);
+    const result = await this.authService.validateOAuth2(data);
+    return done(null, result);
   }
 }
