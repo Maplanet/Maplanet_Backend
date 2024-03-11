@@ -45,8 +45,6 @@ export class AppService {
           'discord_id',
           'title',
           'meso',
-          'hunting_ground',
-          'progress_kind',
           'progress_time',
           'sub_job',
           'discord_global_name',

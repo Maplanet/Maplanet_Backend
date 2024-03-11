@@ -58,7 +58,6 @@ export class BoardController {
   @ApiQuery({ name: 'searchMeso', required: false, type: String })
   @ApiQuery({ name: 'searchTitle', required: false, type: String })
   @ApiQuery({ name: 'searchNickname', required: false, type: String })
-  @ApiQuery({ name: 'searchHuntingGround', required: false, type: String })
   @ApiQuery({ name: 'searchLevel', required: false, type: String })
   @ApiQuery({ name: 'searchSubJob', required: false, type: String })
   @ApiQuery({ name: 'searchProgressKind', required: false, type: String })
@@ -69,10 +68,8 @@ export class BoardController {
     @Query('searchMeso') searchMeso?: number,
     @Query('searchTitle') searchTitle?: string,
     @Query('searchNickname') searchNickname?: string,
-    @Query('searchHuntingGround') searchHuntingGround?: string,
     @Query('searchLevel') searchLevel?: number,
     @Query('searchSubJob') searchSubJob?: string,
-    @Query('searchProgressKind') searchProgressKind?: string,
     @Query('searchProgressTime') searchProgressTime?: number,
     @Query('searchDiscordName') searchDiscordName?: string,
   ): Promise<any> {
@@ -81,10 +78,8 @@ export class BoardController {
       searchMeso,
       searchTitle,
       searchNickname,
-      searchHuntingGround,
       searchLevel,
       searchSubJob,
-      searchProgressKind,
       searchProgressTime,
       searchDiscordName,
     );
@@ -95,7 +90,7 @@ export class BoardController {
     summary: '쩔 게시글 등록',
     description: '쩔 해주는 유저가 올리 게시글 등록하기',
   })
-  @ApiResponse({ status: 201, description: 'meso, title, maple_nickname, hunting_ground, level, main_job, sub_job, progress_kind, progress_time, position 등록' })
+  @ApiResponse({ status: 201, description: 'meso, title, maple_nickname, level, main_job, sub_job, progress_kind, progress_time, position 등록' })
   @UseGuards(AccessTokenGuard)
   @Post('/post')
   async postBoard(

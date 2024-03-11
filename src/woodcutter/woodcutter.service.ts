@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { WoodCutter } from './entities/woodcutter.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equal, Like, Repository, UpdateResult } from 'typeorm';
@@ -244,60 +244,60 @@ export class WoodcutterService {
     }
   }
 
-  // async completeParty(board4_id: number, user_id: any): Promise<any> {
-  //   try{
-  //     const party = await this.partyRepository.findOne({
-  //       where: {
-  //         board4_id,
-  //       }
-  //     });
+  async completeWoodCutter(board3_id: number, user_id: any): Promise<any> {
+    try{
+      const woodCutter = await this.woodCutterRepository.findOne({
+        where: {
+          board3_id,
+        }
+      });
 
-  //     const user = await this.usersRepository.findOne({
-  //       where: {
-  //         user_id: user_id.user_id
-  //       }
-  //     })
+      const user = await this.usersRepository.findOne({
+        where: {
+          user_id: user_id.user_id
+        }
+      })
 
-  //     if(!party) {
-  //       throw new NotFoundException('게시글이 존재하지 않습니다.');
-  //     }
+      if(!woodCutter) {
+        throw new NotFoundException('게시글이 존재하지 않습니다.');
+      }
 
-  //     // if(board.user_id !== user_id) {
-  //     //   throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
-  //     // }
+      // if(board.user_id !== user_id) {
+      //   throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
+      // }
 
-  //     if (party.user_id === user.user_id){
-  //       if (!party.complete) {
-  //         party.complete = true;
-  //         user.progress_count += 1;
-  //         await this.usersRepository.save(user)
-  //       } else {
-  //         party.complete = false;
-  //         user.progress_count -= 1;
-  //         await this.usersRepository.save(user)
-  //       }
+      if (woodCutter.user_id === user.user_id){
+        if (!woodCutter.complete) {
+          woodCutter.complete = true;
+          user.progress_count += 1;
+          await this.usersRepository.save(user)
+        } else {
+          woodCutter.complete = false;
+          user.progress_count -= 1;
+          await this.usersRepository.save(user)
+        }
 
-  //       await this.partyRepository.save(party);
+        await this.woodCutterRepository.save(woodCutter);
 
-  //       if (party.complete) {
-  //         return '게시글을 완료하였습니다.';
-  //       } else {
-  //         return '게시글의 완료를 취소하였습니다.';
-  //       }  
-  //     } else {
-  //       throw new Error ('자신의 게시글만 완료처리 할 수 있습니다.')
-  //     }
-  //   } catch (error) {
-  //     throw new HttpException(
-  //       {
-  //         status: 401,
-  //         error: {
-  //           message: '파티모집 게시글 완료 에러',
-  //           detail: error.message,
-  //         },
-  //       },
-  //       401,
-  //     );
-  //   }
-  // } 
+        if (woodCutter.complete) {
+          return '게시글을 완료하였습니다.';
+        } else {
+          return '게시글의 완료를 취소하였습니다.';
+        }  
+      } else {
+        throw new Error ('자신의 게시글만 완료처리 할 수 있습니다.')
+      }
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 401,
+          error: {
+            message: '나무꾼 게시글 완료 에러',
+            detail: error.message,
+          },
+        },
+        401,
+      );
+    }
+  } 
 }
