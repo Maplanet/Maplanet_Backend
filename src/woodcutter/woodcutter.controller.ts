@@ -22,7 +22,7 @@ export class WoodcutterController {
   async woodCutterInfo(@Query('page') page: number): Promise<any> {
     const getWoodCutterInfo = await this.woodCutterService.woodCutterInfo(page);
     const getWoodCutterCount = await this.woodCutterService.woodCutterPageCount();
-    return { woodCutterData:
+    return { board3Data:
       getWoodCutterInfo,
       totalCount: getWoodCutterCount
     }

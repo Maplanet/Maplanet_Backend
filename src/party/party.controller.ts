@@ -18,7 +18,7 @@ export class PartyController {
     async partyInfo(@Query('page') page: number): Promise<any> {
       const getPartyInfo = await this.partyService.partyInfo(page);
       const getPartyCount = await this.partyService.partyPageCount();
-      return { partyData:
+      return { board4Data:
         getPartyInfo,
         totalCount: getPartyCount
       }
