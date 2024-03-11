@@ -29,22 +29,22 @@ export class AuthController {
   @UseGuards(AuthGuard('discord'))
   async googleLoginCallback(@Req() req, @Res() res): Promise<void> {
     const access_token = req.user;
-    console.log(access_token);
+    console.log('토큰정보', access_token);
     // if (access_token)
     //   res.redirect(
     //     'http://localhost:3000/main' + `/${access_token?.access_token}`,
     //   );
     // else res.redirect('http://localhost:3000/board1');
-    console.log('리다이렉트시키기');
     res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
       maxAge: 3600000,
-      domain: '13.209.210.215',
+      //domain: 'http://localhost',
+      domain: 'http://13.209.210.215',
       path: '/',
       sameSite: 'none', // cross-site에서도 전송
     });
     res.header('Authorization', `Bearer ${access_token?.access_token}`);
     // res.json(access_token.payload);
-    res.redirect('http://13.209.210.215:3000/main');
+    res.redirect('http://localhost:3000/main');
     //return ;
   }
 
