@@ -1,7 +1,7 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/users.entity';
-import { Like, Repository, UpdateResult } from 'typeorm';
+import { Equal, Like, Repository, UpdateResult } from 'typeorm';
 import { CreateBoard2Dto } from './dto/create-board2.dto';
 import { Board2 } from './entities/board2.entity';
 
@@ -136,13 +136,13 @@ export class Board2Service {
 
         const [searchedBoard2, totalCount] = await this.board2Repository.findAndCount({
           where: [
-            { meso: searchMeso },
-            { report_kind: Like(`%${searchReportKind}%`) },
-            { title: Like(`%${searchTitle}%`) },
-            { request_nickname: Like(`%${searchRequestNickname}%`) },
-            { place_theif_nickname: Like(`%${searchPlaceTheifNickname}%`) },
-            { discord_global_name: Like(`%${searchDiscordName}%`) },
-          ],
+            searchMeso && { meso: Equal(searchMeso) },
+            searchReportKind && { report_kind: Like(`%${searchReportKind}%`) },
+            searchTitle && { title: Like(`%${searchTitle}%`) },
+            searchRequestNickname && { request_nickname: Like(`%${searchRequestNickname}%`) },
+            searchPlaceTheifNickname && { place_theif_nickname: Like(`%${searchPlaceTheifNickname}%`) },
+            searchDiscordName && { discord_global_name: Like(`%${searchDiscordName}%`) }
+          ].filter(Boolean),
           select: [
             'user_id',
             'board2_id',

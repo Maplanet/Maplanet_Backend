@@ -142,11 +142,11 @@ export class PartyService {
           const take = limit;
           const [searchedParty, totalCount] = await this.partyRepository.findAndCount({
             where: [
-              { title: Like(`%${searchTitle}%`) },
-              { hunting_ground: Like(`%${searchHuntingGround}%`) },
-              { progress_time: Equal(searchProgressTime) },
-              { discord_global_name: Like(`%${searchDiscordName}%`) },
-            ],
+              searchTitle && { title: Like(`%${searchTitle}%`) },
+              searchHuntingGround && { hunting_ground: Like(`%${searchHuntingGround}%`) },
+              searchProgressTime && { progress_time: Equal(searchProgressTime) },
+              searchDiscordName && { discord_global_name: Like(`%${searchDiscordName}%`) },
+            ].filter(Boolean),
             select: [
               'user_id',
               'board4_id',

@@ -22,46 +22,46 @@ export class WoodCutter {
   @JoinColumn({ name: 'user_id' })
   Users: Users;
 
-  @Column({ type: 'char', length: 20 })
+  @Column()
   discord_id: string;
 
-  @Column({ type: 'int' })
+  @Column()
   meso: number;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column()
   title: string;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column()
   hunting_ground: string;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column()
   main_job: string;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column()
   sub_job: string;
 
-  @Column({ type: 'int' })
+  @Column()
   level: number;
 
-  @Column({ type: 'varchar', length: 10 })
+  @Column()
   maple_nickname: string;
 
-  @Column({ type: 'int' })
+  @Column()
   progress_time: number;
 
-  @Column({ type: 'varchar', length: 10 })
+  @Column()
   discord_username: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ nullable: true })
   discord_global_name: string;
 
-  @Column({ type: 'varchar' })
+  @Column()
   discord_image: string;
 
-  @Column({ type: 'int' })
+  @Column()
   view_count: number;
 
-  @Column({ type: 'boolean' })
+  @Column()
   complete: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })
