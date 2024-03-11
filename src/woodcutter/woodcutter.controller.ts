@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { WoodcutterService } from './woodcutter.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
@@ -93,19 +93,19 @@ export class WoodcutterController {
     return getWoodCutterInfo;
   }
 
-  // @ApiOperation({
-  //   summary: '파티모집 게시글 완료',
-  //   description: '파티모집이 끝난 게시글을 올린 유저가 완료하기 누르기',
-  // })
-  // @ApiResponse({ status: 201, description: '파티모집 완료됨' })
-  // @UseGuards(AccessTokenGuard)
-  // @Patch('/complete/:board4_id')
-  // async completeParty(
-  //   @Param('board4_id') board4_id: number, 
-  //   @Req() req,
-  // ): Promise<any> {
-  //   const {user_id} = req.user;
-  //   return await this.partyService.completeParty(board4_id, user_id);
-  // }
+  @ApiOperation({
+    summary: '나무꾼 게시글 완료',
+    description: '나무꾼이 끝난 게시글을 올린 유저가 완료하기 누르기',
+  })
+  @ApiResponse({ status: 201, description: '나무꾼 완료됨' })
+  @UseGuards(AccessTokenGuard)
+  @Patch('/complete/:board3_id')
+  async completeWoodCutter(
+    @Param('board3_id') board3_id: number, 
+    @Req() req,
+  ): Promise<any> {
+    const {user_id} = req.user;
+    return await this.woodCutterService.completeWoodCutter(board3_id, user_id);
+  }
 
 }

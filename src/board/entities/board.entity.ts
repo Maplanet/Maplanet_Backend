@@ -27,9 +27,6 @@ export class Board {
     maple_nickname: string;
 
     @Column()
-    hunting_ground: string;
-
-    @Column()
     level: number;
 
     @Column()
@@ -37,9 +34,6 @@ export class Board {
 
     @Column()
     sub_job: string;
-
-    @Column()
-    progress_kind: string;
 
     @Column()
     progress_time: number;
