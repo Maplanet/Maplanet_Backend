@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { LoggingInterceptor } from './logger/logger.interceptor';
 import { ConfigService } from '@nestjs/config';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,7 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.enableCors();
+  app.use(cookieParser());
   const options = new DocumentBuilder()
     .setTitle('Maplanet API')
     .setDescription('메이플래닛 Swagger')
