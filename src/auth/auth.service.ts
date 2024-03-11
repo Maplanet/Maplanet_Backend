@@ -9,8 +9,6 @@ import { Users } from 'src/users/entities/users.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { DiscordOAuth2Credentials } from './entity/discord.entity';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { DiscdordDataType, ITokenpayload } from './type/updateOaut2.type';
@@ -18,17 +16,12 @@ import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import Redis from 'ioredis';
 @Injectable()
 export class AuthService {
-  private readonly adminList: string[];
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-    @Inject(CACHE_MANAGER)
-    private cache: Cache,
     private readonly usersService: UsersService,
     @InjectRepository(DiscordOAuth2Credentials)
     private readonly DiscordRepository: Repository<DiscordOAuth2Credentials>,
-    @InjectRepository(Users)
-    private usersRepository: Repository<Users>,
     @InjectRedis() private readonly redisClient: Redis,
   ) {}
 
@@ -42,7 +35,6 @@ export class AuthService {
   }
   async validateOAuth2(data) {
     let { id, username, global_name, avatar, email } = data;
-    console.log(data);
     const userAvatar = `https://cdn.discordapp.com/avatars/${id}/${avatar}`;
     const userAvatarNull =
       'https://discord.com/assets/6debd47ed13483642cf09e832ed0bc1b.png';
@@ -56,15 +48,11 @@ export class AuthService {
 
     await this.usersService.saveUser(data);
 
-    const user_id = await this.usersService.findOne(id);
-    console.log('여기 유저 아이디', user_id);
-    // if (!user_id) {
-    //   throw new BadRequestException('존재하지 않는 유저');
-    // }
+    const { user_id } = await this.usersService.findOne(id);
 
     const payload: ITokenpayload = {
       discord_id: id,
-      user_id: user_id,
+      user_id,
       username,
       global_name,
       avatar,
@@ -137,12 +125,11 @@ export class AuthService {
       },
     );
     await this.redisClient.setex(discord_id, 1209600, refresh_token);
-    const check = await this.redisClient.get(String(discord_id));
-    console.log('리프레쉬톸ㄴ', check);
+    await this.redisClient.get(String(discord_id));
     return refresh_token;
   }
 
-  verifyToken(token) {
+  verifyToken(token: string) {
     try {
       return this.jwtService.verify(token, {
         secret: this.configService.get<string>('JWT_SECRET_KEY'),
@@ -182,8 +169,6 @@ export class AuthService {
     });
   }
   async deleteRefreshToken(discord_id) {
-    const a = await this.redisClient.get(discord_id);
-    console.log(a);
     await this.redisClient.del(discord_id);
   }
 }
