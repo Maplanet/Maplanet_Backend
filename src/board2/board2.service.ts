@@ -197,7 +197,7 @@ export class Board2Service {
             place_theif_nickname
         } = createBoard2Dto;
 
-        const createBoard2 = this.board2Repository.create({
+        const createBoard2 = await this.board2Repository.create({
           user_id: user.user_id,
           meso,
           report_kind,
@@ -226,7 +226,7 @@ export class Board2Service {
     }
   } 
 
-  async completeBoard2(board2_id: number, user_id: number): Promise<any> {
+  async completeBoard2(board2_id: number, user_id: any): Promise<any> {
     try{
       const board2 = await this.board2Repository.findOne({
         where: {
@@ -236,7 +236,7 @@ export class Board2Service {
 
       const user = await this.usersRepository.findOne({
         where: {
-          user_id: user_id
+          user_id: user_id.user_id
         }
       })
 

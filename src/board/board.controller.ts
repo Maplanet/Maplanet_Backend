@@ -122,7 +122,6 @@ export class BoardController {
     @Req() req,
   ): Promise<any> {
     const {user_id} = req.user;
-    // const user_id = 1
     return await this.boardService.completeBoard1(board1_id, user_id);
   }
 }

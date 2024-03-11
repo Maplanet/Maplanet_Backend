@@ -35,7 +35,9 @@ export class Board2 {
     @Column()
     discord_username: string;
 
-    @Column()
+    @Column({
+        nullable: true,
+    })
     discord_global_name: string;
 
     @Column()
