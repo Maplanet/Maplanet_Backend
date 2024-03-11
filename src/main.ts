@@ -15,6 +15,9 @@ async function bootstrap() {
       transform: true,
       //요청데이터에서 유효하지 않은 속성제거
       whitelist: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
   app.useGlobalInterceptors(new LoggingInterceptor());
