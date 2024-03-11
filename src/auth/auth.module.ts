@@ -13,7 +13,6 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule,
     JwtModule.register({}),
     CacheModule.register(),
     TypeOrmModule.forFeature([DiscordOAuth2Credentials, Users]),
