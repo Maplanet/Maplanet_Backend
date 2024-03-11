@@ -27,25 +27,21 @@ export class AuthController {
 
   @Get('discord/callback')
   @UseGuards(AuthGuard('discord'))
-  async googleLoginCallback(@Req() req, @Res() res): Promise<void> {
+  async googleLoginCallback(
+    @Req() req,
+    @Res({ passthrough: true }) res,
+  ): Promise<void> {
     const access_token = req.user;
-    console.log('토큰정보', access_token);
-    // if (access_token)
-    //   res.redirect(
-    //     'http://localhost:3000/main' + `/${access_token?.access_token}`,
-    //   );
-    // else res.redirect('http://localhost:3000/board1');
+
     res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
       maxAge: 3600000,
-      //domain: 'http://localhost',
       domain: '13.209.210.215',
       path: '/',
       sameSite: 'none', // cross-site에서도 전송
+      secure: true, // HTTPS 환경에서만 쿠키 전송
     });
-    res.header('Authorization', `Bearer ${access_token?.access_token}`);
-    // res.json(access_token.payload);
+
     res.redirect('http://13.209.210.215:3000/main');
-    //return ;
   }
 
   @Delete('logout')
