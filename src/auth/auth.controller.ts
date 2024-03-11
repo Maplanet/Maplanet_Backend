@@ -36,7 +36,10 @@ export class AuthController {
     //   );
     // else res.redirect('http://localhost:3000/board1');
     console.log('리다이렉트시키기');
-    res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
+    res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
+      path: '/',
+      sameSite: 'none', // cross-site에서도 전송
+    });
     res.header('Authorization', `Bearer ${access_token?.access_token}`);
     // res.json(access_token.payload);
     res.redirect('http://localhost:3000');

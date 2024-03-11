@@ -20,7 +20,7 @@ jobs:
 
       - name: Set ENV
         run: |
-          echo "${{ secrets.DOT_ENV_DEV }}" > .env.dev
+          echo "${{ secrets.DOT_ENV_DEV }}" > .env.development
         shell: bash
 
       - name: Build Docker image
