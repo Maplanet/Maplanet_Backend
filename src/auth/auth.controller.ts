@@ -37,7 +37,8 @@ export class AuthController {
     // else res.redirect('http://localhost:3000/board1');
     console.log('리다이렉트시키기');
     res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
-      domain: '*',
+      maxAge: 3600000,
+      domain: '13.209.210.215',
       path: '/',
       sameSite: 'none', // cross-site에서도 전송
     });
