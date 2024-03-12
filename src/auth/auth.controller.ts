@@ -35,13 +35,14 @@ export class AuthController {
 
     res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
       maxAge: 3600000,
-      domain: '13.209.210.215',
+      domain: 'maplanet.store',
       path: '/',
       sameSite: 'none', // cross-site에서도 전송
       secure: true, // HTTPS 환경에서만 쿠키 전송
     });
 
-    res.redirect('http://13.209.210.215:3000/main');
+    res.redirect('https://maplanet.store/main');
+    //res.redirect('http://13.209.210.215:3000/main');
   }
 
   @Delete('logout')
