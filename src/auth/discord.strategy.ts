@@ -6,6 +6,7 @@ import { Strategy, Verifycheck } from 'passport-oauth2';
 import { stringify } from 'querystring';
 import { UsersService } from 'src/users/users.service';
 import { VerifyCallback } from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 
 // change these to be your Discord client ID and secret
 const clientID = '1207737873063739452';
@@ -16,7 +17,6 @@ const callbackURL = 'https://maplanet.store/auth/discord/callback';
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   constructor(
-    private readonly usersServiece: UsersService,
     private authService: AuthService,
     private http: HttpService,
   ) {
