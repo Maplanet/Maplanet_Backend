@@ -11,7 +11,7 @@ import { VerifyCallback } from 'jsonwebtoken';
 const clientID = '1207737873063739452';
 const clientSecret = 'ZaxXr7J7d3P4W3-RmuZO7HYbLgdmpMCS';
 //const callbackURL = 'http://localhost:3000/auth/discord/callback';
-const callbackURL = 'http://13.209.210.215:3000/auth/discord/callback';
+const callbackURL = 'https://maplanet.store/auth/discord/callback';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
