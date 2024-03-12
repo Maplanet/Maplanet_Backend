@@ -36,11 +36,17 @@ export class AppController {
     const getBoard2Data = await this.appService.getBoard2Data();
     maindata.board2Data = getBoard2Data;
 
-    const highestManner3 = await this.appService.getManner3();
-    maindata.board1MannerData = highestManner3;
+    const getBoard3Data = await this.appService.getBoard3Data();
+    maindata.board3Data = getBoard3Data;
 
-    const highestMeso3 = await this.appService.highestMeso3();
-    maindata.board2HighMesoData = highestMeso3;
+    const getBoard4Data = await this.appService.getBoard4Data();
+    maindata.board4Data = getBoard4Data;
+
+    // const highestManner3 = await this.appService.getManner3();
+    // maindata.board1MannerData = highestManner3;
+
+    // const highestMeso3 = await this.appService.highestMeso3();
+    // maindata.board2HighMesoData = highestMeso3;
 
     const noticeData = await this.appService.noticeData();
     maindata.noticeData = noticeData;

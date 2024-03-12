@@ -142,7 +142,7 @@ export class BoardService {
         where: [
           searchMeso && { meso: Equal(searchMeso) },
           searchTitle && { title: Like(`%${searchTitle}%`) },
-          searchNickname && { maple_nickname: Like(`%${searchNickname}%`) },
+          searchNickname && { place_theif_nickname: Like(`%${searchNickname}%`) },
           searchLevel && { level: Equal(searchLevel) },
           searchSubJob && { sub_job: Like(`%${searchSubJob}%`) },
           searchProgressTime && { progress_time: Equal(searchProgressTime) },
