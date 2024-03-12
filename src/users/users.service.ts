@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Users } from './entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from 'src/board/entities/board.entity';
 import { Board2 } from 'src/board2/entities/board2.entity';
+import { WoodCutter } from 'src/woodcutter/entities/woodcutter.entity';
+import { Party } from 'src/party/entities/party.entity';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +16,10 @@ export class UsersService {
     private readonly board1Repository: Repository<Board>,
     @InjectRepository(Board2)
     private readonly board2Repository: Repository<Board2>,
+    @InjectRepository(WoodCutter)
+    private readonly woodCutterRepository: Repository<WoodCutter>,
+    @InjectRepository(Party)
+    private readonly partyRepository: Repository<Party>,
   ) {}
 
   async checkUser(discordId: string) {
@@ -115,8 +121,15 @@ export class UsersService {
     return modifiedBoard1;
   }
 
+  async userPageCountBoard1(user_id: number): Promise<number> {
+    const userPageCountBoard1 = await this.board1Repository.count({
+      where: { user_id },
+    });
+    return userPageCountBoard1;
+  }
+
   async board2Profile(page: number, user_id: number): Promise<any> {
-    const limit = 8;
+    const limit = 12;
     const skip = (page - 1) * limit;
     const take = limit;
     const board2Profile = await this.board2Repository.find({
@@ -155,17 +168,106 @@ export class UsersService {
     return modifiedBoard2;
   }
 
-  async userPageCountBoard1(user_id: number): Promise<number> {
-    const userPageCountBoard1 = await this.board1Repository.count({
-      where: { user_id },
-    });
-    return userPageCountBoard1;
-  }
-
   async userPageCountBoard2(user_id: number): Promise<number> {
     const userPageCountBoard2 = await this.board2Repository.count({
       where: { user_id },
     });
     return userPageCountBoard2;
+  }
+
+  async board3Profile(page: number = 1, user_id: number): Promise<any> {
+      const limit = 12;
+      const skip = (page - 1) * limit;
+      const take = limit;
+
+      const board3Profile = await this.woodCutterRepository.find({
+        where: {
+          user_id,
+        },
+        select: [
+          'user_id',
+          'board3_id',
+          'discord_id',
+          'title',
+          'meso',
+          'sub_job',
+          'hunting_ground',
+          'progress_time',
+          'level',
+          'discord_global_name',
+          'discord_image',
+          'view_count',
+          'complete',
+          'created_at',
+          'updated_at',
+        ],
+        skip,
+        take,
+        order: {
+          created_at: 'DESC', 
+        },
+        relations: ['Users']
+    });
+
+    const modifiedBoard3 = board3Profile.map(({ Users: { report_count, manner_count }, ...board3 }) => ({
+        ...board3,
+        report_count,
+        manner_count,
+      }));
+    return modifiedBoard3;
+  }
+
+  async userPageCountBoard3(user_id: number): Promise<number> {
+    const userPageCountBoard3 = await this.woodCutterRepository.count({
+      where: { user_id },
+    });
+    return userPageCountBoard3;
+  }
+
+  async board4Profile(page: number = 1, user_id: number): Promise<any> {
+      const limit = 12;
+      const skip = (page - 1) * limit;
+      const take = limit;
+
+      const board4Profile = await this.partyRepository.find({
+        where: {
+          user_id,
+        },
+        select: [
+          'user_id',
+          'board4_id',
+          'discord_id',
+          'title',
+          'hunting_ground',
+          'progress_time',
+          'recruit_people_count',
+          'discord_global_name',
+          'discord_image',
+          'view_count',
+          'complete',
+          'created_at',
+          'updated_at',
+        ],
+        skip,
+        take,
+        order: {
+          created_at: 'DESC', 
+        },
+        relations: ['Users']
+    });
+
+    const modifiedBoard4 = board4Profile.map(({ Users: { report_count, manner_count }, ...board4 }) => ({
+        ...board4,
+        report_count,
+        manner_count,
+      }));
+    return modifiedBoard4;
+  }
+
+  async userPageCountBoard4(user_id: number): Promise<number> {
+    const userPageCountBoard4 = await this.partyRepository.count({
+      where: { user_id },
+    });
+    return userPageCountBoard4;
   }
 }

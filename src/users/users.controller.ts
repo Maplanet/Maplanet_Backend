@@ -94,6 +94,72 @@ export class UsersController {
   }
 
   @ApiOperation({
+    summary: '유저 프로필 나무꾼',
+    description: '유저의 프로필을 확인할 수 있음',
+  })
+  @ApiResponse({ status: 200, description: '유저 정보, 유저가 올린 나무꾼 게시글 정보' })
+  @Get('/userprofile/board3/:user_id')
+  async usersProfileBoard3 (@Query('page') page: number, @Param('user_id') user_id: number): Promise<any> {
+    try {
+      const userProfileBoard3: any = {}
+      const userProfile = await this.usersService.userProfile(user_id);
+      userProfileBoard3.userProfile = userProfile
+      
+      const board3Profile = await this.usersService.board3Profile(page, user_id);
+      userProfileBoard3.board3Profile = board3Profile
+
+      const userPageCount = await this.usersService.userPageCountBoard3(user_id);
+      userProfileBoard3.totalCount = userPageCount
+
+      return userProfileBoard3
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '유저 프로필 나무꾼 게시글 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
+    }
+  }
+
+  @ApiOperation({
+    summary: '유저 프로필 파티모집',
+    description: '유저의 프로필을 확인할 수 있음',
+  })
+  @ApiResponse({ status: 200, description: '유저 정보, 유저가 올린 파티모집 게시글 정보' })
+  @Get('/userprofile/board4/:user_id')
+  async usersProfileBoard4 (@Query('page') page: number, @Param('user_id') user_id: number): Promise<any> {
+    try {
+      const usersProfileBoard4: any = {}
+      const userProfile = await this.usersService.userProfile(user_id);
+      usersProfileBoard4.userProfile = userProfile
+      
+      const board4Profile = await this.usersService.board4Profile(page, user_id);
+      usersProfileBoard4.board4Profile = board4Profile
+
+      const userPageCount = await this.usersService.userPageCountBoard4(user_id);
+      usersProfileBoard4.totalCount = userPageCount
+
+      return usersProfileBoard4
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '유저 프로필 파티모집 게시글 조회 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
+    }
+  }
+
+  @ApiOperation({
     summary: '내 프로필 쩔',
     description: '내 프로필을 확인할 수 있음',
   })
@@ -132,7 +198,8 @@ export class UsersController {
     summary: '내 프로필 겹사',
     description: '내 프로필을 확인할 수 있음',
   })
-  @ApiResponse({ status: 200, description: '내 정보, 내가 올린 겹사 게시글 정보' })  @UseGuards(AccessTokenGuard)
+  @ApiResponse({ status: 200, description: '내 정보, 내가 올린 겹사 게시글 정보' })  
+  @UseGuards(AccessTokenGuard)
   @Get('/myprofile/board2')
   async myProfileBoard2 (@Query('page') page: number, @Req() req): Promise<any> {
     try{
@@ -162,4 +229,73 @@ export class UsersController {
     }
   }
 
+  @ApiOperation({
+    summary: '내 프로필 나무꾼',
+    description: '내 프로필을 확인할 수 있음',
+  })
+  @ApiResponse({ status: 200, description: '내 정보, 내가 올린 나무꾼 게시글 정보' })  
+  @UseGuards(AccessTokenGuard)
+  @Get('/myprofile/board3')
+  async myProfileBoard3 (@Query('page') page: number, @Req() req): Promise<any> {
+    try{
+      const {user_id} = req.user
+      const myProfileBoard3: any = {}
+      const myProfile = await this.usersService.userProfile(user_id);
+      myProfileBoard3.myProfile = myProfile
+      
+      const board3Profile = await this.usersService.board3Profile(page, user_id);
+      myProfileBoard3.board3Profile = board3Profile 
+
+      const userPageCount = await this.usersService.userPageCountBoard3(user_id);
+      myProfileBoard3.totalCount = userPageCount
+    
+      return myProfileBoard3
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 401,
+          error: {
+            message: '내 프로필 나무꾼 게시글 조회 에러',
+            detail: error.message,
+          },
+        },
+        401,
+      );
+    }
+  }
+
+  @ApiOperation({
+    summary: '내 프로필 파티모집',
+    description: '내 프로필을 확인할 수 있음',
+  })
+  @ApiResponse({ status: 200, description: '내 정보, 내가 올린 파티모집 게시글 정보' })  
+  @UseGuards(AccessTokenGuard)
+  @Get('/myprofile/board4')
+  async myProfileBoard4 (@Query('page') page: number, @Req() req): Promise<any> {
+    try{
+      const {user_id} = req.user
+      const myProfileBoard4: any = {}
+      const myProfile = await this.usersService.userProfile(user_id);
+      myProfileBoard4.myProfile = myProfile
+      
+      const board4Profile = await this.usersService.board4Profile(page, user_id);
+      myProfileBoard4.board4Profile = board4Profile 
+
+      const userPageCount = await this.usersService.userPageCountBoard4(user_id);
+      myProfileBoard4.totalCount = userPageCount
+    
+      return myProfileBoard4
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 401,
+          error: {
+            message: '내 프로필 파티모집 게시글 조회 에러',
+            detail: error.message,
+          },
+        },
+        401,
+      );
+    }
+  }
 }
