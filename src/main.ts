@@ -4,10 +4,16 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { LoggingInterceptor } from './logger/logger.interceptor';
 import { ConfigService } from '@nestjs/config';
+import * as Sentry from '@sentry/node';
 import * as cookieParser from 'cookie-parser';
+import { WebhookInterceptor } from './common/Webhook.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+  });
+  app.useGlobalInterceptors(new WebhookInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
       //요청 데이터를 유호성검사전에 자동으로 변환함

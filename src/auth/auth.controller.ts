@@ -38,7 +38,6 @@ export class AuthController {
       domain: 'maplanet.store',
       path: '/',
       sameSite: 'none', // cross-site에서도 전송
-      secure: true, // HTTPS 환경에서만 쿠키 전송
     });
 
     res.redirect('https://maplanet.store/main');
