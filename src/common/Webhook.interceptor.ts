@@ -8,14 +8,18 @@ import { captureException } from '@sentry/minimal';
 import { catchError, Observable, of } from 'rxjs';
 import { IncomingWebhook } from '@slack/client';
 import * as Sentry from '@sentry/minimal';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class WebhookInterceptor implements NestInterceptor {
+  private readonly configService: ConfigService;
   intercept(_: ExecutionContext, next: CallHandler) /** : Observable<any>*/ {
     return next.handle().pipe(
       catchError((error) => {
         Sentry.captureException(error);
-        const webhook = new IncomingWebhook(process.env.SLACK_WEBHOOK);
+        const webhook = new IncomingWebhook(
+          'https://hooks.slack.com/services/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',
+        );
         webhook.send({
           attachments: [
             {

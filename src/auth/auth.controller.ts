@@ -33,12 +33,13 @@ export class AuthController {
   ): Promise<void> {
     const access_token = req.user;
 
-    res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
-      maxAge: 3600000,
-      domain: 'maplanet.store',
-      path: '/',
-      sameSite: 'none', // cross-site에서도 전송
-    });
+    // res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
+    //   maxAge: 3600000,
+    //   domain: 'maplanet.store',
+    //   path: '/',
+    //   sameSite: 'none', // cross-site에서도 전송
+    // });
+    res.setHeader('Authorization', `Bearer ${access_token?.access_token}`);
 
     res.redirect('https://maplanet.store/main');
     //res.redirect('http://13.209.210.215:3000/main');
