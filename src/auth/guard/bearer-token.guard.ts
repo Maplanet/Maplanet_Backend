@@ -17,6 +17,7 @@ export class BearerTokenGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
 
     const Bearertoken = req.cookies['Authorization'];
+    console.log('베어러토큰', Bearertoken);
 
     const [type, rawToken] = Bearertoken.split(' ') ?? [];
 
