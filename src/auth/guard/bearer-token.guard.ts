@@ -16,10 +16,14 @@ export class BearerTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
 
-    const Bearertoken = req.cookies['Authorization'];
-    console.log('베어러토큰', Bearertoken);
+    const Bearertoken1 = req.cookies['Authorization'];
+    const Bearertoken2 = req.cookies['authorization'];
+    const Bearertoken3 = req.headers['authorization'];
+    //const rawToken = req.headers['authorization'];
 
-    const [type, rawToken] = Bearertoken.split(' ') ?? [];
+    console.log(Bearertoken1, Bearertoken2, Bearertoken3);
+
+    const [type, rawToken] = Bearertoken1.split(' ') ?? Bearertoken2.split(' ');
 
     //const user = await this.usersServcie.getUserByEmail(result.email);
     //토큰은 없는데 유저정보는 있을때
