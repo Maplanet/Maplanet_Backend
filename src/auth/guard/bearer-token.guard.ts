@@ -17,6 +17,8 @@ export class BearerTokenGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
 
     //console.log(req.headers['Authorization']);
+    console.log(req.headers);
+    console.log(req.headers['cookie']);
     const [type, rawToken] =
       req.headers['cookie'].split('=')[1].split('%20') ?? [];
 
