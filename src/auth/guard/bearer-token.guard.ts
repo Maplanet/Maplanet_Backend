@@ -16,15 +16,9 @@ export class BearerTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
 
-    //console.log(req.headers['Authorization']);
-    console.log('1', req.cookies['Authrization']);
-    console.log('2', req.cookies['Authorization']);
-    console.log('3', req.cookies['Authorization'].Authorization);
-    console.log('4', req.cookies['Authorization'].Authorization.split(' '));
+    const Bearertoken = req.cookies['Authorization'];
 
-    //console.log(req.headers['cookie']);
-    const [type, rawToken] =
-      req.cookies['Authorization'].Authorization.split(' ') ?? [];
+    const [type, rawToken] = Bearertoken.split(' ') ?? [];
 
     //const user = await this.usersServcie.getUserByEmail(result.email);
     //토큰은 없는데 유저정보는 있을때
@@ -33,9 +27,8 @@ export class BearerTokenGuard implements CanActivate {
       throw new UnauthorizedException('토큰이 없습니다');
     }
 
-    const token = this.authService.extractTokenFormHeader(rawToken);
+    const token = this.authService.extractTokenFormHeader(type, rawToken);
 
-    console.log(token);
     const result = await this.authService.verifyToken(token);
 
     //const user = await this.usersServcie.getUserByEmail(result.email);
