@@ -17,10 +17,9 @@ export class BearerTokenGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
 
     //console.log(req.headers['Authorization']);
-    console.log(req.headers);
+    console.log(req.cookie);
     console.log(req.headers['cookie']);
-    const [type, rawToken] =
-      req.headers['cookie'].split('=')[1].split('%20') ?? [];
+    const [type, rawToken] = req.cookie.split('=')[1].split('%20') ?? [];
 
     //const user = await this.usersServcie.getUserByEmail(result.email);
     //토큰은 없는데 유저정보는 있을때
