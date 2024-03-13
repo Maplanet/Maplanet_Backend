@@ -23,7 +23,7 @@ export class BearerTokenGuard implements CanActivate {
 
     console.log(Bearertoken1, Bearertoken2, Bearertoken3);
 
-    const [type, rawToken] = Bearertoken1.split(' ') ?? Bearertoken2.split(' ');
+    const [type, rawToken] = Bearertoken3.split(' ') ?? Bearertoken2.split(' ');
 
     //const user = await this.usersServcie.getUserByEmail(result.email);
     //토큰은 없는데 유저정보는 있을때
