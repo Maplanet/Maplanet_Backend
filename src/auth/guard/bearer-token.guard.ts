@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { UsersService } from 'src/users/users.service';
-import { raw } from 'mysql2';
 @Injectable()
 export class BearerTokenGuard implements CanActivate {
   constructor(
@@ -18,8 +17,11 @@ export class BearerTokenGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
 
     //console.log(req.headers['Authorization']);
-    const rawToken = req.headers['authorization'];
+    const rawToken = req?.cookies?.Authentication;
 
+    //const user = await this.usersServcie.getUserByEmail(result.email);
+    //토큰은 없는데 유저정보는 있을때
+    //토큰도 없고 가입한 유저정보도 없을때
     if (!rawToken) {
       throw new UnauthorizedException('토큰이 없습니다');
     }

@@ -171,4 +171,13 @@ export class AuthService {
   async deleteRefreshToken(discord_id) {
     await this.redisClient.del(discord_id);
   }
+
+  async getRefreshToken(discord_id) {
+    const existRefreshToken = await this.redisClient.get(discord_id);
+    console.log(existRefreshToken);
+
+    if (!existRefreshToken) {
+      throw new BadRequestException('리프레쉬토큰이 존재하지 않습니다');
+    }
+  }
 }
