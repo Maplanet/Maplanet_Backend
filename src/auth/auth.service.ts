@@ -140,14 +140,12 @@ export class AuthService {
     }
   }
 
-  extractTokenFormHeader(header: string) {
-    const [bearer, token] = header.split(' ');
-
-    if (bearer !== 'Bearer' || !token) {
+  extractTokenFormHeader(type, rawToken: string) {
+    if (type !== 'Bearer' || !rawToken) {
       throw new UnauthorizedException('wrong token');
     }
 
-    return token;
+    return rawToken;
   }
   async updateOAuth2(data: DiscdordDataType) {
     const { id, access_token, refresh_token } = data;
