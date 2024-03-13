@@ -39,7 +39,7 @@ export class AuthController {
     //   path: '/',
     //   sameSite: 'none', // cross-site에서도 전송
     // });
-    res.setHeader('Authorization', `Bearer ${access_token?.access_token}`);
+    res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
 
     res.redirect('https://maplanet.store/main');
     //res.redirect('http://13.209.210.215:3000/main');
