@@ -32,10 +32,7 @@ export class BoardController {
   async boardInfo(@Query('page') page: number): Promise<any> {
     const getBoardInfo = await this.boardService.boardInfo(page);
     const getBoardCount = await this.boardService.board1PageCount();
-    return { board1Data:
-      getBoardInfo,
-      totalCount: getBoardCount
-    }
+    return { board1Data: getBoardInfo, totalCount: getBoardCount };
   }
 
   @Get('/detail/:board1_id')
@@ -90,7 +87,11 @@ export class BoardController {
     summary: '쩔 게시글 등록',
     description: '쩔 해주는 유저가 올리 게시글 등록하기',
   })
-  @ApiResponse({ status: 201, description: 'meso, title, maple_nickname, level, main_job, sub_job, progress_kind, progress_time, position 등록' })
+  @ApiResponse({
+    status: 201,
+    description:
+      'meso, title, maple_nickname, level, main_job, sub_job, progress_kind, progress_time, position 등록',
+  })
   @UseGuards(AccessTokenGuard)
   @Post('/post')
   async postBoard(
@@ -100,8 +101,9 @@ export class BoardController {
     const user = req.user;
     const getBoardInfo = await this.boardService.postBoard(
       createBoardDto,
-      user
+      user,
     );
+    console.log(getBoardInfo);
     return getBoardInfo;
   }
 
@@ -113,11 +115,10 @@ export class BoardController {
   @UseGuards(AccessTokenGuard)
   @Patch('/complete/:board1_id')
   async completeBoard1(
-    @Param('board1_id') board1_id: number, 
+    @Param('board1_id') board1_id: number,
     @Req() req,
   ): Promise<any> {
-    const {user_id} = req.user;
+    const { user_id } = req.user;
     return await this.boardService.completeBoard1(board1_id, user_id);
   }
 }
-
