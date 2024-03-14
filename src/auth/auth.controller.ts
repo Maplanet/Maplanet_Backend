@@ -2,6 +2,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Redirect,
   Req,
   Res,
@@ -39,9 +40,18 @@ export class AuthController {
     //   path: '/',
     //   sameSite: 'none', // cross-site에서도 전송
     // });
-    res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
-
-    res.redirect('https://maplanet.store/main');
+    res
+      .cookie('Authorization', `Bearer ${access_token?.access_token}`, {
+        maxAge: 3600000,
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        domain: '.maplanet-front.vercel.app',
+      })
+      .redirect(
+        HttpStatus.MOVED_PERMANENTLY,
+        'https://maplanet-front.vercel.app/',
+      );
     //res.redirect('http://13.209.210.215:3000/main');
   }
 
