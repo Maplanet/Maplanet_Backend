@@ -39,17 +39,19 @@ export class BoardService {
         skip,
         take,
         order: {
-          created_at: 'DESC', 
+          created_at: 'DESC',
         },
-        relations: ['Users']
-    });
+        relations: ['Users'],
+      });
 
-    const modifiedBoard1 = board1.map(({ Users: { report_count, manner_count }, ...board }) => ({
-        ...board,
-        report_count,
-        manner_count,
-      }));
-    return modifiedBoard1;
+      const modifiedBoard1 = board1.map(
+        ({ Users: { report_count, manner_count }, ...board }) => ({
+          ...board,
+          report_count,
+          manner_count,
+        }),
+      );
+      return modifiedBoard1;
     } catch (error) {
       throw new HttpException(
         {
@@ -64,19 +66,22 @@ export class BoardService {
     }
   }
 
-  async board1PageCount (): Promise<any> {
-    const board1Count = await this.boardRepository.count()
-    return board1Count
+  async board1PageCount(): Promise<any> {
+    const board1Count = await this.boardRepository.count();
+    return board1Count;
   }
 
   async board1ViewCount(board1_id: number): Promise<UpdateResult> {
-    return await this.boardRepository.update({ board1_id }, {view_count: () => 'view_count + 1'});
+    return await this.boardRepository.update(
+      { board1_id },
+      { view_count: () => 'view_count + 1' },
+    );
   }
 
-  async boardDetailInfo(board1_id: number):Promise<any> {
-    try{
-    const boardDetailInfo = await this.boardRepository.findOne({
-        where: {board1_id},
+  async boardDetailInfo(board1_id: number): Promise<any> {
+    try {
+      const boardDetailInfo = await this.boardRepository.findOne({
+        where: { board1_id },
         select: [
           'user_id',
           'board1_id',
@@ -96,20 +101,23 @@ export class BoardService {
           'updated_at',
         ],
         order: {
-          created_at: 'DESC', 
+          created_at: 'DESC',
         },
-        relations: ['Users']
-    });
-    // console.log(boardDetailInfo)]
-    await this.board1ViewCount(board1_id);
+        relations: ['Users'],
+      });
+      // console.log(boardDetailInfo)]
+      await this.board1ViewCount(board1_id);
 
-    const { Users: { report_count, manner_count }, ...board } = boardDetailInfo;
+      const {
+        Users: { report_count, manner_count },
+        ...board
+      } = boardDetailInfo;
 
-    return {
-            ...board,
-            report_count,
-            manner_count,
-        }
+      return {
+        ...board,
+        report_count,
+        manner_count,
+      };
     } catch (error) {
       throw new HttpException(
         {
@@ -123,10 +131,10 @@ export class BoardService {
       );
     }
   }
- 
+
   async boardSearchInfo(
     page: number = 1,
-    searchMeso: number, 
+    searchMeso: number,
     searchTitle: string,
     searchNickname: string,
     searchLevel: number,
@@ -138,44 +146,51 @@ export class BoardService {
       const limit = 12;
       const skip = (page - 1) * limit;
       const take = limit;
-      const [searchedBoard1, totalCount] = await this.boardRepository.findAndCount({
-        where: [
-          searchMeso && { meso: Equal(searchMeso) },
-          searchTitle && { title: Like(`%${searchTitle}%`) },
-          searchNickname && { place_theif_nickname: Like(`%${searchNickname}%`) },
-          searchLevel && { level: Equal(searchLevel) },
-          searchSubJob && { sub_job: Like(`%${searchSubJob}%`) },
-          searchProgressTime && { progress_time: Equal(searchProgressTime) },
-          searchDiscordName && { discord_global_name: Like(`%${searchDiscordName}%`) }
-        ].filter(Boolean),
-        select: [
-          'user_id',
-          'board1_id',
-          'discord_id',
-          'meso',
-          'title',
-          'sub_job',
-          'progress_time',
-          'discord_global_name',
-          'discord_image',
-          'view_count',
-          'complete',
-          'created_at',
-          'updated_at',
-        ],
-        skip,
-        take,
-        order: {
-          created_at: 'DESC',
-        },
-        relations: ['Users']
-      });
+      const [searchedBoard1, totalCount] =
+        await this.boardRepository.findAndCount({
+          where: [
+            searchMeso && { meso: Equal(searchMeso) },
+            searchTitle && { title: Like(`%${searchTitle}%`) },
+            searchNickname && {
+              place_theif_nickname: Like(`%${searchNickname}%`),
+            },
+            searchLevel && { level: Equal(searchLevel) },
+            searchSubJob && { sub_job: Like(`%${searchSubJob}%`) },
+            searchProgressTime && { progress_time: Equal(searchProgressTime) },
+            searchDiscordName && {
+              discord_global_name: Like(`%${searchDiscordName}%`),
+            },
+          ].filter(Boolean),
+          select: [
+            'user_id',
+            'board1_id',
+            'discord_id',
+            'meso',
+            'title',
+            'sub_job',
+            'progress_time',
+            'discord_global_name',
+            'discord_image',
+            'view_count',
+            'complete',
+            'created_at',
+            'updated_at',
+          ],
+          skip,
+          take,
+          order: {
+            created_at: 'DESC',
+          },
+          relations: ['Users'],
+        });
 
-      const modifiedSearchBoard1 = searchedBoard1.map(({ Users: { report_count, manner_count }, ...board }) => ({
-        ...board,
-        report_count,
-        manner_count,
-      }));
+      const modifiedSearchBoard1 = searchedBoard1.map(
+        ({ Users: { report_count, manner_count }, ...board }) => ({
+          ...board,
+          report_count,
+          manner_count,
+        }),
+      );
 
       return { search1Data: modifiedSearchBoard1, totalCount };
     } catch (error) {
@@ -205,7 +220,7 @@ export class BoardService {
         position,
       } = createBoardDto;
 
-      const createBoard1 = await this.boardRepository.create({
+      const createBoard1 = this.boardRepository.create({
         user_id: user.user_id,
         meso,
         title,
@@ -238,18 +253,18 @@ export class BoardService {
   }
 
   async completeBoard1(board1_id: number, user_id: any): Promise<any> {
-    try{
+    try {
       const board = await this.boardRepository.findOne({
         where: {
           board1_id: board1_id,
-        }
+        },
       });
 
       const user = await this.usersRepository.findOne({
-        where: {user_id: user_id.user_id},
+        where: { user_id: user_id.user_id },
       });
 
-      if(!board) {
+      if (!board) {
         throw new NotFoundException('게시글이 존재하지 않습니다.');
       }
 
@@ -257,7 +272,7 @@ export class BoardService {
       //   throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
       // }
 
-      if (board.user_id === user.user_id){
+      if (board.user_id === user.user_id) {
         if (!board.complete) {
           board.complete = true;
           user.progress_count += 1;
@@ -265,19 +280,19 @@ export class BoardService {
           board.complete = false;
           user.progress_count -= 1;
         }
-        
+
         await Promise.all([
           this.usersRepository.save(user),
-          this.boardRepository.save(board) 
+          this.boardRepository.save(board),
         ]);
 
         if (board.complete) {
           return '게시글을 완료하였습니다.';
         } else {
           return '게시글의 완료를 취소하였습니다.';
-        }  
+        }
       } else {
-        throw new Error ('자신의 게시글만 완료처리 할 수 있습니다.')
+        throw new Error('자신의 게시글만 완료처리 할 수 있습니다.');
       }
     } catch (error) {
       throw new HttpException(
@@ -291,5 +306,5 @@ export class BoardService {
         401,
       );
     }
-  } 
+  }
 }

@@ -26,13 +26,12 @@ export class CreateBoardDto {
   })
   public maple_nickname: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    example: '죽은나무의숲4',
-    description: '사냥터',
-  })
-  public hunting_ground: string;
+  // @IsString()
+  // @ApiProperty({
+  //   example: '죽은나무의숲4',
+  //   description: '사냥터',
+  // })
+  // public hunting_ground: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -58,16 +57,15 @@ export class CreateBoardDto {
   })
   public sub_job: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    example: '심쩔',
-    description: '쩔 종류',
-  })
-  public progress_kind: string;
+  // @IsString()
+  // @ApiProperty({
+  //   example: '심쩔',
+  //   description: '쩔 종류',
+  // })
+  // public progress_kind: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   @ApiProperty({
     example: '5',
     description: '잠쩔 시간',
