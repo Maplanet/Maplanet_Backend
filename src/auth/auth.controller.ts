@@ -46,7 +46,7 @@ export class AuthController {
         httpOnly: true,
         sameSite: 'none',
         secure: true,
-        domain: '.maplanet-front.vercel.app',
+        domain: '.maplanet.store',
       })
       .redirect(
         HttpStatus.MOVED_PERMANENTLY,
