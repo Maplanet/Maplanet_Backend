@@ -103,7 +103,7 @@ export class BoardController {
       createBoardDto,
       user,
     );
-    console.log(getBoardInfo);
+    console.log(createBoardDto);
     return getBoardInfo;
   }
 

@@ -239,6 +239,7 @@ export class BoardService {
       await this.boardRepository.save(createBoard1);
       return { msg: '쩔 게시글 등록이 완료되었습니다.' };
     } catch (error) {
+      console.error(error);
       throw new HttpException(
         {
           status: 401,
