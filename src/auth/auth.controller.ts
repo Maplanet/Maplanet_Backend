@@ -43,10 +43,11 @@ export class AuthController {
     res
       .cookie('Authorization', `Bearer ${access_token?.access_token}`, {
         maxAge: 3600000,
+        path: '/',
         httpOnly: true,
         sameSite: 'none',
         secure: true,
-        domain: '.maplanet.store',
+        domain: '.maplanet-front.vercel.app',
       })
       .redirect(
         HttpStatus.MOVED_PERMANENTLY,
