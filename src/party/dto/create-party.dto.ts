@@ -56,40 +56,40 @@ export class CreatePartyDto {
     example: '55 표도',
     description: '사냥 자리',
   })
-  public first_floor: string;
+  public first_floor: string | null;
 
   @IsString()
   @ApiProperty({
     example: '구인중',
     description: '사냥 자리',
   })
-  public second_floor: string;
+  public second_floor: string | null;
 
   @IsString()
   @ApiProperty({
     example: '75 표도',
     description: '사냥 자리',
   })
-  public third_floor: string;
+  public third_floor: string | null;
 
   @IsString()
   @ApiProperty({
     example: '93 클레릭',
     description: '사냥 자리',
   })
-  public fourth_floor: string;
+  public fourth_floor: string | null;
 
   @IsString()
   @ApiProperty({
     example: '구인중',
     description: '사냥 자리',
   })
-  public fifth_floor: string;
+  public fifth_floor: string | null;
 
   @IsString()
   @ApiProperty({
     example: '구인중',
     description: '사냥 자리',
   })
-  public sixth_floor: string;
+  public sixth_floor: string | null;
 }
