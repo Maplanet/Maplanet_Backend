@@ -51,7 +51,8 @@ export class AuthController {
       })
       .redirect(
         HttpStatus.MOVED_PERMANENTLY,
-        'https://maplanet-front.vercel.app/',
+        // 'https://maplanet-front.vercel.app/',
+        'http://localhost:3000'
       );
     //res.redirect('http://13.209.210.215:3000/main');
   }
