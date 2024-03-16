@@ -47,12 +47,11 @@ export class AuthController {
         httpOnly: true,
         sameSite: 'none',
         secure: true,
-        domain: '.maplanet-front.vercel.app',
-        // domain: '.vercel.app',
+        // domain: '.maplanet-front.vercel.app',
+        domain: 'maplanet.store',
       })
       .redirect(
-        HttpStatus.FOUND,
-        // HttpStatus.MOVED_PERMANENTLY,
+        HttpStatus.MOVED_PERMANENTLY,
         'https://maplanet-front.vercel.app/',
         // 'http://localhost:3000'
       );
