@@ -48,7 +48,7 @@ export class AuthController {
         sameSite: 'none',
         secure: true,
         // domain: '.maplanet-front.vercel.app',
-        domain: '.maplanet.store/auth/discord',
+        domain: '.vercel.app',
       })
       .redirect(
         HttpStatus.MOVED_PERMANENTLY,
