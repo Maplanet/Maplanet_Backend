@@ -34,14 +34,6 @@ export class CreateBoard2Dto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
-    example: '번개의신zz',
-    description: '의뢰인 닉네임',
-  })
-  public request_nickname: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
     example: '타락파워전사',
     description: '비매너 유저 닉네임',
   })

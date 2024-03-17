@@ -27,9 +27,6 @@ export class Board2 {
     title: string;
 
     @Column()
-    request_nickname: string;
-
-    @Column()
     place_theif_nickname: string;
 
     @Column()

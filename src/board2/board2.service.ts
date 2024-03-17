@@ -83,7 +83,6 @@ export class Board2Service {
             'meso',
             'title',
             'report_kind',
-            'request_nickname',
             'place_theif_nickname',
             'discord_global_name',
             'discord_image',
@@ -125,7 +124,6 @@ export class Board2Service {
     searchMeso: number,
     searchReportKind: string,
     searchTitle: string,
-    searchRequestNickname: string,
     searchPlaceTheifNickname: string,
     searchDiscordName: string,
   ): Promise<any> {
@@ -139,7 +137,6 @@ export class Board2Service {
             searchMeso && { meso: Equal(searchMeso) },
             searchReportKind && { report_kind: Like(`%${searchReportKind}%`) },
             searchTitle && { title: Like(`%${searchTitle}%`) },
-            searchRequestNickname && { request_nickname: Like(`%${searchRequestNickname}%`) },
             searchPlaceTheifNickname && { place_theif_nickname: Like(`%${searchPlaceTheifNickname}%`) },
             searchDiscordName && { discord_global_name: Like(`%${searchDiscordName}%`) }
           ].filter(Boolean),
@@ -161,7 +158,7 @@ export class Board2Service {
           skip,
           take,
           order: {
-              created_at: 'DESC' // Order by created_at timestamp in descending order
+              created_at: 'DESC'
           },
           relations: ['Users']
         })
@@ -193,7 +190,6 @@ export class Board2Service {
             meso,
             report_kind,
             title,
-            request_nickname,
             place_theif_nickname
         } = createBoard2Dto;
 
@@ -202,7 +198,6 @@ export class Board2Service {
           meso,
           report_kind,
           title,
-          request_nickname,
           place_theif_nickname,
           discord_id: user.discord_id,
           discord_username: user.username,

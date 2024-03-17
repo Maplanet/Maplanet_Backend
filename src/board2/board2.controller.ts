@@ -44,7 +44,6 @@ export class Board2Controller {
   @ApiQuery({ name: 'searchMeso', required: false, type: Number })
   @ApiQuery({ name: 'searchReportKind', required: false, type: String })
   @ApiQuery({ name: 'searchTitle', required: false, type: String })
-  @ApiQuery({ name: 'searchRequestNickname', required: false, type: String })
   @ApiQuery({ name: 'searchPlaceTheifNickname', required: false, type: String })
   @ApiQuery({ name: 'searchDiscordName', required: false, type: String })
   async board2SearchInfo(
@@ -52,7 +51,6 @@ export class Board2Controller {
     @Query('searchMeso') searchMeso: number,
     @Query('searchReportKind') searchReportKind: string,
     @Query('searchTitle') searchTitle: string,
-    @Query('searchRequestNickname') searchRequestNickname: string,
     @Query('searchPlaceTheifNickname') searchPlaceTheifNickname: string,
     @Query('searchDiscordName') searchDiscordName: string,
 
@@ -62,7 +60,6 @@ export class Board2Controller {
       searchMeso,
       searchReportKind,
       searchTitle,
-      searchRequestNickname,
       searchPlaceTheifNickname,
       searchDiscordName
       )
@@ -73,7 +70,7 @@ export class Board2Controller {
     summary: '겹사 게시글 등록',
     description: '겹사 의뢰를 올릴 유저가 게시글 등록하기',
   })
-  @ApiResponse({ status: 201, description: 'meso, report_kind, titl, request_nickname, place_theif_nickname 등록' })
+  @ApiResponse({ status: 201, description: 'meso, report_kind, title, place_theif_nickname 등록' })
   @UseGuards(AccessTokenGuard)
   @Post('/post')
   async postBoard2(@Body() createBoard2Dto: CreateBoard2Dto, @Req() req): Promise<any> {
