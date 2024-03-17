@@ -164,8 +164,8 @@ export class AuthService {
     res.redirect(HttpStatus.MOVED_PERMANENTLY, url);
   }
   async getRefreshTokenFromRedis(discordId: any): Promise<any | null> {
-    // const refreshtoken = await this.redisClient.get(discordId);
-    const refreshtoken = await this.DiscordRepository.find(discordId);
+    const refreshtoken = await this.redisClient.get(discordId);
+    // const refreshtoken = await this.DiscordRepository.find(discordId);
     // Redis에서 해당 Discord ID의 리프레쉬 토큰 조회
     console.log('getRefreshTokenFromRedis',refreshtoken)
     return refreshtoken;
