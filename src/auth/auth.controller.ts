@@ -73,16 +73,28 @@ export class AuthController {
 
   @Delete('logout')
   @UseGuards(AccessTokenGuard)
-  DeleteToken(@Req() req) {
+  async DeleteToken(@Req() req, @Res() res) {
     const { discord_id } = req.user;
-    this.authService.deleteRefreshToken(discord_id);
-  }
-
-  @Get('access')
-  //여기다가 가드를 어떤 가드를 써야하나
-  refreshaccessToken() {
-    //사용자 디스코드 아이디로 리프레쉬 토큰 조회
-    //디스코드 아이디는
-    return 1;
+    await this.authService.deleteRefreshToken(discord_id);
+    res
+      .clearCookie('Authorization', {
+        maxAge: 3600000,
+        path: '/',
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        // domain: '.maplanet-front.vercel.app',
+        domain: '.maplanet.store',
+      })
+      .clearCookie('userInfo', {
+        maxAge: 3600000,
+        path: '/',
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        // domain: '.maplanet-front.vercel.app',
+        domain: '.maplanet.store',
+      });
+    return '삭제완료';
   }
 }
