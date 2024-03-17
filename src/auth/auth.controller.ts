@@ -51,16 +51,20 @@ export class AuthController {
         // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
       })
-      .cookie('userInfo', `${userInfo.global_name},${userInfo.global_name}`, {
-        maxAge: 3600000,
-        path: '/',
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        // domain: '.maplanet-front.vercel.app',
-        domain: '.maplanet.store',
-      })
-      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
+      .cookie(
+        'userInfo',
+        `${userInfo.payload.global_name},${userInfo.payload.avatar}`,
+        {
+          maxAge: 3600000,
+          path: '/',
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+          // domain: '.maplanet-front.vercel.app',
+          domain: '.maplanet.store',
+        },
+      )
+      .redirect(HttpStatus.MOVED_PERMANENTLY, 'http://www.localhost:3000');
   }
 
   @Delete('logout')
