@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccessTokenGuard } from './guard/bearer-token.guard';
 import { ConfigService } from '@nestjs/config';
+import { url } from 'inspector';
 
 @Controller('auth')
 export class AuthController {
@@ -47,7 +48,7 @@ export class AuthController {
     console.log(userInfo);
     res
       .cookie('Authorization', `Bearer ${userInfo?.access_token}`, {
-        maxAge: this.configService.get<number>('cookieExpires'), // 쿠키의 만료 날짜를 7일 후로 설정
+        maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
         path: '/',
         httpOnly: true,
         sameSite: 'none',
@@ -59,7 +60,7 @@ export class AuthController {
         'userInfo',
         `${userInfo.payload.global_name},${userInfo.payload.avatar}`,
         {
-          maxAge: 3600000,
+          maxAge: 604800000,
           path: '/',
           httpOnly: true,
           sameSite: 'none',
@@ -78,7 +79,7 @@ export class AuthController {
     await this.authService.deleteRefreshToken(discord_id);
     res
       .clearCookie('Authorization', {
-        maxAge: 3600000,
+        maxAge: 604800000,
         path: '/',
         httpOnly: true,
         sameSite: 'none',
@@ -87,7 +88,7 @@ export class AuthController {
         domain: '.maplanet.store',
       })
       .clearCookie('userInfo', {
-        maxAge: 3600000,
+        maxAge: 604800000,
         path: '/',
         httpOnly: true,
         sameSite: 'none',
@@ -96,5 +97,11 @@ export class AuthController {
         domain: '.maplanet.store',
       });
     return '삭제완료';
+  }
+
+  @Get('test')
+  test(@Res() res) {
+    const url = 'https://www.maplanet.store/auth/discord';
+    this.authService.redirectDiscordUrl(res, url);
   }
 }
