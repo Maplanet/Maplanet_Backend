@@ -142,13 +142,9 @@ export class AuthService {
       const userInfo = this.jwtService.verify(token, {
         secret: this.configService.get<string>('JWT_SECRET_KEY'),
       });
-      console.log('userInfo', userInfo);
       return userInfo;
     } catch (e) {
       const userInfo = this.jwtService.decode(token);
-
-      // console.log(userInfo);
-      // Redis에서 리프레쉬 토큰 조회
       const refreshToken = await this.getRefreshTokenFromRedis(
         userInfo.discord_id,
       );
@@ -165,7 +161,6 @@ export class AuthService {
   async redirectDiscordUrl(res: Response, url: string): Promise<void> {
     res.redirect(url);
   }
-
   async getRefreshTokenFromRedis(discordId: string): Promise<string | null> {
     const refreshtoken = await this.redisClient.get(discordId);
     // Redis에서 해당 Discord ID의 리프레쉬 토큰 조회
