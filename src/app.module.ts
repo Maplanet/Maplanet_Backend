@@ -35,7 +35,7 @@ import { Party } from './party/entities/party.entity';
     RedisModule.forRoot({
       readyLog: true,
       config: {
-        // host: '127.0.0.1',
+        //host: '127.0.0.1',
         host: 'my-redis',
         port: 6379,
       },
