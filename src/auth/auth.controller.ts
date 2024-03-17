@@ -51,10 +51,15 @@ export class AuthController {
         // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
       })
-      .cookie(
-        'userInfo',
-        `${userInfo.discord_image},${userInfo.discord_global_name}`,
-      )
+      .cookie('userInfo', `${userInfo.global_name},${userInfo.global_name}`, {
+        maxAge: 3600000,
+        path: '/',
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        // domain: '.maplanet-front.vercel.app',
+        domain: '.maplanet.store',
+      })
       .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
   }
 
