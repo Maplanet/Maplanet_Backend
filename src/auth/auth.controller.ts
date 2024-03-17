@@ -2,6 +2,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   HttpStatus,
   Redirect,
   Req,
@@ -75,6 +76,7 @@ export class AuthController {
   @Delete('logout')
   @UseGuards(AccessTokenGuard)
   async DeleteToken(@Req() req, @Res() res) {
+    try{
     const { discord_id } = req.user;
     await this.authService.deleteRefreshToken(discord_id);
     res
@@ -86,6 +88,7 @@ export class AuthController {
         secure: true,
         // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
+        // domain: 'localhost:3000',
       })
       .clearCookie('userInfo', {
         maxAge: 604800000,
@@ -95,8 +98,21 @@ export class AuthController {
         secure: true,
         // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
+        // domain: 'localhost:3000',
       });
     return '삭제완료';
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '로그아웃 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
+    }
   }
 
   @Get('test')
