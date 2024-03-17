@@ -55,6 +55,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     data.refresh_token = refreshToken;
 
     const result = await this.authService.validateOAuth2(data);
+    console.log(result);
     return done(null, result);
   }
 }
