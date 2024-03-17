@@ -64,7 +64,7 @@ export class AuthController {
           domain: '.maplanet.store',
         },
       )
-      .redirect(HttpStatus.MOVED_PERMANENTLY, 'http://www.localhost:3000');
+      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
   }
 
   @Delete('logout')
