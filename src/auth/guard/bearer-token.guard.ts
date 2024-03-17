@@ -29,9 +29,11 @@ export class BearerTokenGuard implements CanActivate {
     const token = this.authService.extractTokenFormHeader(type, rawToken);
 
     //2. 토큰 검증
+    console.log(token);
     const result = await this.authService.verifyToken(token, res);
 
-    if (result?.newAccessToken) {
+    console.log(result);
+    if (result.newAccessToken) {
       req.token = result.newAccessToken;
       req.user = result.userInfo;
       res.cookie('Authorization', `Bearer ${result.newAccessToken}`, {
@@ -84,7 +86,4 @@ export class RefreshTokenGuard extends BearerTokenGuard {
 
     return true;
   }
-}
-function SetCookie(arg0: { name: string; value: any; maxAge: number }) {
-  throw new Error('Function not implemented.');
 }
