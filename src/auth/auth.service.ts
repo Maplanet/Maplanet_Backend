@@ -159,7 +159,7 @@ export class AuthService {
     }
   }
   async redirectDiscordUrl(res: Response, url: string): Promise<void> {
-    res.redirect(url);
+    res.redirect(HttpStatus.MOVED_PERMANENTLY, url);
   }
   async getRefreshTokenFromRedis(discordId: string): Promise<string | null> {
     const refreshtoken = await this.redisClient.get(discordId);

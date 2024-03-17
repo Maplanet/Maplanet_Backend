@@ -31,11 +31,17 @@ export class BearerTokenGuard implements CanActivate {
     //2. 토큰 검증
     const result = await this.authService.verifyToken(token, res);
 
-    if (result.newAccessToken) {
+    if (result?.newAccessToken) {
       req.token = result.newAccessToken;
       req.user = result.userInfo;
       res.cookie('Authorization', `Bearer ${result.newAccessToken}`, {
         maxAge: 3600000,
+        path: '/',
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        // domain: '.maplanet-front.vercel.app',
+        domain: '.maplanet.store',
       }); // maxAge는 밀리초 단위로 설정됩니다.
     } else {
       req.token = token;
