@@ -6,10 +6,16 @@ import { UsersModule } from 'src/users/users.module';
 import { Manner } from './entities/manner.entity';
 import { MannerController } from './manner.controller';
 import { MannerService } from './manner.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users, Manner]), UsersModule, AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([Users, Manner]),
+    UsersModule,
+    AuthModule,
+    HttpModule,
+  ],
   controllers: [MannerController],
-  providers: [MannerService]
+  providers: [MannerService],
 })
 export class MannerModule {}

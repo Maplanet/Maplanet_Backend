@@ -11,8 +11,8 @@ import { ConfigService } from '@nestjs/config';
 // change these to be your Discord client ID and secret
 const clientID = '1207737873063739452';
 const clientSecret = 'ZaxXr7J7d3P4W3-RmuZO7HYbLgdmpMCS';
-//const callbackURL = 'http://localhost:3000/auth/discord/callback';
-const callbackURL = 'https://maplanet.store/auth/discord/callback';
+const callbackURL = 'http://localhost:3000/auth/discord/callback';
+//const callbackURL = 'https://maplanet.store/auth/discord/callback';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
@@ -55,7 +55,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     data.refresh_token = refreshToken;
 
     const result = await this.authService.validateOAuth2(data);
-    console.log(result);
+    // console.log(result);
     return done(null, result);
   }
 }

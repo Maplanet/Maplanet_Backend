@@ -3,6 +3,7 @@ import {
   Inject,
   Injectable,
   UnauthorizedException,
+  HttpStatus,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/users.entity';
@@ -14,8 +15,11 @@ import { ConfigService } from '@nestjs/config';
 import { DiscdordDataType, ITokenpayload } from './type/updateOaut2.type';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import Redis from 'ioredis';
+import { Response } from 'express';
+
 @Injectable()
 export class AuthService {
+  httpService: any;
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
@@ -101,7 +105,8 @@ export class AuthService {
       },
       {
         secret: this.configService.get<string>('JWT_SECRET_KEY'),
-        expiresIn: this.configService.get<number>('ACCESS_TOKEN_EXPIRESTIME'),
+        //expiresIn: this.configService.get<number>('ACCESS_TOKEN_EXPIRESTIME'),
+        expiresIn: '30s',
       },
     );
   }
@@ -132,15 +137,39 @@ export class AuthService {
     return refresh_token;
   }
 
-  verifyToken(token: string) {
+  async verifyToken(token: string, res: Response) {
     try {
-      return this.jwtService.verify(token, {
+      const userInfo = this.jwtService.verify(token, {
         secret: this.configService.get<string>('JWT_SECRET_KEY'),
       });
+      console.log('userInfo', userInfo);
+      return userInfo;
     } catch (e) {
-      console.error(e);
-      throw new UnauthorizedException('토큰이 만료됐거나 잘못된 토큰입니다.');
+      const userInfo = this.jwtService.decode(token);
+
+      // console.log(userInfo);
+      // Redis에서 리프레쉬 토큰 조회
+      const refreshToken = await this.getRefreshTokenFromRedis(
+        userInfo.discord_id,
+      );
+      if (refreshToken) {
+        // 리프레쉬 토큰이 존재하면 액세스 토큰을 재발급하고 API 요청 처리
+        const newAccessToken = this.getAccessToken(userInfo);
+        return { userInfo, newAccessToken };
+      } else {
+        //리프레쉬 토큰이 없으면 사용자를 디스코르 로그인 라우터로 리다이렉트
+        this.redirectDiscordUrl(res, 'https://www.maplanet.store/');
+      }
     }
+  }
+  async redirectDiscordUrl(res: Response, url: string): Promise<void> {
+    res.redirect(url);
+  }
+
+  async getRefreshTokenFromRedis(discordId: string): Promise<string | null> {
+    const refreshtoken = await this.redisClient.get(discordId);
+    // Redis에서 해당 Discord ID의 리프레쉬 토큰 조회
+    return refreshtoken;
   }
 
   extractTokenFormHeader(type: string, rawToken: string) {
@@ -171,14 +200,5 @@ export class AuthService {
   }
   async deleteRefreshToken(discord_id) {
     await this.redisClient.del(discord_id);
-  }
-
-  async getRefreshToken(discord_id) {
-    const existRefreshToken = await this.redisClient.get(discord_id);
-    console.log(existRefreshToken);
-
-    if (!existRefreshToken) {
-      throw new BadRequestException('리프레쉬토큰이 존재하지 않습니다');
-    }
   }
 }

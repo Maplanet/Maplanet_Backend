@@ -77,4 +77,12 @@ export class AuthController {
     const { discord_id } = req.user;
     this.authService.deleteRefreshToken(discord_id);
   }
+
+  @Get('access')
+  //여기다가 가드를 어떤 가드를 써야하나
+  refreshaccessToken() {
+    //사용자 디스코드 아이디로 리프레쉬 토큰 조회
+    //디스코드 아이디는
+    return 1;
+  }
 }

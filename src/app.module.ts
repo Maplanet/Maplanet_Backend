@@ -25,9 +25,11 @@ import { Board2 } from './board2/entities/board2.entity';
 import { Notice } from './notice/entities/notice.entity';
 import { WoodCutter } from './woodcutter/entities/woodcutter.entity';
 import { Party } from './party/entities/party.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
@@ -35,8 +37,8 @@ import { Party } from './party/entities/party.entity';
     RedisModule.forRoot({
       readyLog: true,
       config: {
-        host: '127.0.0.1',
-        //host: 'my-redis',
+        //host: '127.0.0.1',
+        host: 'my-redis',
         port: 6379,
       },
     }),
@@ -49,6 +51,7 @@ import { Party } from './party/entities/party.entity';
     Board2Module,
     UsersModule,
     ReportModule,
+
     AdministratorModule,
     NoticeModule,
     AuthModule,

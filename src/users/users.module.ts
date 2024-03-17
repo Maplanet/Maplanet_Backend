@@ -8,9 +8,14 @@ import { Board2 } from 'src/board2/entities/board2.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { WoodCutter } from 'src/woodcutter/entities/woodcutter.entity';
 import { Party } from 'src/party/entities/party.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users, Board, Board2, WoodCutter, Party]), forwardRef(() => AuthModule)],
+  imports: [
+    TypeOrmModule.forFeature([Users, Board, Board2, WoodCutter, Party]),
+    forwardRef(() => AuthModule),
+    HttpModule,
+  ],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],
