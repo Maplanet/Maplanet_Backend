@@ -29,10 +29,10 @@ export class BearerTokenGuard implements CanActivate {
     const token = this.authService.extractTokenFormHeader(type, rawToken);
 
     //2. 토큰 검증
-    console.log(token);
+    // console.log('tokentoken',token);
     const result = await this.authService.verifyToken(token, res);
 
-    console.log(result);
+    // console.log("resultresult",result);
     if (result.newAccessToken) {
       req.token = result.newAccessToken;
       req.user = result.userInfo;
