@@ -11,10 +11,14 @@ import {
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccessTokenGuard } from './guard/bearer-token.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
@@ -43,7 +47,7 @@ export class AuthController {
     console.log(userInfo);
     res
       .cookie('Authorization', `Bearer ${userInfo?.access_token}`, {
-        maxAge: 3600000,
+        maxAge: this.configService.get<number>('cookieExpires'), // 쿠키의 만료 날짜를 7일 후로 설정
         path: '/',
         httpOnly: true,
         sameSite: 'none',
@@ -72,5 +76,13 @@ export class AuthController {
   DeleteToken(@Req() req) {
     const { discord_id } = req.user;
     this.authService.deleteRefreshToken(discord_id);
+  }
+
+  @Get('access')
+  //여기다가 가드를 어떤 가드를 써야하나
+  refreshaccessToken() {
+    //사용자 디스코드 아이디로 리프레쉬 토큰 조회
+    //디스코드 아이디는
+    return 1;
   }
 }

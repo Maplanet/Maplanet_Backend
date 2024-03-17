@@ -6,9 +6,15 @@ import { UsersModule } from 'src/users/users.module';
 import { Board2 } from './entities/board2.entity';
 import { Users } from 'src/users/entities/users.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Board2, Users]),UsersModule, AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([Board2, Users]),
+    UsersModule,
+    AuthModule,
+    HttpModule,
+  ],
   controllers: [Board2Controller],
   providers: [Board2Service],
 })

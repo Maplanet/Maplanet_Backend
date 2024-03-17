@@ -7,41 +7,40 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { UsersService } from 'src/users/users.service';
+import { HttpService } from '@nestjs/axios';
 @Injectable()
 export class BearerTokenGuard implements CanActivate {
   constructor(
     private readonly authService: AuthService,
     private readonly usersServcie: UsersService,
+    private readonly httpService: HttpService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
+    const res = context.switchToHttp().getResponse();
 
     const Bearertoken1 = req.cookies['Authorization'];
     const Bearertoken2 = req.cookies['authorization'];
     const Bearertoken3 = req.headers['authorization'];
-    //const rawToken = req.headers['authorization'];
 
-    console.log(Bearertoken1, Bearertoken2, Bearertoken3);
-
+    //1. 토큰 입력
     const [type, rawToken] = Bearertoken3.split(' ') ?? Bearertoken2.split(' ');
-
-    //const user = await this.usersServcie.getUserByEmail(result.email);
-    //토큰은 없는데 유저정보는 있을때
-    //토큰도 없고 가입한 유저정보도 없을때
-    if (!rawToken) {
-      throw new UnauthorizedException('토큰이 없습니다');
-    }
 
     const token = this.authService.extractTokenFormHeader(type, rawToken);
 
-    const result = await this.authService.verifyToken(token);
+    //2. 토큰 검증
+    const result = await this.authService.verifyToken(token, res);
 
-    //const user = await this.usersServcie.getUserByEmail(result.email);
-
-    //req.user = user;
-    req.token = token;
-    req.user = result;
-    //req.tokenType = result.Type;
+    if (result.newAccessToken) {
+      req.token = result.newAccessToken;
+      req.user = result.userInfo;
+      res.cookie('Authorization', `Bearer ${result.newAccessToken}`, {
+        maxAge: 3600000,
+      }); // maxAge는 밀리초 단위로 설정됩니다.
+    } else {
+      req.token = token;
+      req.user = result;
+    }
 
     return true;
   }
@@ -79,4 +78,7 @@ export class RefreshTokenGuard extends BearerTokenGuard {
 
     return true;
   }
+}
+function SetCookie(arg0: { name: string; value: any; maxAge: number }) {
+  throw new Error('Function not implemented.');
 }
