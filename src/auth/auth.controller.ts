@@ -11,10 +11,14 @@ import {
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccessTokenGuard } from './guard/bearer-token.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
@@ -43,7 +47,7 @@ export class AuthController {
     console.log(userInfo);
     res
       .cookie('Authorization', `Bearer ${userInfo?.access_token}`, {
-        maxAge: 3600000,
+        maxAge: this.configService.get<number>('cookieExpires'), // 쿠키의 만료 날짜를 7일 후로 설정
         path: '/',
         httpOnly: true,
         sameSite: 'none',

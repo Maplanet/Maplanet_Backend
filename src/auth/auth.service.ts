@@ -124,8 +124,11 @@ export class AuthService {
         expiresIn: this.configService.get<number>('REFRESH_TOKEN_EXPIRESTIME'),
       },
     );
-    await this.redisClient.setex(discord_id, 1209600, refresh_token);
-    await this.redisClient.get(String(discord_id));
+    await this.redisClient.setex(
+      discord_id,
+      this.configService.get<number>('REFRESH_TOKEN_EXPIRESTIME'),
+      refresh_token,
+    );
     return refresh_token;
   }
 
@@ -140,7 +143,7 @@ export class AuthService {
     }
   }
 
-  extractTokenFormHeader(type, rawToken: string) {
+  extractTokenFormHeader(type: string, rawToken: string) {
     if (type !== 'Bearer' || !rawToken) {
       throw new UnauthorizedException('wrong token');
     }
@@ -161,7 +164,7 @@ export class AuthService {
     return data;
   }
 
-  private findOAuth2(discord_id) {
+  private findOAuth2(discord_id: string) {
     return this.DiscordRepository.findOne({
       where: { discord_id: discord_id },
     });

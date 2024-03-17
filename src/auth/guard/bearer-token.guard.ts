@@ -24,10 +24,6 @@ export class BearerTokenGuard implements CanActivate {
     console.log(Bearertoken1, Bearertoken2, Bearertoken3);
 
     const [type, rawToken] = Bearertoken3.split(' ') ?? Bearertoken2.split(' ');
-
-    //const user = await this.usersServcie.getUserByEmail(result.email);
-    //토큰은 없는데 유저정보는 있을때
-    //토큰도 없고 가입한 유저정보도 없을때
     if (!rawToken) {
       throw new UnauthorizedException('토큰이 없습니다');
     }
