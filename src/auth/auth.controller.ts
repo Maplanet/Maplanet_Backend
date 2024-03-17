@@ -32,7 +32,7 @@ export class AuthController {
     @Req() req,
     @Res({ passthrough: true }) res,
   ): Promise<void> {
-    const access_token = req.user;
+    const userInfo = req.user;
 
     // res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
     //   maxAge: 3600000,
@@ -40,8 +40,9 @@ export class AuthController {
     //   path: '/',
     //   sameSite: 'none', // cross-site에서도 전송
     // });
+    console.log(userInfo);
     res
-      .cookie('Authorization', `Bearer ${access_token?.access_token}`, {
+      .cookie('Authorization', `Bearer ${userInfo?.access_token}`, {
         maxAge: 3600000,
         path: '/',
         httpOnly: true,
@@ -50,12 +51,11 @@ export class AuthController {
         // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
       })
-      .redirect(
-        HttpStatus.MOVED_PERMANENTLY,
-        'https://www.maplanet.store/',
-        // 'http://localhost:3000'
-      );
-    //res.redirect('http://13.209.210.215:3000/main');
+      .cookie(
+        'userInfo',
+        `${userInfo.discord_image},${userInfo.discord_global_name}`,
+      )
+      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
   }
 
   @Delete('logout')
