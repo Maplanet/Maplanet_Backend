@@ -106,7 +106,7 @@ export class AuthService {
       {
         secret: this.configService.get<string>('JWT_SECRET_KEY'),
         //expiresIn: this.configService.get<number>('ACCESS_TOKEN_EXPIRESTIME'),
-        expiresIn: '30s',
+        expiresIn: '2m',
       },
     );
   }
