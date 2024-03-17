@@ -148,9 +148,11 @@ export class AuthService {
       const refreshToken = await this.getRefreshTokenFromRedis(
         userInfo.discord_id,
       );
+      console.log('refreshTokenrefreshToken', userInfo.discord_id,)
       if (refreshToken) {
         // 리프레쉬 토큰이 존재하면 액세스 토큰을 재발급하고 API 요청 처리
         const newAccessToken = this.getAccessToken(userInfo);
+        console.log('newAccessToken',newAccessToken)
         return { userInfo, newAccessToken };
       } else {
         //리프레쉬 토큰이 없으면 사용자를 디스코르 로그인 라우터로 리다이렉트
@@ -161,9 +163,11 @@ export class AuthService {
   async redirectDiscordUrl(res: Response, url: string): Promise<void> {
     res.redirect(HttpStatus.MOVED_PERMANENTLY, url);
   }
-  async getRefreshTokenFromRedis(discordId: string): Promise<string | null> {
-    const refreshtoken = await this.redisClient.get(discordId);
+  async getRefreshTokenFromRedis(discordId: any): Promise<any | null> {
+    // const refreshtoken = await this.redisClient.get(discordId);
+    const refreshtoken = await this.DiscordRepository.find(discordId);
     // Redis에서 해당 Discord ID의 리프레쉬 토큰 조회
+    console.log('getRefreshTokenFromRedis',refreshtoken)
     return refreshtoken;
   }
 
