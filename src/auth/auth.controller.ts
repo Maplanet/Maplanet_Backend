@@ -81,7 +81,7 @@ export class AuthController {
     await this.authService.deleteRefreshToken(discord_id);
     res
       .clearCookie('Authorization', {
-        maxAge: 604800000,
+        maxAge: 0,
         path: '/',
         httpOnly: true,
         sameSite: 'none',
@@ -91,7 +91,7 @@ export class AuthController {
         // domain: 'localhost:3000',
       })
       .clearCookie('userInfo', {
-        maxAge: 604800000,
+        maxAge: 0,
         path: '/',
         httpOnly: true,
         sameSite: 'none',
