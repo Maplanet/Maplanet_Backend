@@ -84,21 +84,19 @@ export class AuthController {
         maxAge: 604800000,
         path: '/',
         httpOnly: true,
+        sameSite: 'none',
         secure: true,
-        // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
-        // domain: 'localhost:3000',
       })
       .clearCookie('userInfo', {
         maxAge: 604800000,
         path: '/',
         httpOnly: true,
+        sameSite: 'none',
         secure: true,
-        // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
-        // domain: 'localhost:3000',
-      });
-    return '삭제완료';
+      })
+      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
   }
 
   @Get('test')
