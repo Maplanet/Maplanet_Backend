@@ -4,6 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
   HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/users.entity';
@@ -148,11 +149,11 @@ export class AuthService {
       const refreshToken = await this.getRefreshTokenFromRedis(
         userInfo.discord_id,
       );
-      console.log('refreshTokenrefreshToken', userInfo.discord_id,)
+      console.log('refreshTokenrefreshToken', userInfo.discord_id);
       if (refreshToken) {
         // 리프레쉬 토큰이 존재하면 액세스 토큰을 재발급하고 API 요청 처리
         const newAccessToken = this.getAccessToken(userInfo);
-        console.log('newAccessToken',newAccessToken)
+        console.log('newAccessToken', newAccessToken);
         return { userInfo, newAccessToken };
       } else {
         //리프레쉬 토큰이 없으면 사용자를 디스코르 로그인 라우터로 리다이렉트
@@ -167,7 +168,7 @@ export class AuthService {
     const refreshtoken = await this.redisClient.get(discordId);
     // const refreshtoken = await this.DiscordRepository.find(discordId);
     // Redis에서 해당 Discord ID의 리프레쉬 토큰 조회
-    console.log('getRefreshTokenFromRedis',refreshtoken)
+    console.log('getRefreshTokenFromRedis', refreshtoken);
     return refreshtoken;
   }
 
@@ -198,6 +199,23 @@ export class AuthService {
     });
   }
   async deleteRefreshToken(discord_id) {
-    await this.redisClient.del(discord_id);
+    try {
+      const result: number = await this.redisClient.del(discord_id);
+      if (!result) {
+        throw new BadRequestException('리프레쉬토큰 존재 x');
+      }
+      return result;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: 400,
+          error: {
+            message: '로그아웃 에러',
+            detail: error.message,
+          },
+        },
+        400,
+      );
+    }
   }
 }
