@@ -79,27 +79,26 @@ export class AuthController {
     try{
     const { discord_id } = req.user;
     await this.authService.deleteRefreshToken(discord_id);
-    res
-      .clearCookie('Authorization', {
-        maxAge: 0,
-        path: '/',
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        // domain: '.maplanet-front.vercel.app',
-        domain: '.maplanet.store',
-        // domain: 'localhost:3000',
-      })
-      .clearCookie('userInfo', {
-        maxAge: 0,
-        path: '/',
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        // domain: '.maplanet-front.vercel.app',
-        domain: '.maplanet.store',
-        // domain: 'localhost:3000',
-      });
+    res.cookie('Authorization', {
+      maxAge: 0,
+      path: '/',
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      // domain: '.maplanet-front.vercel.app',
+      domain: '.maplanet.store',
+      // domain: 'localhost:3000',
+    })
+    res.cookie('userInfo', {
+      maxAge: 0,
+      path: '/',
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      // domain: '.maplanet-front.vercel.app',
+      domain: '.maplanet.store',
+      // domain: 'localhost:3000',
+    });
     return '삭제완료';
     } catch (error) {
       throw new HttpException(
