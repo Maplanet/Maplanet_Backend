@@ -13,7 +13,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccessTokenGuard } from './guard/bearer-token.guard';
 import { ConfigService } from '@nestjs/config';
-import { url } from 'inspector';
+import { send } from 'process';
 
 @Controller('auth')
 export class AuthController {
@@ -75,41 +75,30 @@ export class AuthController {
 
   @Delete('logout')
   @UseGuards(AccessTokenGuard)
-  async DeleteToken(@Req() req, @Res() res) {
-    try{
+  async DeleteToken(@Req() req, @Res({ passthrough: true }) res) {
     const { discord_id } = req.user;
-    await this.authService.deleteRefreshToken(discord_id);
-    res.cookie('Authorization', {
-      maxAge: 0,
-      path: '/',
-      httpOnly: true,
-      secure: true,
-      // domain: '.maplanet-front.vercel.app',
-      domain: '.maplanet.store',
-      // domain: 'localhost:3000',
-    })
-    res.cookie('userInfo', {
-      maxAge: 0,
-      path: '/',
-      httpOnly: true,
-      secure: true,
-      // domain: '.maplanet-front.vercel.app',
-      domain: '.maplanet.store',
-      // domain: 'localhost:3000',
-    });
+    const a = await this.authService.deleteRefreshToken(discord_id);
+    console.log('여기 반환결과', a);
+    res
+      .clearCookie('Authorization', {
+        maxAge: 604800000,
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        // domain: '.maplanet-front.vercel.app',
+        domain: '.maplanet.store',
+        // domain: 'localhost:3000',
+      })
+      .clearCookie('userInfo', {
+        maxAge: 604800000,
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        // domain: '.maplanet-front.vercel.app',
+        domain: '.maplanet.store',
+        // domain: 'localhost:3000',
+      });
     return '삭제완료';
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: 400,
-          error: {
-            message: '로그아웃 에러',
-            detail: error.message,
-          },
-        },
-        400,
-      );
-    }
   }
 
   @Get('test')
