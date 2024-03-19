@@ -74,24 +74,26 @@ export class AuthController {
     console.log('userInfo.access_token', access_token);
     console.log('userInfo.payload.global_name', userInfo.global_name);
     console.log('userInfo.payload.avatar', userInfo.avatar);
+    // res
+    //   .setHeader('Authorization', `Bearer ${access_token}`, {
+    //     maxAge: 0, // 쿠키의 만료 날짜를 7일 후로 설정
+    //     path: '/',
+    //     httpOnly: true,
+    //     sameSite: 'strict',
+    //     secure: false,
+    //     domain: '.maplanet.store',
+    //   })
     res
-      .clearCookie('Authorization', `Bearer ${access_token}`, {
-        maxAge: 0, // 쿠키의 만료 날짜를 7일 후로 설정
-        path: '/',
-        httpOnly: true,
-        sameSite: 'strict',
-        secure: false,
-        domain: '.maplanet.store',
-      })
-      .clearCookie('userInfo', `${userInfo.global_name},${userInfo.avatar}`, {
-        maxAge: 0, // 쿠키의 만료 날짜를 7일 후로 설정
-        path: '/',
-        httpOnly: true,
-        sameSite: 'strict',
-        secure: false,
-        domain: '.maplanet.store',
-      });
-    res.send('로그아웃 성공');
+      .setHeader(
+        'Set-Cookie',
+        `Authorization=Bearer ${access_token}; Max-Age=0; Path=/; HttpOnly; SameSite=Strict; Domain=.maplanet.store`,
+      )
+      .setHeader(
+        'Set-Cookie',
+        `userInfo=${userInfo.global_name},${userInfo.avatar};
+        Max-Age=0; Path=/; HttpOnly; SameSite=Strict; Domain=.maplanet.store`,
+      )
+      .send('로그아웃 성공');
     //.redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
 
     console.log(2);
