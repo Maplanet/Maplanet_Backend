@@ -23,12 +23,10 @@ export class BearerTokenGuard implements CanActivate {
     const Bearertoken2 = req.cookies['authorization'];
     const Bearertoken3 = req.headers['authorization'];
 
-    //1. 토큰 입력
     const [type, rawToken] = Bearertoken3.split(' ') ?? Bearertoken2.split(' ');
 
     const token = this.authService.extractTokenFormHeader(type, rawToken);
 
-    //2. 토큰 검증
     const result = await this.authService.verifyToken(token, res);
 
     if (result.newAccessToken) {

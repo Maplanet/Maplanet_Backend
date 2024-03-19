@@ -90,10 +90,6 @@ export class AuthService {
     const { discord_id, user_id, username, global_name, avatar, email } = data;
     const tokentype: string = 'access';
 
-    // if (accessTokenType !== 'access') {
-    //   throw new UnauthorizedException('유효하지 않은 액세스 토큰');
-    // }
-
     return this.jwtService.sign(
       {
         discord_id,
@@ -106,8 +102,7 @@ export class AuthService {
       },
       {
         secret: this.configService.get<string>('JWT_SECRET_KEY'),
-        //expiresIn: this.configService.get<number>('ACCESS_TOKEN_EXPIRESTIME'),
-        expiresIn: '2m',
+        expiresIn: this.configService.get<number>('ACCESS_TOKEN_EXPIRESTIME'),
       },
     );
   }
