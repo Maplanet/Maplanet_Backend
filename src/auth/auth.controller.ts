@@ -52,7 +52,7 @@ export class AuthController {
       })
       .cookie(
         'userInfo',
-        `${userInfo.payload.global_name},${userInfo.payload.avatar}`,
+        `${userInfo.payload.global_name},${userInfo.payload.avatar},${userInfo.payload.user_id}`,
         {
           maxAge: 604800000,
           path: '/',
