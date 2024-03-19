@@ -45,9 +45,9 @@ export class AuthController {
         maxAge: 604800000,
         path: '/',
         httpOnly: true,
-        sameSite: 'strict',
-        secure: false,
-        domain: '.maplanet.store',
+        sameSite: 'none',
+        secure: true,
+        domain: 'maplanet.store',
       })
       .cookie(
         'userInfo',
@@ -56,9 +56,9 @@ export class AuthController {
           maxAge: 604800000,
           path: '/',
           httpOnly: true,
-          sameSite: 'strict',
-          secure: false,
-          domain: '.maplanet.store',
+          sameSite: 'none',
+          secure: true,
+          domain: 'maplanet.store',
         },
       )
       .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
@@ -66,37 +66,29 @@ export class AuthController {
 
   @Delete('logout')
   @UseGuards(AccessTokenGuard)
-  async DeleteToken(@Req() req, @Res() res) {
+  async DeleteToken(@Req() req, @Res({ passthrough: true }) res) {
     const userInfo = req.user;
-    const access_token = req.token;
+    const access_token: string = req.token;
     await this.authService.deleteRefreshToken(userInfo.discord_id);
-    console.log('userInfo', userInfo);
-    console.log('userInfo.access_token', access_token);
-    console.log('userInfo.payload.global_name', userInfo.global_name);
-    console.log('userInfo.payload.avatar', userInfo.avatar);
-    // res
-    //   .setHeader('Authorization', `Bearer ${access_token}`, {
-    //     maxAge: 0, // 쿠키의 만료 날짜를 7일 후로 설정
-    //     path: '/',
-    //     httpOnly: true,
-    //     sameSite: 'strict',
-    //     secure: false,
-    //     domain: '.maplanet.store',
-    //   })
-    res
-      .setHeader(
-        'Set-Cookie',
-        `Authorization=Bearer ${access_token}; Max-Age=0; Path=/; HttpOnly; SameSite=Strict; Domain=.maplanet.store`,
-      )
-      .setHeader(
-        'Set-Cookie',
-        `userInfo=${userInfo.global_name},${userInfo.avatar};
-        Max-Age=0; Path=/; HttpOnly; SameSite=Strict; Domain=.maplanet.store`,
-      )
-      .send('로그아웃 성공');
-    //.redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
 
-    console.log(2);
+    res
+      .clearCookie('Authorization', {
+        maxAge: 0,
+        path: '/',
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        domain: 'maplanet.store',
+      })
+      .clearCookie('userInfo', {
+        maxAge: 0,
+        path: '/',
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        domain: 'maplanet.store',
+      })
+      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
   }
 
   @Get('test')
