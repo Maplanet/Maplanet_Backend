@@ -66,7 +66,7 @@ export class AuthController {
 
   @Delete('logout')
   @UseGuards(AccessTokenGuard)
-  async DeleteToken(@Req() req, @Res({ passthrough: true }) res) {
+  async DeleteToken(@Req() req, @Res() res) {
     const userInfo = req.user;
     const access_token = req.token;
     await this.authService.deleteRefreshToken(userInfo.discord_id);
@@ -90,11 +90,11 @@ export class AuthController {
         sameSite: 'strict',
         secure: false,
         domain: '.maplanet.store',
-      })
-      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
+      });
+    res.send('로그아웃 성공');
+    //.redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
 
     console.log(2);
-    //res.send('로그아웃 성공');
   }
 
   @Get('test')
