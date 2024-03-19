@@ -76,7 +76,7 @@ export class AuthController {
     console.log('userInfo.payload.avatar', userInfo.avatar);
     res
       .clearCookie('Authorization', `Bearer ${access_token}`, {
-        maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
+        maxAge: 0, // 쿠키의 만료 날짜를 7일 후로 설정
         path: '/',
         httpOnly: true,
         sameSite: 'strict',
@@ -84,7 +84,7 @@ export class AuthController {
         domain: '.maplanet.store',
       })
       .clearCookie('userInfo', `${userInfo.global_name},${userInfo.avatar}`, {
-        maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
+        maxAge: 0, // 쿠키의 만료 날짜를 7일 후로 설정
         path: '/',
         httpOnly: true,
         sameSite: 'strict',
