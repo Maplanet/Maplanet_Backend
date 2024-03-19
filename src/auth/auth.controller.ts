@@ -39,34 +39,25 @@ export class AuthController {
     @Res({ passthrough: true }) res,
   ): Promise<void> {
     const userInfo = req.user;
-
-    // res.cookie('Authorization', `Bearer ${access_token?.access_token}`, {
-    //   maxAge: 3600000,
-    //   domain: 'maplanet.store',
-    //   path: '/',
-    //   sameSite: 'none', // cross-site에서도 전송
-    // });
     console.log(userInfo);
     res
       .cookie('Authorization', `Bearer ${userInfo?.access_token}`, {
-        maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
+        maxAge: 604800000,
         path: '/',
         httpOnly: true,
         sameSite: 'none',
         secure: true,
-        // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
       })
       .cookie(
         'userInfo',
         `${userInfo.payload.global_name},${userInfo.payload.avatar}`,
         {
-          maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
+          maxAge: 604800000,
           path: '/',
           httpOnly: true,
           sameSite: 'none',
           secure: true,
-          // domain: '.maplanet-front.vercel.app',
           domain: '.maplanet.store',
         },
       )
@@ -98,10 +89,11 @@ export class AuthController {
         // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
       })
-      .redirect(
-        HttpStatus.MOVED_PERMANENTLY,
-        'https://www.maplanet.store/helper-board',
-      );
+      .send('로그아웃 성공');
+    // .redirect(
+    //   HttpStatus.MOVED_PERMANENTLY,
+    //   'https://www.maplanet.store/helper-board',
+    // );
   }
 
   @Get('test')
