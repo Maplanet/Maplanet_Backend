@@ -67,11 +67,11 @@ export class AuthController {
   @Delete('logout')
   @UseGuards(AccessTokenGuard)
   async DeleteToken(@Req() req, @Res({ passthrough: true }) res) {
-    const { discord_id } = req.user;
-    const a = await this.authService.deleteRefreshToken(discord_id);
+    const userInfo = req.user;
+    const a = await this.authService.deleteRefreshToken(userInfo.discord_id);
     console.log('여기 반환결과', a);
     res
-      .clearCookie('Authorization', {
+      .clearCookie('Authorization', `Bearer ${userInfo?.access_token}`, {
         maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
         path: '/',
         httpOnly: true,
@@ -80,15 +80,19 @@ export class AuthController {
         // domain: '.maplanet-front.vercel.app',
         domain: '.maplanet.store',
       })
-      .clearCookie('userInfo', {
-        maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
-        path: '/',
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        // domain: '.maplanet-front.vercel.app',
-        domain: '.maplanet.store',
-      })
+      .clearCookie(
+        'userInfo',
+        `${userInfo.payload.global_name},${userInfo.payload.avatar}`,
+        {
+          maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
+          path: '/',
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+          // domain: '.maplanet-front.vercel.app',
+          domain: '.maplanet.store',
+        },
+      )
       .send('로그아웃 성공');
     // .redirect(
     //   HttpStatus.MOVED_PERMANENTLY,
