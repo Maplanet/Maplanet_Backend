@@ -8,7 +8,7 @@ import { VerifyCallback } from 'jsonwebtoken';
 
 const clientID = '1207737873063739452';
 const clientSecret = 'ZaxXr7J7d3P4W3-RmuZO7HYbLgdmpMCS';
-const callbackURL = 'https://maplelandpp.com/auth/discord/callback';
+const callbackURL = 'https://maplanet.store/auth/discord/callback';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {

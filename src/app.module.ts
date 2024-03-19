@@ -32,12 +32,16 @@ import { HttpModule } from '@nestjs/axios';
     HttpModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+
+      envFilePath:
+        process.env.NODE_ENV === 'production'
+          ? '.env.production'
+          : '.env.development',
     }),
     RedisModule.forRoot({
       readyLog: true,
       config: {
-        // host: '127.0.0.1',
+        //host: '127.0.0.1',
         host: 'my-redis',
         port: 6379,
       },
