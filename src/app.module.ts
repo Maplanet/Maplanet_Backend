@@ -33,10 +33,7 @@ import { HttpModule } from '@nestjs/axios';
     ConfigModule.forRoot({
       isGlobal: true,
       // cache: true,
-      envFilePath:
-        process.env.NODE_ENV == 'development'
-          ? '.env.development'
-          : '.env.production',
+      envFilePath: '.env.development',
     }),
     RedisModule.forRoot({
       readyLog: true,
