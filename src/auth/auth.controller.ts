@@ -72,24 +72,26 @@ export class AuthController {
     const access_token: string = req.token;
     await this.authService.deleteRefreshToken(userInfo.discord_id);
 
-    res
-      .clearCookie('Authorization', {
-        maxAge: 0,
-        path: '/',
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        domain: 'maplanet.store',
-      })
-      .clearCookie('userInfo', {
-        maxAge: 0,
-        path: '/',
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        domain: 'maplanet.store',
-      });
-    // .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
+    //   res
+    //     .clearCookie('Authorization', {
+    //       maxAge: 0,
+    //       path: '/',
+    //       httpOnly: true,
+    //       sameSite: 'none',
+    //       secure: true,
+    //       domain: 'maplanet.store',
+    //     })
+    //     .clearCookie('userInfo', {
+    //       maxAge: 0,
+    //       path: '/',
+    //       httpOnly: true,
+    //       sameSite: 'none',
+    //       secure: true,
+    //       domain: 'maplanet.store',
+    //     })
+    //   // .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
+    // }
+    return { msg: '삭제완료' };
   }
 
   @Get('test')

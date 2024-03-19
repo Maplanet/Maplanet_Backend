@@ -157,12 +157,12 @@ export class AuthService {
         return { userInfo, newAccessToken };
       } else {
         //리프레쉬 토큰이 없으면 사용자를 디스코르 로그인 라우터로 리다이렉트
-        this.redirectDiscordUrl(res, 'https://www.maplanet.store/');
+        return this.redirectDiscordUrl(res, 'https://www.maplanet.store/');
       }
     }
   }
   async redirectDiscordUrl(res: Response, url: string): Promise<void> {
-    res.redirect(HttpStatus.MOVED_PERMANENTLY, url);
+    return res.redirect(HttpStatus.MOVED_PERMANENTLY, url);
   }
   async getRefreshTokenFromRedis(discordId: any): Promise<any | null> {
     const refreshtoken = await this.redisClient.get(discordId);
