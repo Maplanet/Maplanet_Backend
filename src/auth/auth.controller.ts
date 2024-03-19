@@ -68,9 +68,8 @@ export class AuthController {
   @Post('logout')
   @UseGuards(AccessTokenGuard)
   async DeleteToken(@Req() req, @Res({ passthrough: true }) res) {
-    const userInfo = req.user;
-    const access_token: string = req.token;
-    await this.authService.deleteRefreshToken(userInfo.discord_id);
+    const { discord_id } = req.user;
+    await this.authService.deleteRefreshToken(discord_id);
 
     //   res
     //     .clearCookie('Authorization', {
@@ -96,7 +95,7 @@ export class AuthController {
 
   @Get('test')
   test(@Res() res) {
-    const url = 'https://www.maplanet.store/auth/discord';
+    const url = 'https://www.maplelandpp.com/auth/discord';
     this.authService.redirectDiscordUrl(res, url);
   }
 }
