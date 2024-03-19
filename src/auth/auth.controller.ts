@@ -88,8 +88,8 @@ export class AuthController {
         sameSite: 'none',
         secure: true,
         domain: 'maplanet.store',
-      })
-      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
+      });
+    // .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
   }
 
   @Get('test')
