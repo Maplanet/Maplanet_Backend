@@ -18,7 +18,8 @@ async function bootstrap() {
   //   tracesSampleRate: 0.2,
   //   // Set sampling rate for profiling - this is relative to tracesSampleRate
   //   profilesSampleRate: 1.0,
-  // });
+  // });\
+
   app.useGlobalInterceptors(new WebhookInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
