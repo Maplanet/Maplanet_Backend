@@ -4,6 +4,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Post,
   Redirect,
   Req,
   Res,
@@ -64,7 +65,7 @@ export class AuthController {
       .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
   }
 
-  @Delete('logout')
+  @Post('logout')
   @UseGuards(AccessTokenGuard)
   async DeleteToken(@Req() req, @Res({ passthrough: true }) res) {
     const userInfo = req.user;
