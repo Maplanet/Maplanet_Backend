@@ -65,18 +65,17 @@ export class AuthController {
   }
 
   @Delete('logout')
-  @UseGuards(AuthGuard('discord'))
-  // @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard)
   async DeleteToken(@Req() req, @Res({ passthrough: true }) res) {
     const userInfo = req.user;
-    // const access_token = req.token;
+    const access_token = req.token;
     await this.authService.deleteRefreshToken(userInfo.discord_id);
     console.log('userInfo', userInfo);
-    console.log('userInfo.access_token', userInfo?.access_token);
+    console.log('userInfo.access_token', access_token);
     console.log('userInfo.payload.global_name', userInfo.global_name);
     console.log('userInfo.payload.avatar', userInfo.avatar);
     res
-      .clearCookie('Authorization', `Bearer ${userInfo?.access_token}`, {
+      .clearCookie('Authorization', `Bearer ${access_token}`, {
         maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
         path: '/',
         httpOnly: true,
@@ -84,25 +83,18 @@ export class AuthController {
         secure: true,
         domain: '.maplanet.store',
       })
-      .clearCookie(
-        'userInfo',
-        `${userInfo.payload.global_name},${userInfo.payload.avatar}`,
-        {
-          maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
-          path: '/',
-          httpOnly: true,
-          sameSite: 'none',
-          secure: true,
-          domain: '.maplanet.store',
-        },
-      );
+      .clearCookie('userInfo', `${userInfo.global_name},${userInfo.avatar}`, {
+        maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
+        path: '/',
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        domain: '.maplanet.store',
+      })
+      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
 
     console.log(2);
-    res.send('로그아웃 성공');
-    // .redirect(
-    //   HttpStatus.MOVED_PERMANENTLY,
-    //   'https://www.maplanet.store/helper-board',
-    // );
+    //res.send('로그아웃 성공');
   }
 
   @Get('test')
