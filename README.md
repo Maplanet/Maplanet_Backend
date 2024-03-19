@@ -1,73 +1,55 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# ⚔MapleLandpEOpLE
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<!-- ![image](https://github.com/ParkBrianJunSoo/diediebackend/assets/125964794/d29a9699-a432-49e5-9efa-38e14fcad40d)
+<img width="1280" alt="image" src="https://github.com/ParkBrianJunSoo/diediebackend/assets/125964794/21700c63-9e5e-4c78-9d8f-9564d760f15f">
+<img width="1280" alt="image" src="https://github.com/ParkBrianJunSoo/diediebackend/assets/125964794/3b29f1f9-e4b8-4adf-9578-c0bc66743c0b">
+<img width="1280" alt="image" src="https://github.com/ParkBrianJunSoo/diediebackend/assets/125964794/6d415425-9bef-4f53-8db8-68556ec20d30"> -->
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+</br>
+</br>
 
-## Description
+## 🎯프로젝트 소개
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- 메이플랜드 쩔: 잠쩔, 심쩔 구인구직 서비스
+- 메이플랜드 겹사: 익명 뒤에 숨어서 남의 자리를 뺏는 유저들을 박제하고 제 3자에게 의뢰를 맡겨 **인기도 하락** 또는 **똑같이 따라다니면서 겹사**를 할 수 있는 서비스
+  </br>
+  </br>
 
-## Installation
+### ✨주요기능
 
-```bash
-$ yarn install
-```
+- 잠쩔, 심쩔 구인구직 게시글
+- 겹사, 인기도 하락 의뢰 게시글
+- 공지사항
+  </br>
+  </br>
 
-## Running the app
+## ⛏사용기술
 
-```bash
-# development
-$ yarn run start
+### B.E
 
-# watch mode
-$ yarn run start:dev
+<img src="https://img.shields.io/badge/nestjs-E0234E?style=for-the-badge&logo=mysql&logoColor=white">
+<img src="https://img.shields.io/badge/typeform-262627?style=for-the-badge&logo=mysql&logoColor=white">
+<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=mysql&logoColor=white">
+<img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
+<img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white">
+<img src="https://img.shields.io/badge/https-008000?style=for-the-badge&logo=https&logoColor=white">
+</br>
+</br>
 
-# production mode
-$ yarn run start:prod
-```
+## 👩‍⚕️팀원 소개
 
-## Test
+| 이름           | 주특기  | 깃허브 주소                     | 블로그주소                     |
+| :------------- | :------ | :------------------------------ | ------------------------------ |
+| 최혜민 D.E     | Design  |                                 |
+| 오황석 F.E     | React   | https://github.com/osh6006      |
+| 최현식 F.E     | React   | https://github.com/camac0808    |
+| 박준수 B.E (L) | Node.js | https://github.com/crystalation |
+| 김용식 B.E     | Node.js | https://github.com/ystar5008    | https://ystar5008.tistory.com/ |
 
-```bash
-# unit tests
-$ yarn run test
+</br>
+</br>
 
-# e2e tests
-$ yarn run test:e2e
+## ERD
 
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+![erd](https://github.com/Maplanet/Maplanet_Backend/assets/125964794/102ff39e-bbd5-4e5f-aecd-fa9142f511e2)
