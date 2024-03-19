@@ -45,8 +45,8 @@ export class AuthController {
         maxAge: 604800000,
         path: '/',
         httpOnly: true,
-        sameSite: 'none',
-        secure: true,
+        sameSite: 'strict',
+        secure: false,
         domain: '.maplanet.store',
       })
       .cookie(
@@ -56,8 +56,8 @@ export class AuthController {
           maxAge: 604800000,
           path: '/',
           httpOnly: true,
-          sameSite: 'none',
-          secure: true,
+          sameSite: 'strict',
+          secure: false,
           domain: '.maplanet.store',
         },
       )
@@ -79,16 +79,16 @@ export class AuthController {
         maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
         path: '/',
         httpOnly: true,
-        sameSite: 'none',
-        secure: true,
+        sameSite: 'strict',
+        secure: false,
         domain: '.maplanet.store',
       })
       .clearCookie('userInfo', `${userInfo.global_name},${userInfo.avatar}`, {
         maxAge: 604800000, // 쿠키의 만료 날짜를 7일 후로 설정
         path: '/',
         httpOnly: true,
-        sameSite: 'none',
-        secure: true,
+        sameSite: 'strict',
+        secure: false,
         domain: '.maplanet.store',
       })
       .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');

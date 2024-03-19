@@ -38,8 +38,8 @@ export class BearerTokenGuard implements CanActivate {
         maxAge: 604800000,
         path: '/',
         httpOnly: true,
-        sameSite: 'none',
-        secure: true,
+        sameSite: 'strict',
+        secure: false,
         domain: '.maplanet.store',
       });
     } else {
