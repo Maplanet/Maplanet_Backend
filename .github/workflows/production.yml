@@ -1,9 +1,6 @@
 name: Production CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -23,7 +20,7 @@ jobs:
 
       - name: Set ENV
         run: |
-          echo "${{ secrets.DOT_ENV_PRODUCTION }}" > .env.production
+          echo "${{ secrets.DOT_ENV_PRODUCTION }}" > .env.development
         shell: bash
       - name: Build Docker image
         run: |
@@ -50,4 +47,4 @@ jobs:
             docker stop maplanet-nest-app || true
             docker rm maplanet-nest-app || true
             docker rmi $(docker images -f "dangling=true" -q)
-            docker run -d --name maplanet-nest-app -p 3000:3000 parkbrianjunsoo/maplanet_repository:v2
+            docker run -d --name maplanet-nest-app -p 3000:3000 -e NODE_ENV=production --network maplanet-network parkbrianjunsoo/maplanet_repository:v1

@@ -5,31 +5,33 @@ import { AuthService } from './auth.service';
 import { Strategy, Verifycheck } from 'passport-oauth2';
 import { stringify } from 'querystring';
 import { VerifyCallback } from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 
-const clientID = '1207737873063739452';
-const clientSecret = 'ZaxXr7J7d3P4W3-RmuZO7HYbLgdmpMCS';
-const callbackURL = 'https://maplanet.store/auth/discord/callback';
+// const clientID = '1207737873063739452';
+// const clientSecret = 'ZaxXr7J7d3P4W3-RmuZO7HYbLgdmpMCS';
+// const callbackURL = 'https://maplanet.store/auth/discord/callback';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   constructor(
     private authService: AuthService,
     private http: HttpService,
+    private configService: ConfigService,
   ) {
     super({
       authorizationURL: `https://discordapp.com/api/oauth2/authorize?${stringify(
         {
-          client_id: clientID,
-          redirect_uri: callbackURL,
+          client_id: process.env.clientID,
+          redirect_uri: process.env.callbackURL,
           response_type: 'code',
           scope: 'identify email',
         },
       )}`,
       tokenURL: 'https://discordapp.com/api/oauth2/token',
       scope: 'identify email',
-      clientID,
-      clientSecret,
-      callbackURL,
+      clientID: process.env.clientID,
+      clientSecret: process.env.clientSecret,
+      callbackURL: process.env.callbackURL,
     });
   }
 

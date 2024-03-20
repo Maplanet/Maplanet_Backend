@@ -38,7 +38,7 @@ export class AppService {
   getHello(@Req() req, @Res() res): void {
     const apiKey = this.configservice.get<string>('SECRET_PASSPHRASE');
     const env = this.configservice.get<string>('NODE_ENV');
-    res.redirect('http://localhost:3000/main');
+    res.redirect('https://www.maplelandpp.com');
     //return '1';
   }
 

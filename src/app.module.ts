@@ -26,14 +26,18 @@ import { Notice } from './notice/entities/notice.entity';
 import { WoodCutter } from './woodcutter/entities/woodcutter.entity';
 import { Party } from './party/entities/party.entity';
 import { HttpModule } from '@nestjs/axios';
+import { DiscordStrategy } from './auth/discord.strategy';
 
 @Module({
   imports: [
     HttpModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      // cache: true,
-      envFilePath: '.env.development',
+      cache: true,
+      envFilePath:
+        process.env.NODE_ENV === 'production'
+          ? '.env.production'
+          : '.env.development',
     }),
     RedisModule.forRoot({
       readyLog: true,
@@ -52,7 +56,6 @@ import { HttpModule } from '@nestjs/axios';
     Board2Module,
     UsersModule,
     ReportModule,
-
     AdministratorModule,
     NoticeModule,
     AuthModule,
@@ -63,6 +66,6 @@ import { HttpModule } from '@nestjs/axios';
     TypeOrmModule.forFeature([Board, Board2, Notice, WoodCutter, Party]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, DiscordStrategy],
 })
 export class AppModule {}
