@@ -16,12 +16,12 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   constructor(
     private authService: AuthService,
     private http: HttpService,
-    private configService: ConfigService,
+    public configService: ConfigService,
   ) {
     super({
       authorizationURL: `https://discordapp.com/api/oauth2/authorize?${stringify(
         {
-          client_id: configService.get('clientId'),
+          client_id: configService.get('clientID'),
           redirect_uri: configService.get('callbackURL'),
           // client_id: process.env.clientID,
           // redirect_uri: process.env.callbackURL,
@@ -31,7 +31,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       )}`,
       tokenURL: 'https://discordapp.com/api/oauth2/token',
       scope: 'identify email',
-      clientID: configService.get('clientId'),
+      clientID: configService.get('clientID'),
       clientSecret: configService.get('clientSecret'),
       callbackURL: configService.get('callbackURL'),
       // clientID: process.env.clientID,
