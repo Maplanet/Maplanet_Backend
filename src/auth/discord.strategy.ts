@@ -32,9 +32,6 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       clientID: configService.get('clientID'),
       clientSecret: configService.get('clientSecret'),
       callbackURL: configService.get('callbackURL'),
-      // clientID: process.env.clientID,
-      // clientSecret: process.env.clientSecret,
-      // callbackURL: process.env.callbackURL,
     });
   }
 
