@@ -22,6 +22,7 @@ jobs:
         run: |
           echo "${{ secrets.DOT_ENV_PRODUCTION }}" > .env.production
         shell: bash
+
       - name: Build Docker image
         run: |
           docker build -t parkbrianjunsoo/maplanet_repository:v2 -f Dockerfile.prod .
