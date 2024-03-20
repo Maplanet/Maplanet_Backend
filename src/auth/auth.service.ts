@@ -152,7 +152,10 @@ export class AuthService {
         return { userInfo, newAccessToken };
       } else {
         //리프레쉬 토큰이 없으면 사용자를 디스코르 로그인 라우터로 리다이렉트
-        return this.redirectDiscordUrl(res, 'https://www.maplanet.store/');
+        return this.redirectDiscordUrl(
+          res,
+          this.configService.get<string>('loginRedirectURL'),
+        );
       }
     }
   }

@@ -21,17 +21,22 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     super({
       authorizationURL: `https://discordapp.com/api/oauth2/authorize?${stringify(
         {
-          client_id: process.env.clientID,
-          redirect_uri: process.env.callbackURL,
+          client_id: configService.get('clientId'),
+          redirect_uri: configService.get('callbackURL'),
+          // client_id: process.env.clientID,
+          // redirect_uri: process.env.callbackURL,
           response_type: 'code',
           scope: 'identify email',
         },
       )}`,
       tokenURL: 'https://discordapp.com/api/oauth2/token',
       scope: 'identify email',
-      clientID: process.env.clientID,
-      clientSecret: process.env.clientSecret,
-      callbackURL: process.env.callbackURL,
+      clientID: configService.get('clientId'),
+      clientSecret: configService.get('clientSecret'),
+      callbackURL: configService.get('callbackURL'),
+      // clientID: process.env.clientID,
+      // clientSecret: process.env.clientSecret,
+      // callbackURL: process.env.callbackURL,
     });
   }
 

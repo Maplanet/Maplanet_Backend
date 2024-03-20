@@ -41,7 +41,7 @@ export class AuthController {
         httpOnly: true,
         sameSite: 'none',
         secure: true,
-        domain: this.configService.get<number>('cookieDomain'),
+        domain: this.configService.get<string>('cookieDomain'),
       })
       .cookie(
         'userInfo',
@@ -52,12 +52,12 @@ export class AuthController {
           httpOnly: true,
           sameSite: 'none',
           secure: true,
-          domain: this.configService.get<number>('cookieDomain'),
+          domain: this.configService.get<string>('cookieDomain'),
         },
       )
       .redirect(
         HttpStatus.MOVED_PERMANENTLY,
-        this.configService.get<number>('loginRedirectURL'),
+        this.configService.get<string>('loginRedirectURL'),
       );
   }
 
