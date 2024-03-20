@@ -23,8 +23,6 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
         {
           client_id: configService.get('clientID'),
           redirect_uri: configService.get('callbackURL'),
-          // client_id: process.env.clientID,
-          // redirect_uri: process.env.callbackURL,
           response_type: 'code',
           scope: 'identify email',
         },
@@ -46,8 +44,6 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     profile: any,
     done: VerifyCallback,
   ): Promise<any> {
-    // const encryptedAccessToken = encrypt(accessToken);
-    // const encryptedRefreshToken = encrypt(refreshToken);
     const { data } = await this.http
       .get('https://discordapp.com/api/users/@me', {
         headers: { Authorization: `Bearer ${accessToken}` },
