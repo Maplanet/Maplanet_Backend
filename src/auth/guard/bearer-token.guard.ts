@@ -8,12 +8,12 @@ import {
 import { AuthService } from '../auth.service';
 import { UsersService } from 'src/users/users.service';
 import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class BearerTokenGuard implements CanActivate {
   constructor(
     private readonly authService: AuthService,
-    private readonly usersServcie: UsersService,
-    private readonly httpService: HttpService,
+    private configService: ConfigService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
@@ -33,12 +33,12 @@ export class BearerTokenGuard implements CanActivate {
       req.token = result.newAccessToken;
       req.user = result.userInfo;
       res.cookie('Authorization', `Bearer ${result.newAccessToken}`, {
-        maxAge: 604800000,
+        maxAge: this.configService.get<number>('cookieExpires'),
         path: '/',
         httpOnly: true,
         sameSite: 'strict',
         secure: false,
-        domain: '.maplanet.store',
+        domain: this.configService.get<string>('cookieDomain'),
       });
     } else {
       req.token = token;
