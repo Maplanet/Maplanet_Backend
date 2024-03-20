@@ -33,13 +33,11 @@ export class AppService {
     @InjectRepository(Notice)
     private readonly noticeReporotory: Repository<Notice>,
     @InjectRedis() private readonly redisClient: Redis,
+    private readonly configService: ConfigService,
   ) {}
 
   getHello(@Req() req, @Res() res): void {
-    const apiKey = this.configservice.get<string>('SECRET_PASSPHRASE');
-    const env = this.configservice.get<string>('NODE_ENV');
-    res.redirect('https://www.maplelandpp.com');
-    //return '1';
+    res.redirect(this.configService.get<string>('loginRedirectURL'));
   }
 
   async getBoard1Data() {
