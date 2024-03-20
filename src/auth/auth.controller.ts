@@ -25,13 +25,7 @@ export class AuthController {
 
   @Get('discord')
   @UseGuards(AuthGuard('discord'))
-  //@Redirect('http://localhost:3000', 302)
-  async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {
-    //const access_token = req.user;
-    //res.cookie('Authorization', `Bearer ${access_token?.access_token}`);
-    //res.header('Authorization', `Bearer ${access_token?.access_token}`);
-    // res.redirect('http://localhost:3000');
-  }
+  async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {}
 
   @Get('discord/callback')
   @UseGuards(AuthGuard('discord'))
@@ -40,29 +34,31 @@ export class AuthController {
     @Res({ passthrough: true }) res,
   ): Promise<void> {
     const userInfo = req.user;
-    console.log(userInfo);
     res
       .cookie('Authorization', `Bearer ${userInfo?.access_token}`, {
-        maxAge: 604800000,
+        maxAge: this.configService.get<number>('cookieExpires'),
         path: '/',
         httpOnly: true,
         sameSite: 'none',
         secure: true,
-        domain: 'maplanet.store',
+        domain: this.configService.get<number>('cookieDomain'),
       })
       .cookie(
         'userInfo',
         `${userInfo.payload.global_name},${userInfo.payload.avatar},${userInfo.payload.user_id}`,
         {
-          maxAge: 604800000,
+          maxAge: this.configService.get<number>('cookieExpires'),
           path: '/',
           httpOnly: true,
           sameSite: 'none',
           secure: true,
-          domain: 'maplanet.store',
+          domain: this.configService.get<number>('cookieDomain'),
         },
       )
-      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
+      .redirect(
+        HttpStatus.MOVED_PERMANENTLY,
+        this.configService.get<number>('loginRedirectURL'),
+      );
   }
 
   @Post('logout')
@@ -70,32 +66,6 @@ export class AuthController {
   async DeleteToken(@Req() req, @Res({ passthrough: true }) res) {
     const { discord_id } = req.user;
     await this.authService.deleteRefreshToken(discord_id);
-
-    //   res
-    //     .clearCookie('Authorization', {
-    //       maxAge: 0,
-    //       path: '/',
-    //       httpOnly: true,
-    //       sameSite: 'none',
-    //       secure: true,
-    //       domain: 'maplanet.store',
-    //     })
-    //     .clearCookie('userInfo', {
-    //       maxAge: 0,
-    //       path: '/',
-    //       httpOnly: true,
-    //       sameSite: 'none',
-    //       secure: true,
-    //       domain: 'maplanet.store',
-    //     })
-    //   // .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
-    // }
     return { msg: '삭제완료' };
-  }
-
-  @Get('test')
-  test(@Res() res) {
-    const url = 'https://www.maplelandpp.com/auth/discord';
-    this.authService.redirectDiscordUrl(res, url);
   }
 }
