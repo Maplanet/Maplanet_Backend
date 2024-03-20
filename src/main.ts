@@ -20,7 +20,7 @@ async function bootstrap() {
   //   profilesSampleRate: 1.0,
   // });\
 
-  app.useGlobalInterceptors(new WebhookInterceptor());
+  //app.useGlobalInterceptors(new WebhookInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
       //요청 데이터를 유호성검사전에 자동으로 변환함
