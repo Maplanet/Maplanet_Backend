@@ -14,7 +14,6 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccessTokenGuard } from './guard/bearer-token.guard';
 import { ConfigService } from '@nestjs/config';
-import { send } from 'process';
 
 @Controller('auth')
 export class AuthController {
