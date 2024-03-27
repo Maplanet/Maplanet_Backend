@@ -260,9 +260,8 @@ export class BoardService {
           board1_id: board1_id,
         },
       });
-
       const user = await this.usersRepository.findOne({
-        where: { user_id: user_id.user_id },
+        where: { user_id: user_id },
       });
 
       if (!board) {
