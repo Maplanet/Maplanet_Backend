@@ -14,7 +14,6 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccessTokenGuard } from './guard/bearer-token.guard';
 import { ConfigService } from '@nestjs/config';
-import { send } from 'process';
 
 @Controller('auth')
 export class AuthController {
@@ -55,10 +54,8 @@ export class AuthController {
           domain: this.configService.get<string>('cookieDomain'),
         },
       )
-      .redirect(
-        HttpStatus.MOVED_PERMANENTLY,
-        this.configService.get<string>('loginRedirectURL'),
-      );
+      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
+    //.redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.naver.com');
   }
 
   @Post('logout')
