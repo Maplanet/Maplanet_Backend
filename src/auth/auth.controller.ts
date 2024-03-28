@@ -54,8 +54,10 @@ export class AuthController {
           domain: this.configService.get<string>('cookieDomain'),
         },
       )
-      .redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.maplanet.store/');
-    //.redirect(HttpStatus.MOVED_PERMANENTLY, 'https://www.naver.com');
+      .redirect(
+        HttpStatus.MOVED_PERMANENTLY,
+        this.configService.get<string>('loginRedirectURL'),
+      );
   }
 
   @Post('logout')
