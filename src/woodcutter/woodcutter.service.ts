@@ -42,17 +42,19 @@ export class WoodcutterService {
         skip,
         take,
         order: {
-          created_at: 'DESC', 
+          created_at: 'DESC',
         },
-        relations: ['Users']
-    });
+        relations: ['Users'],
+      });
 
-    const modifiedBoard3 = board3.map(({ Users: { report_count, manner_count }, ...board3 }) => ({
-        ...board3,
-        report_count,
-        manner_count,
-      }));
-    return modifiedBoard3;
+      const modifiedBoard3 = board3.map(
+        ({ Users: { report_count, manner_count }, ...board3 }) => ({
+          ...board3,
+          report_count,
+          manner_count,
+        }),
+      );
+      return modifiedBoard3;
     } catch (error) {
       throw new HttpException(
         {
@@ -67,18 +69,21 @@ export class WoodcutterService {
     }
   }
 
-  async woodCutterPageCount (): Promise<any> {
-    return await this.woodCutterRepository.count()
+  async woodCutterPageCount(): Promise<any> {
+    return await this.woodCutterRepository.count();
   }
 
   async woodCutterViewCount(board3_id: number): Promise<UpdateResult> {
-    return await this.woodCutterRepository.update({ board3_id }, {view_count: () => 'view_count + 1'});
+    return await this.woodCutterRepository.update(
+      { board3_id },
+      { view_count: () => 'view_count + 1' },
+    );
   }
 
-  async woodCutterDetailInfo(board3_id: number):Promise<any> {
-    try{
-    const woodCutterDetailInfo = await this.woodCutterRepository.findOne({
-        where: {board3_id},
+  async woodCutterDetailInfo(board3_id: number): Promise<any> {
+    try {
+      const woodCutterDetailInfo = await this.woodCutterRepository.findOne({
+        where: { board3_id },
         select: [
           'user_id',
           'board3_id',
@@ -98,20 +103,23 @@ export class WoodcutterService {
           'updated_at',
         ],
         order: {
-          created_at: 'DESC', 
+          created_at: 'DESC',
         },
-        relations: ['Users']
-    });
+        relations: ['Users'],
+      });
 
-    await this.woodCutterViewCount(board3_id);
+      await this.woodCutterViewCount(board3_id);
 
-    const { Users: { report_count, manner_count }, ...board3 } = woodCutterDetailInfo;
+      const {
+        Users: { report_count, manner_count },
+        ...board3
+      } = woodCutterDetailInfo;
 
-    return {
-            ...board3,
-            report_count,
-            manner_count,
-        }
+      return {
+        ...board3,
+        report_count,
+        manner_count,
+      };
     } catch (error) {
       throw new HttpException(
         {
@@ -125,7 +133,7 @@ export class WoodcutterService {
       );
     }
   }
- 
+
   async woodCutterSearchInfo(
     page: number = 1,
     searchMeso?: number,
@@ -140,48 +148,55 @@ export class WoodcutterService {
       const limit = 12;
       const skip = (page - 1) * limit;
       const take = limit;
-      
-      const [searchedWoodCutter, totalCount] = await this.woodCutterRepository.findAndCount({
-        where: [
-          searchMeso && { meso: Equal(searchMeso) },
-          searchTitle && { title: Like(`%${searchTitle}%`) },
-          searchSubJob && { sub_job: Like(`%${searchSubJob}%`) },
-          searchLevel && { level: Equal(searchLevel) },
-          searchHuntingGround && { hunting_ground: Like(`%${searchHuntingGround}%`) },
-          searchProgressTime && { progress_time: Equal(searchProgressTime) },
-          searchDiscordName && { discord_global_name: Like(`%${searchDiscordName}%`) }
-        ].filter(Boolean),
-        select: [
-          'user_id',
-          'board3_id',
-          'discord_id',
-          'title',
-          'meso',
-          'sub_job',
-          'hunting_ground',
-          'progress_time',
-          'level',
-          'discord_global_name',
-          'discord_image',
-          'view_count',
-          'complete',
-          'created_at',
-          'updated_at',
-        ],
-        skip,
-        take,
-        order: {
-          created_at: 'DESC',
-        },
-        relations: ['Users']
-      });
-      console.log('asdfasdf',searchedWoodCutter)
 
-      const modifiedSearchWoodCutter = searchedWoodCutter.map(({ Users: { report_count, manner_count }, ...board3 }) => ({
-        ...board3,
-        report_count,
-        manner_count,
-      }));
+      const [searchedWoodCutter, totalCount] =
+        await this.woodCutterRepository.findAndCount({
+          where: [
+            searchMeso && { meso: Equal(searchMeso) },
+            searchTitle && { title: Like(`%${searchTitle}%`) },
+            searchSubJob && { sub_job: Like(`%${searchSubJob}%`) },
+            searchLevel && { level: Equal(searchLevel) },
+            searchHuntingGround && {
+              hunting_ground: Like(`%${searchHuntingGround}%`),
+            },
+            searchProgressTime && { progress_time: Equal(searchProgressTime) },
+            searchDiscordName && {
+              discord_global_name: Like(`%${searchDiscordName}%`),
+            },
+          ].filter(Boolean),
+          select: [
+            'user_id',
+            'board3_id',
+            'discord_id',
+            'title',
+            'meso',
+            'sub_job',
+            'hunting_ground',
+            'progress_time',
+            'level',
+            'discord_global_name',
+            'discord_image',
+            'view_count',
+            'complete',
+            'created_at',
+            'updated_at',
+          ],
+          skip,
+          take,
+          order: {
+            created_at: 'DESC',
+          },
+          relations: ['Users'],
+        });
+      console.log('asdfasdf', searchedWoodCutter);
+
+      const modifiedSearchWoodCutter = searchedWoodCutter.map(
+        ({ Users: { report_count, manner_count }, ...board3 }) => ({
+          ...board3,
+          report_count,
+          manner_count,
+        }),
+      );
 
       return { search3Data: modifiedSearchWoodCutter, totalCount };
     } catch (error) {
@@ -198,7 +213,10 @@ export class WoodcutterService {
     }
   }
 
-  async postWoodCutter(createWoodCutterDTO: WoodCutterDTO, user: any): Promise<any> {
+  async postWoodCutter(
+    createWoodCutterDTO: WoodCutterDTO,
+    user: any,
+  ): Promise<any> {
     try {
       const {
         title,
@@ -209,7 +227,6 @@ export class WoodcutterService {
         maple_nickname,
         hunting_ground,
         progress_time,
-
       } = createWoodCutterDTO;
 
       const createWoodCutter = await this.woodCutterRepository.create({
@@ -245,20 +262,20 @@ export class WoodcutterService {
   }
 
   async completeWoodCutter(board3_id: number, user_id: any): Promise<any> {
-    try{
+    try {
       const woodCutter = await this.woodCutterRepository.findOne({
         where: {
           board3_id,
-        }
+        },
       });
 
       const user = await this.usersRepository.findOne({
         where: {
-          user_id: user_id.user_id
-        }
-      })
+          user_id: user_id,
+        },
+      });
 
-      if(!woodCutter) {
+      if (!woodCutter) {
         throw new NotFoundException('게시글이 존재하지 않습니다.');
       }
 
@@ -266,15 +283,15 @@ export class WoodcutterService {
       //   throw new NotFoundException('다른 사람이 작성한 게시글에 완료처리를 할 수 없습니다.')
       // }
 
-      if (woodCutter.user_id === user.user_id){
+      if (woodCutter.user_id === user.user_id) {
         if (!woodCutter.complete) {
           woodCutter.complete = true;
           user.progress_count += 1;
-          await this.usersRepository.save(user)
+          await this.usersRepository.save(user);
         } else {
           woodCutter.complete = false;
           user.progress_count -= 1;
-          await this.usersRepository.save(user)
+          await this.usersRepository.save(user);
         }
 
         await this.woodCutterRepository.save(woodCutter);
@@ -283,9 +300,9 @@ export class WoodcutterService {
           return '게시글을 완료하였습니다.';
         } else {
           return '게시글의 완료를 취소하였습니다.';
-        }  
+        }
       } else {
-        throw new Error ('자신의 게시글만 완료처리 할 수 있습니다.')
+        throw new Error('자신의 게시글만 완료처리 할 수 있습니다.');
       }
     } catch (error) {
       throw new HttpException(
@@ -299,5 +316,5 @@ export class WoodcutterService {
         401,
       );
     }
-  } 
+  }
 }
