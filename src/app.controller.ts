@@ -58,11 +58,13 @@ export class AppController {
     // await this.appService.loginUser('2');
     // await this.appService.loginUser('3');
     // await this.appService.logoutUser('user_id_1');
+    console.log(todayVisitors / 2);
     const loggedInUser = await this.chatService.getUserList();
     maindata.visitorsData = {
       total_visitors: allVisitors,
       today_visitors: todayVisitors,
-      logged_in_user: loggedInUser,
+      logged_in_user: todayVisitors / 2,
+      //logged_in_user: loggedInUser,
     };
 
     return maindata;
