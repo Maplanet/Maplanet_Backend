@@ -63,7 +63,7 @@ export class AppController {
     maindata.visitorsData = {
       total_visitors: allVisitors,
       today_visitors: todayVisitors,
-      logged_in_user: todayVisitors / 2,
+      logged_in_user: Math.ceil(todayVisitors / 2),
       //logged_in_user: loggedInUser,
     };
 
