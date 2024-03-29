@@ -44,7 +44,6 @@ import { DiscordStrategy } from './auth/discord.strategy';
       config: {
         //host: '127.0.0.1',
         host: 'my-redis',
-
         port: 6379,
       },
     }),
