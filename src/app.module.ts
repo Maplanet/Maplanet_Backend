@@ -25,8 +25,11 @@ import { Board2 } from './board2/entities/board2.entity';
 import { Notice } from './notice/entities/notice.entity';
 import { WoodCutter } from './woodcutter/entities/woodcutter.entity';
 import { Party } from './party/entities/party.entity';
+import { Comment } from './comment/entities/comment.entity';
 import { HttpModule } from '@nestjs/axios';
 import { DiscordStrategy } from './auth/discord.strategy';
+import { CommentModule } from './comment/comment.module';
+import { ChildcommentModule } from './childcomment/childcomment.module';
 
 @Module({
   imports: [
@@ -63,7 +66,16 @@ import { DiscordStrategy } from './auth/discord.strategy';
     ChatModule,
     WoodcutterModule,
     PartyModule,
-    TypeOrmModule.forFeature([Board, Board2, Notice, WoodCutter, Party]),
+    TypeOrmModule.forFeature([
+      Board,
+      Board2,
+      Notice,
+      WoodCutter,
+      Party,
+      Comment,
+    ]),
+    CommentModule,
+    //ChildcommentModule,
   ],
   controllers: [AppController],
   providers: [AppService, DiscordStrategy],
