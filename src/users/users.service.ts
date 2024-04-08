@@ -80,7 +80,7 @@ export class UsersService {
   }
 
   async board1Profile(page: number, user_id: number): Promise<any> {
-    const limit = 12;
+    const limit = 8;
     const skip = (page - 1) * limit;
     const take = limit;
     const board1Profile = await this.board1Repository.find({
@@ -110,13 +110,41 @@ export class UsersService {
       relations: ['Users'],
     });
 
-    const modifiedBoard1 = board1Profile.map(
-      ({ Users: { report_count, manner_count }, ...board }) => ({
+    const currentTime = new Date(); 
+
+    const modifiedBoard1 = board1Profile.map(({ Users: { report_count, manner_count }, created_at, ...board }) => {
+  
+      const timeDifferenceInMs = currentTime.getTime() - new Date(created_at).getTime();
+      let timeDifference: string;
+
+      const minute = 60000;
+      const hour = 3600000;
+      const day = 86400000;
+      const month = 2592000000; 
+      const year = 31536000000; 
+
+      if (timeDifferenceInMs < minute) { 
+        timeDifference = '방금 전';
+      } else if (timeDifferenceInMs < hour) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / minute)}분`;
+      } else if (timeDifferenceInMs < day) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / hour)}시간`;
+      } else if (timeDifferenceInMs < month) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / day)}일`;
+      } else if (timeDifferenceInMs < year) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / month)}개월`;
+      } else {
+        timeDifference = `${Math.floor(timeDifferenceInMs / year)}년`;
+      }
+
+      return {
         ...board,
         report_count,
         manner_count,
-      }),
-    );
+        created_at,
+        timeDifference, 
+      };
+    });
 
     return modifiedBoard1;
   }
@@ -129,7 +157,7 @@ export class UsersService {
   }
 
   async board2Profile(page: number, user_id: number): Promise<any> {
-    const limit = 12;
+    const limit = 8;
     const skip = (page - 1) * limit;
     const take = limit;
     const board2Profile = await this.board2Repository.find({
@@ -158,13 +186,42 @@ export class UsersService {
       },
       relations: ['Users'],
     });
-    const modifiedBoard2 = board2Profile.map(
-      ({ Users: { report_count, manner_count }, ...board2 }) => ({
-        ...board2,
+    const currentTime = new Date(); 
+
+    const modifiedBoard2 = board2Profile.map(({ Users: { report_count, manner_count }, created_at, ...board }) => {
+  
+      const timeDifferenceInMs = currentTime.getTime() - new Date(created_at).getTime();
+      let timeDifference: string;
+
+      const minute = 60000;
+      const hour = 3600000;
+      const day = 86400000;
+      const month = 2592000000; 
+      const year = 31536000000; 
+
+      if (timeDifferenceInMs < minute) { 
+        timeDifference = '방금 전';
+      } else if (timeDifferenceInMs < hour) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / minute)}분`;
+      } else if (timeDifferenceInMs < day) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / hour)}시간`;
+      } else if (timeDifferenceInMs < month) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / day)}일`;
+      } else if (timeDifferenceInMs < year) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / month)}개월`;
+      } else {
+        timeDifference = `${Math.floor(timeDifferenceInMs / year)}년`;
+      }
+
+      return {
+        ...board,
         report_count,
         manner_count,
-      }),
-    );
+        created_at,
+        timeDifference, 
+      };
+    });
+
     return modifiedBoard2;
   }
 
@@ -176,7 +233,7 @@ export class UsersService {
   }
 
   async board3Profile(page: number = 1, user_id: number): Promise<any> {
-      const limit = 12;
+      const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
 
@@ -208,12 +265,41 @@ export class UsersService {
         },
         relations: ['Users']
     });
+    const currentTime = new Date(); 
 
-    const modifiedBoard3 = board3Profile.map(({ Users: { report_count, manner_count }, ...board3 }) => ({
-        ...board3,
+    const modifiedBoard3 = board3Profile.map(({ Users: { report_count, manner_count }, created_at, ...board }) => {
+  
+      const timeDifferenceInMs = currentTime.getTime() - new Date(created_at).getTime();
+      let timeDifference: string;
+
+      const minute = 60000;
+      const hour = 3600000;
+      const day = 86400000;
+      const month = 2592000000; 
+      const year = 31536000000; 
+
+      if (timeDifferenceInMs < minute) { 
+        timeDifference = '방금 전';
+      } else if (timeDifferenceInMs < hour) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / minute)}분`;
+      } else if (timeDifferenceInMs < day) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / hour)}시간`;
+      } else if (timeDifferenceInMs < month) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / day)}일`;
+      } else if (timeDifferenceInMs < year) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / month)}개월`;
+      } else {
+        timeDifference = `${Math.floor(timeDifferenceInMs / year)}년`;
+      }
+
+      return {
+        ...board,
         report_count,
         manner_count,
-      }));
+        created_at,
+        timeDifference, 
+      };
+    });
     return modifiedBoard3;
   }
 
@@ -225,7 +311,7 @@ export class UsersService {
   }
 
   async board4Profile(page: number = 1, user_id: number): Promise<any> {
-      const limit = 12;
+      const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
 
@@ -255,12 +341,41 @@ export class UsersService {
         },
         relations: ['Users']
     });
+    const currentTime = new Date(); 
 
-    const modifiedBoard4 = board4Profile.map(({ Users: { report_count, manner_count }, ...board4 }) => ({
-        ...board4,
+    const modifiedBoard4 = board4Profile.map(({ Users: { report_count, manner_count }, created_at, ...board }) => {
+  
+      const timeDifferenceInMs = currentTime.getTime() - new Date(created_at).getTime();
+      let timeDifference: string;
+
+      const minute = 60000;
+      const hour = 3600000;
+      const day = 86400000;
+      const month = 2592000000; 
+      const year = 31536000000; 
+
+      if (timeDifferenceInMs < minute) { 
+        timeDifference = '방금 전';
+      } else if (timeDifferenceInMs < hour) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / minute)}분`;
+      } else if (timeDifferenceInMs < day) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / hour)}시간`;
+      } else if (timeDifferenceInMs < month) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / day)}일`;
+      } else if (timeDifferenceInMs < year) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / month)}개월`;
+      } else {
+        timeDifference = `${Math.floor(timeDifferenceInMs / year)}년`;
+      }
+
+      return {
+        ...board,
         report_count,
         manner_count,
-      }));
+        created_at,
+        timeDifference, 
+      };
+    });
     return modifiedBoard4;
   }
 

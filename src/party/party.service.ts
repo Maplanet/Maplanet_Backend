@@ -16,7 +16,7 @@ export class PartyService {
 
   async partyInfo(page: number = 1): Promise<any> {
     try {
-      const limit = 12;
+      const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
 
@@ -43,14 +43,41 @@ export class PartyService {
         },
         relations: ['Users'],
       });
+      const currentTime = new Date(); 
 
-      const modifiedBoard4 = board4.map(
-        ({ Users: { report_count, manner_count }, ...board4 }) => ({
-          ...board4,
+      const modifiedBoard4 = board4.map(({ Users: { report_count, manner_count }, created_at, ...board }) => {
+    
+        const timeDifferenceInMs = currentTime.getTime() - new Date(created_at).getTime();
+        let timeDifference: string;
+  
+        const minute = 60000;
+        const hour = 3600000;
+        const day = 86400000;
+        const month = 2592000000; 
+        const year = 31536000000; 
+  
+        if (timeDifferenceInMs < minute) { 
+          timeDifference = '방금 전';
+        } else if (timeDifferenceInMs < hour) { 
+          timeDifference = `${Math.floor(timeDifferenceInMs / minute)}분`;
+        } else if (timeDifferenceInMs < day) { 
+          timeDifference = `${Math.floor(timeDifferenceInMs / hour)}시간`;
+        } else if (timeDifferenceInMs < month) { 
+          timeDifference = `${Math.floor(timeDifferenceInMs / day)}일`;
+        } else if (timeDifferenceInMs < year) { 
+          timeDifference = `${Math.floor(timeDifferenceInMs / month)}개월`;
+        } else {
+          timeDifference = `${Math.floor(timeDifferenceInMs / year)}년`;
+        }
+  
+        return {
+          ...board,
           report_count,
           manner_count,
-        }),
-      );
+          created_at,
+          timeDifference, 
+        };
+      });
       return modifiedBoard4;
     } catch (error) {
       throw new HttpException(
@@ -115,13 +142,40 @@ export class PartyService {
 
       const {
         Users: { report_count, manner_count },
+        created_at,
         ...board4
       } = partyDetailInfo;
 
+      const currentTime = new Date();
+      
+      const timeDifferenceInMs = currentTime.getTime() - new Date(created_at).getTime();
+      let timeDifference: string;
+  
+      const minute = 60000;
+      const hour = 3600000;
+      const day = 86400000;
+      const month = 2592000000; 
+      const year = 31536000000; 
+  
+      if (timeDifferenceInMs < minute) {
+        timeDifference = '방금 전';
+      } else if (timeDifferenceInMs < hour) {
+        timeDifference = `${Math.floor(timeDifferenceInMs / minute)}분 전`;
+      } else if (timeDifferenceInMs < day) {
+        timeDifference = `${Math.floor(timeDifferenceInMs / hour)}시간 전`;
+      } else if (timeDifferenceInMs < month) {
+        timeDifference = `${Math.floor(timeDifferenceInMs / day)}일 전`;
+      } else if (timeDifferenceInMs < year) { 
+        timeDifference = `${Math.floor(timeDifferenceInMs / month)}달 전`;
+      } else {
+        timeDifference = `${Math.floor(timeDifferenceInMs / year)}년 전`;
+      }
+  
       return {
         ...board4,
         report_count,
         manner_count,
+        timeDifference, 
       };
     } catch (error) {
       throw new HttpException(
@@ -145,7 +199,7 @@ export class PartyService {
     searchDiscordName: string,
   ): Promise<any> {
     try {
-      const limit = 12;
+      const limit = 8;
       const skip = (page - 1) * limit;
       const take = limit;
       const [searchedParty, totalCount] =
@@ -183,13 +237,40 @@ export class PartyService {
           relations: ['Users'],
         });
 
-      const modifiedSearchParty = searchedParty.map(
-        ({ Users: { report_count, manner_count }, ...board4 }) => ({
-          ...board4,
-          report_count,
-          manner_count,
-        }),
-      );
+        const currentTime = new Date(); 
+
+        const modifiedSearchParty = searchedParty.map(({ Users: { report_count, manner_count }, created_at, ...board4 }) => {
+
+          const timeDifferenceInMs = currentTime.getTime() - new Date(created_at).getTime();
+          let timeDifference: string;
+    
+          const minute = 60000;
+          const hour = 3600000;
+          const day = 86400000;
+          const month = 2592000000; 
+          const year = 31536000000; 
+    
+          if (timeDifferenceInMs < minute) { 
+            timeDifference = '방금 전';
+          } else if (timeDifferenceInMs < hour) { 
+            timeDifference = `${Math.floor(timeDifferenceInMs / minute)}분 전`;
+          } else if (timeDifferenceInMs < day) { 
+            timeDifference = `${Math.floor(timeDifferenceInMs / hour)}시간 전`;
+          } else if (timeDifferenceInMs < month) { 
+            timeDifference = `${Math.floor(timeDifferenceInMs / day)}일 전`;
+          } else if (timeDifferenceInMs < year) {
+            timeDifference = `${Math.floor(timeDifferenceInMs / month)}달 전`;
+          } else { 
+            timeDifference = `${Math.floor(timeDifferenceInMs / year)}년 전`;
+          }
+    
+          return {
+            ...board4,
+            report_count,
+            manner_count,
+            timeDifference,
+          };
+        });
 
       return { search4Data: modifiedSearchParty, totalCount };
     } catch (error) {

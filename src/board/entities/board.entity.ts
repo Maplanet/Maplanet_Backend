@@ -24,6 +24,9 @@ export class Board {
     title: string;
 
     @Column()
+    hunting_ground: string;
+
+    @Column()
     maple_nickname: string;
 
     @Column()
