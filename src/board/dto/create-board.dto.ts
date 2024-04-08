@@ -26,12 +26,12 @@ export class CreateBoardDto {
   })
   public maple_nickname: string;
 
-  // @IsString()
-  // @ApiProperty({
-  //   example: '죽은나무의숲4',
-  //   description: '사냥터',
-  // })
-  // public hunting_ground: string;
+  @IsString()
+  @ApiProperty({
+    example: '죽은나무의숲4',
+    description: '사냥터',
+  })
+  public hunting_ground: string;
 
   @IsNotEmpty()
   @IsNumber()
