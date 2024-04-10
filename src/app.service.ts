@@ -55,6 +55,7 @@ export class AppService {
           'discord_image',
           'view_count',
           'complete',
+          'hunting_ground',
           'created_at',
           'updated_at',
         ],
