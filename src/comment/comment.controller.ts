@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/createComment.dto';
 import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
@@ -17,8 +26,14 @@ export class CommentController {
     description: 'board1 댓글 조회',
   })
   @ApiResponse({ status: 200, description: 'board1 댓글 조회' })
-  async boardInfo(@Param('board1_id') board1_id: Board): Promise<any> {
-    const getCommentInfo = await this.commentService.commentInfoBoard1(board1_id);
+  async boardInfo(
+    @Req() Req,
+    @Param('board1_id') board1_id: Board,
+  ): Promise<any> {
+    console.log(Req.HostParam);
+    console.log(Req.hosts);
+    const getCommentInfo =
+      await this.commentService.commentInfoBoard1(board1_id);
     return { commentBoard1Data: getCommentInfo };
   }
 
@@ -28,21 +43,20 @@ export class CommentController {
   })
   @ApiResponse({
     status: 201,
-    description:
-      'board1 comment 등록',
+    description: 'board1 comment 등록',
   })
   @UseGuards(AccessTokenGuard)
   @Post('/board1/:board1_id/comment')
   async postCommentBoard1(
     @Body() createCommentDto: CreateCommentDto,
     @Req() req,
-    @Param('board1_id') board1_id: any
+    @Param('board1_id') board1_id: any,
   ): Promise<any> {
     const user = req.user;
     const getCommentInfo = await this.commentService.postCommentBoard1(
       createCommentDto,
       user,
-      board1_id
+      board1_id,
     );
     console.log(createCommentDto);
     return getCommentInfo;
@@ -55,9 +69,17 @@ export class CommentController {
   @ApiResponse({ status: 200, description: 'board1 댓글 삭제' })
   @UseGuards(AccessTokenGuard)
   @Delete('/board1/:board1_id/comment/:comment_id')
-  async board1Delete(@Req() req, @Param('board1_id') board1_id: any, @Param('comment_id') comment_id: any): Promise<any> {
+  async board1Delete(
+    @Req() req,
+    @Param('board1_id') board1_id: any,
+    @Param('comment_id') comment_id: any,
+  ): Promise<any> {
     const user = req.user;
-    const deleteCommentInfo = await this.commentService.board1Delete(board1_id, comment_id, user);
-    return deleteCommentInfo ;
+    const deleteCommentInfo = await this.commentService.board1Delete(
+      board1_id,
+      comment_id,
+      user,
+    );
+    return deleteCommentInfo;
   }
 }
